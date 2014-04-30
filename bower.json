@@ -1,0 +1,26 @@
+{
+  "name": "BeFF",
+  "version": "0.0.1",
+  "homepage": "https://github.com/behance/BeFF",
+  "authors": [
+    "Alex Lee <axal@adobe.com>"
+  ],
+  "description": "Behance Frontend Framework",
+  "moduleType": [
+    "amd"
+  ],
+  "keywords": [
+    "behance",
+    "mvc",
+    "mvvm",
+    "client"
+  ],
+  "license": "MIT",
+  "ignore": [
+    "**/.*",
+    "node_modules",
+    "bower_components",
+    "test",
+    "tests"
+  ]
+}

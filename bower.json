@@ -22,5 +22,8 @@
     "bower_components",
     "test",
     "tests"
-  ]
+  ],
+  "dependencies": {
+    "nbd": "https://github.com/behance/nbd.js.git#~0.4.0"
+  }
 }

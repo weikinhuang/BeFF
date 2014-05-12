@@ -2,8 +2,8 @@
 define([
   'jquery',
   'log',
-  '../util/debounce'
-], function($, log, debounce) {
+  '../util/throttle'
+], function($, log, throttle) {
   'use strict';
 
   var $window = $(window),
@@ -76,7 +76,7 @@ define([
     }
 
     function onHit() {
-      var retval = debounce(callback);
+      var retval = throttle(callback);
       if (retval && typeof retval.then === 'function') {
         retval.then(scrollCache[context], function(err) {
           if (err instanceof Error) {

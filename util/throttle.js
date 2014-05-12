@@ -1,19 +1,19 @@
 define(function() {
   'use strict';
 
-  return function debounce(fn) {
-    if (debounce._blocking) { return; }
-    debounce._blocking = true;
+  return function throttle(fn) {
+    if (throttle._blocking) { return; }
+    throttle._blocking = true;
 
     var retval = fn.apply(this, arguments);
 
     if (retval && typeof retval.then === 'function') {
       retval.then(function() {
-        debounce._blocking = false;
+        throttle._blocking = false;
       });
     }
     else {
-      debounce._blocking = false;
+      throttle._blocking = false;
     }
 
     return retval;

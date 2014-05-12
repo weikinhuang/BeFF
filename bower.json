@@ -24,6 +24,7 @@
     "tests"
   ],
   "dependencies": {
-    "nbd": "https://github.com/behance/nbd.js.git#~0.4.0"
+    "nbd": "https://github.com/behance/nbd.js.git#~0.4.1",
+    "jquery": "~2.1.1"
   }
 }

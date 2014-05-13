@@ -2,8 +2,9 @@ define([
   'jquery',
   'nbd/util/construct',
   'nbd/View/Element',
-  '../Controller/Entity'
-], function($, construct, Element, Entity) {
+  '../Controller/Entity',
+  '../trait/eventMappable'
+], function($, construct, Element, Entity, eventMappable) {
   'use strict';
 
   return Element.extend({
@@ -19,8 +20,12 @@ define([
       this._super();
     },
 
-    bind: function() {},
-    unbind: function() {},
+    bind: function() {
+      this._mapEvents();
+    },
+    unbind: function() {
+      this._undelegateEvents();
+    },
     decorate: construct.bind(Entity),
 
     render: function(resultset) {
@@ -45,5 +50,6 @@ define([
     isEmpty: function() {
       return !this._el.length;
     }
-  });
+  })
+  .mixin(eventMappable);
 });

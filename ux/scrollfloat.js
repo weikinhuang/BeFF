@@ -1,9 +1,8 @@
 // Events for scrolling past floating regions
 define([
   'jquery',
-  'log',
   '../util/throttle'
-], function($, log, throttle) {
+], function($, throttle) {
   'use strict';
 
   var $window = $(window),
@@ -78,11 +77,7 @@ define([
     function onHit() {
       var retval = throttle(callback);
       if (retval && typeof retval.then === 'function') {
-        retval.then(scrollCache[context], function(err) {
-          if (err instanceof Error) {
-            log.warn(err);
-          }
-        });
+        retval.then(scrollCache[context]);
       }
     }
 

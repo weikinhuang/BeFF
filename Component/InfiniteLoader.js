@@ -1,14 +1,14 @@
 define([
-  'nbd/Class',
   'nbd/trait/pubsub',
   'nbd/util/construct',
   'nbd/util/extend',
+  '../Component',
   '../ux/scrollfloat',
   '../util/xhr'
-], function(Class, pubsub, construct, extend, scrollfloat, xhr) {
+], function(pubsub, construct, extend, Component, scrollfloat, xhr) {
   'use strict';
 
-  return Class.extend({
+  return Component.extend({
     init: function(context, offset) {
       this.context = context || 'window';
       this.resetParams(offset);
@@ -57,7 +57,7 @@ define([
 
     bind: function() {
       if (this._boundLoad) {
-        return;
+        return this;
       }
 
       this._boundLoad = this.load.bind(this);
@@ -131,10 +131,6 @@ define([
       var request = this.load();
       request.then(this.bind.bind(this));
       return request;
-    }
-  }, {
-    init: function(context, offset) {
-      return construct.apply(this, arguments).bind();
     }
   })
   .mixin(pubsub);

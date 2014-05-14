@@ -1,54 +1,49 @@
 define([
   'jquery',
   'nbd/util/construct',
-  'nbd/View/Element',
-  '../Controller/Entity',
+  '../Component',
+  '../Controller',
   '../trait/eventMappable'
-], function($, construct, Element, Entity, eventMappable) {
+], function($, construct, Component, Controller, eventMappable) {
   'use strict';
 
-  return Element.extend({
+  return Component.extend({
     init: function($view) {
       this.$view = $view;
-      this.bind();
-      this._el = $view.children().toArray().map(this.decorate, this);
-      // Important to not call _super
-    },
-
-    destroy: function() {
-      this.unbind();
-      this._super();
     },
 
     bind: function() {
       this._mapEvents();
+      this._nodes = this.$view.children().toArray()
+      .map(this.decorate, this);
     },
+
     unbind: function() {
       this._undelegateEvents();
     },
-    decorate: construct.bind(Entity),
 
-    render: function(resultset) {
+    decorate: construct.bind(Controller),
+
+    add: function(resultset) {
       var nodes = resultset.map(this.decorate, this).filter(Boolean);
 
       nodes.forEach(function(node) {
         return node.render && node.render(this.$view);
       }, this);
-      this._el = this._el.concat(nodes);
-
-      return this.$view;
+      this._nodes = this._nodes.concat(nodes);
+      return nodes;
     },
 
-    clear: function() {
-      this._el.forEach(function(item) {
+    empty: function() {
+      this._nodes.forEach(function(item) {
         return item && item.destroy && item.destroy();
       });
-      this._el = [];
+      this._nodes = [];
       return this.$view.empty();
     },
 
     isEmpty: function() {
-      return !this._el.length;
+      return !this._nodes.length;
     }
   })
   .mixin(eventMappable);

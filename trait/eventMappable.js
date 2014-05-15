@@ -32,8 +32,9 @@ define(function() {
 
   return {
     _mapEvents: function() {
-      this._undelegateEvents();
+      if (this.events == null || !this.$view) { return; }
 
+      this._undelegateEvents();
       Object.keys(this.events)
       .forEach(function(event) {
         var bindings = decomposeEvent(this.events[event], this);
@@ -51,6 +52,7 @@ define(function() {
     },
 
     _undelegateEvents: function() {
+      if (!this.$view) { return; }
       this.$view.off('.delegated');
     },
   };

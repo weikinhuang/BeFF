@@ -1,7 +1,7 @@
 define([
   'jquery',
   'nbd/View/Entity',
-  '../trait/eventMappable'
+  './trait/eventMappable'
 ], function($, Entity, eventMappable) {
   'use strict';
 
@@ -12,13 +12,15 @@ define([
     },
 
     template: function(templateData) {
-      return this.mustache && $(this.mustache(templateData, this.partials));
+      return this.mustache && this.mustache(templateData, this.partials);
     },
 
     destroy: function() {
       this._undelegateEvents();
       this._super.apply(this, arguments);
     }
+  }, {
+    domify: $
   })
   .mixin(eventMappable);
 });

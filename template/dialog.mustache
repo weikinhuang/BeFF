@@ -1,0 +1,20 @@
+<article class="{{dialogType}}{{^buttons}} no-buttons{{/buttons}}{{^title}} no-title{{/title}}{{#containerClasses}} {{.}}{{/containerClasses}}">
+  {{#toolbar}}
+  <header class="{{#classes}} {{.}}{{/classes}}">
+    <div class="header">{{{title}}}</div>
+    {{^hideClose}}
+    <a class="header-action right js-close">
+      <span class="nav-icon-close nav-icon"></span>
+    </a>
+    {{/hideClose}}
+  </header>
+  {{/toolbar}}
+
+  <section class="{{#toolbar}} has-toolbar{{/toolbar}}">{{{content}}}</section>
+
+  <footer class="{{^buttons}} hide{{/buttons}}">
+    {{#buttons}}
+    <button class="{{#classes}} {{.}}{{/classes}}">{{label}}</button>
+    {{/buttons}}
+  </footer>
+</article>

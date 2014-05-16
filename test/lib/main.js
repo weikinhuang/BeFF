@@ -13,6 +13,7 @@ require.config({
   baseUrl: '/base',
 
   paths: {
+    'jquery': 'bower_components/jquery/dist/jquery',
     'nbd': 'bower_components/nbd'
   },
 

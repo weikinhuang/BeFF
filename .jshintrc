@@ -21,7 +21,6 @@
   "unused": "vars",
   "globals": {
     "require": false,
-    "define": false,
-    "console": false //candidate for eventual removal
+    "define": false
   }
 }

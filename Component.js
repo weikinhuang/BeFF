@@ -9,8 +9,10 @@ define([
     bind: function() { return this; },
     unbind: function() { return this; },
     destroy: function() {
-      this.unbind();
-      this.stopListening();
+      this
+      .unbind()
+      .stopListening()
+      .off();
     }
   }, {
     init: function() {

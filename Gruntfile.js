@@ -22,7 +22,7 @@ module.exports = function(grunt) {
     },
     karma: {
       options: {
-        configFile: 'test/karma.conf.js',
+        configFile: 'test/lib/karma.conf.js',
         singleRun: true
       },
       persistent: {

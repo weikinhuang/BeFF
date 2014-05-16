@@ -1,0 +1,31 @@
+{
+  "name": "BeFF",
+  "version": "0.0.1",
+  "description": "Behance Frontend Framework",
+  "directories": {
+    "test": "test"
+  },
+  "dependencies": {
+    "grunt-contrib-jshint": "^0.10.0",
+    "grunt-karma": "^0.8.3",
+    "karma-jasmine": "^0.2.2",
+    "requirejs": "^2.1.11",
+    "karma": "^0.12.16",
+    "karma-requirejs": "^0.2.1",
+    "grunt": "^0.4.5"
+  },
+  "devDependencies": {},
+  "scripts": {
+    "test": "grunt test"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git://github.com/behance/BeFF.git"
+  },
+  "author": "",
+  "license": "MIT",
+  "bugs": {
+    "url": "https://github.com/behance/BeFF/issues"
+  },
+  "homepage": "https://github.com/behance/BeFF"
+}

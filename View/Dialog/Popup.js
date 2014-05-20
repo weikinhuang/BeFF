@@ -7,7 +7,7 @@ define([
 
   var constructor = View.extend({
     dialogData: {
-      dialogType: "desktop",
+      dialogType: "popup",
       toolbar: true
     },
 

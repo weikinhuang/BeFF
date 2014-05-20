@@ -19,6 +19,7 @@ define([
 
     _bindButtons: function($view) {
       $view
+      .on('click', '.js-confirm', this.trigger.bind(this, 'confirm'))
       .on('click', '.js-close', this.hide.bind(this))
       .on('click', '.js-disabled', false);
     },

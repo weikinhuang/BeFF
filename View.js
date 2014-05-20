@@ -15,6 +15,8 @@ define([
       return this.mustache && this.mustache(templateData, this.partials);
     },
 
+    rendered: function() {},
+
     destroy: function() {
       this._undelegateEvents();
       this._super.apply(this, arguments);

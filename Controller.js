@@ -1,8 +1,9 @@
 define([
   'jquery',
   'nbd/util/extend',
-  'nbd/Controller/Entity'
-], function($, extend, Entity) {
+  'nbd/Controller/Entity',
+  './View'
+], function($, extend, Entity, View) {
   'use strict';
 
   return Entity.extend({
@@ -32,9 +33,13 @@ define([
       this._super(data);
       this._view.$view = $view;
 
-      if (this._view.$view && this._view.rendered) {
-        this._view.rendered();
+      if ($view) {
+        this._view
+        .trigger('postrender', $view)
+        .rendered($view);
       }
     }
+  }, {
+    VIEW_CLASS: View
   });
 });

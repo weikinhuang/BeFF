@@ -1,10 +1,9 @@
-// Top-level form module for programmictally assembling form behaviors
 define([
-  'nbd/Class',
   'nbd/Promise',
-  'nbd/trait/pubsub',
+  'nbd/util/pipe',
+  '../Component',
   './util/xhr'
-], function(Class, Promise, pubsub, xhr) {
+], function(Promise, pipe, Component, xhr) {
   'use strict';
 
   /**
@@ -44,44 +43,29 @@ define([
     }
   },
 
-  initChain = function(e) {
-    if (e) { e.preventDefault(); }
-
-    var chain = new Promise(),
-        formMetadata = {
-          url: this.$form.attr('action'),
-          type: this.$form.attr('method') || 'POST',
-          data: decompose(this.$form.serializeArray())
-        };
-
-    chain.resolve(formMetadata);
-    return this._submit(chain);
-  },
-
   innerChain = function(metadata) {
     var chain = new Promise(),
     then = chain.thenable(),
-    retval;
+    retval = typeof this.commit === 'function' ?
+      this.commit.call(then, metadata) :
+      this.commmit;
 
-    retval = this.commit.call(then, metadata);
     chain.resolve(retval === then ? xhr(metadata) : retval);
 
     return chain;
   },
 
-  Form = Class.extend({
+  Form = Component.extend({
     init: function($context) {
-      this.$form = $context;
+      this.$form = $context.is('form') ? $context : $context.find('form');
 
       // Internal bindings so that we can unbind later
       this._normalizeSubmitter = normalizeSubmitter.bind(this);
-      this._initChain = initChain.bind(this);
-
-      this._bindSubmission();
+      this.submit = this.submit.bind(this);
     },
 
     destroy: function() {
-      this._unbindSubmission();
+      this._super();
       this.$form = null;
     },
 
@@ -96,41 +80,67 @@ define([
       return this;
     },
 
-    submit: function() {
-      return this._initChain();
-    },
-
     /**
-     * Private function that handles the steps necessary to submit the form. This should be
-     * overridden in subclasses.
-     *
-     * The base implementation calls the submission function to determine whether to return
-     * submission's return value or ajax submit the form.
+     * Default validator does nothing
      */
-    _submit: function(chain) {
+    validator: function(data) { return true; },
+
+    submit: function(e) {
+      var meta = {
+            url: this.$form.attr('action'),
+            type: this.$form.attr('method') || 'POST',
+            data: this.constructor.decompose(this.$form.serializeArray())
+          },
+          validator = Array.isArray(this.validator) ?
+            pipe.apply(null, this.validator) :
+            this.validator,
+          resolver = new Promise(),
+          chain, valid, error;
+
       this.trigger('before');
 
-      chain = chain.then(innerChain.bind(this));
+      try {
+        valid = validator(meta.data);
+      }
+      catch (validationError) {
+        valid = false;
+        error = validationError;
+      }
+
+      if (e && (valid === false || typeof this.commit === 'function')) {
+        e.preventDefault();
+      }
+
+      if (valid === false) {
+        resolver.reject(error);
+      }
+      else {
+        resolver.resolve(meta);
+      }
+      chain = resolver.then(innerChain.bind(this));
       chain.then(this.trigger.bind(this, 'success'), this.trigger.bind(this, 'error'));
 
       return chain;
     },
 
-    _bindSubmission: function() {
+    _submitSelector: '.js-submit:not([type=submit])',
+
+    bind: function() {
       this.$form
-      .on('click keydown', '.form-submit:not([type=submit])', this._normalizeSubmitter)
-      .on('submit', this._initChain);
+      .on('click keydown', this._submitSelector, this._normalizeSubmitter)
+      .on('submit', this.submit);
+      return this;
     },
 
-    _unbindSubmission: function() {
+    unbind: function() {
       this.$form
-      .off('click keydown', '.form-submit:not([type=submit])', this._normalizeSubmitter)
-      .off('submit', this._initChain);
+      .off('click keydown', this._submitSelector, this._normalizeSubmitter)
+      .off('submit', this.submit);
+      return this;
     }
   }, {
     decompose: decompose
-  })
-  .mixin(pubsub);
+  });
 
   return Form;
 });

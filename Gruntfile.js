@@ -36,13 +36,23 @@ module.exports = function(grunt) {
         reporters: ['dots'],
         browsers: ['PhantomJS', 'Firefox'/*, 'Chrome'*/]
       }
+    },
+    jsdoc: {
+      dist: {
+        src: ['**/*.js', '!Gruntfile.js', '!node_modules/**/*.js'],
+        options: {
+            destination: 'docs'
+        }
+      }
     }
   });
 
   grunt.loadNpmTasks('grunt-contrib-jshint');
+  grunt.loadNpmTasks('grunt-jsdoc');
   grunt.loadNpmTasks('grunt-karma');
 
   grunt.registerTask('test', ['jshint', 'karma:persistent']);
+  grunt.registerTask('docs', ['jsdoc']);
   grunt.registerTask('travis', ['jshint', 'karma:multi']);
   grunt.registerTask('default', ['test']);
 };

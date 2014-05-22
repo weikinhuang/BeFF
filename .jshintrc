@@ -19,6 +19,7 @@
   "latedef": true,
   "undef": true,
   "unused": "vars",
+  "node": true,
   "globals": {
     "require": false,
     "define": false

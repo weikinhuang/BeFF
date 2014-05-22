@@ -1,3 +1,4 @@
+/* jshint node: true */
 module.exports = function(grunt) {
   'use strict';
 
@@ -39,7 +40,7 @@ module.exports = function(grunt) {
     },
     jsdoc: {
       dist: {
-        src: ['**/*.js', '!Gruntfile.js', '!node_modules/**/*.js'],
+        src: ['**/*.js', '!Gruntfile.js', '!node_modules/**/*.js', '!bower_components/**/*.js', '!test/**/*.js'],
         options: {
             destination: 'docs'
         }

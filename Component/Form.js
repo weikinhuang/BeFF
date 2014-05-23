@@ -1,9 +1,11 @@
 define([
   'nbd/Promise',
+  'nbd/util/extend',
   'nbd/util/pipe',
   '../Component',
-  './util/xhr'
-], function(Promise, pipe, Component, xhr) {
+  './util/xhr',
+  './util/error'
+], function(Promise, extend, pipe, Component, xhr, error) {
   'use strict';
 
   /**
@@ -62,12 +64,22 @@ define([
       // Internal bindings so that we can unbind later
       this._normalizeSubmitter = normalizeSubmitter.bind(this);
       this.submit = this.submit.bind(this);
+
+      // Error handling chain
+      this.on('error', function(e) {
+        error.call([this.catch.bind(this)], e).catch(error);
+      });
     },
 
     destroy: function() {
       this._super();
       this.$form = null;
     },
+
+    /**
+     * Default validator does nothing
+     */
+    validator: function(data) { return true; },
 
     /**
      * Inner Submission process. Should be limited to the forms specific behaviors that are
@@ -81,23 +93,35 @@ define([
     },
 
     /**
-     * Default validator does nothing
+     * Default error catch
      */
-    validator: function(data) { return true; },
+    catch: function(err) {
+      if (!(err instanceof this.constructor.Error)) {
+        throw err;
+      }
+
+      Object.keys(err).forEach(function(name) {
+        var $element = this.$form.find('[name=' + name + '], #' + name).first();
+        if ($element.length) {
+          this.trigger('error:show', $element, err[name]);
+        }
+      }, this);
+    },
 
     submit: function(e) {
-      var meta = {
-            url: this.$form.attr('action'),
-            type: this.$form.attr('method') || 'POST',
-            data: this.constructor.decompose(this.$form.serializeArray())
-          },
+      this.trigger('before', e);
+      var chain = this._submit(e);
+      chain.then(this.trigger.bind(this, 'success'), this.trigger.bind(this, 'error'));
+      return chain;
+    },
+
+    _submit: function(e) {
+      var meta = this.toJSON(),
           validator = Array.isArray(this.validator) ?
             pipe.apply(null, this.validator) :
             this.validator,
           resolver = new Promise(),
-          chain, valid, error;
-
-      this.trigger('before');
+          valid, error;
 
       try {
         valid = validator(meta.data);
@@ -106,21 +130,27 @@ define([
         valid = false;
         error = validationError;
       }
+      valid = valid !== false;
 
-      if (e && (valid === false || typeof this.commit === 'function')) {
+      if (e && (!valid || typeof this.commit === 'function')) {
         e.preventDefault();
       }
 
-      if (valid === false) {
+      if (!valid) {
         resolver.reject(error);
       }
       else {
         resolver.resolve(meta);
       }
-      chain = resolver.then(innerChain.bind(this));
-      chain.then(this.trigger.bind(this, 'success'), this.trigger.bind(this, 'error'));
+      return resolver.then(innerChain.bind(this));
+    },
 
-      return chain;
+    toJSON: function() {
+      return {
+        url: this.$form.attr('action'),
+        type: this.$form.attr('method') || 'POST',
+        data: this.constructor.decompose(this.$form.serializeArray())
+      };
     },
 
     _submitSelector: '.js-submit:not([type=submit])',
@@ -139,7 +169,11 @@ define([
       return this;
     }
   }, {
-    decompose: decompose
+    decompose: decompose,
+
+    Error: function(messages) {
+      extend(this, messages);
+    }
   });
 
   return Form;

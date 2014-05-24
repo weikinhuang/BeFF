@@ -57,6 +57,25 @@ define([
     return chain;
   },
 
+  findFields = function(err) {
+    if (!(err instanceof Object)) { throw err; }
+    var meta = this._cacheMeta || this.toJSON(),
+
+    matches = Object.keys(meta.data)
+    .filter(err.hasOwnProperty.bind(err)),
+
+    results = matches
+    .reduce(function(o, key) {
+      o[key] = err[key];
+      return o;
+    }, {});
+
+    if (matches.length) {
+      throw new this.constructor.Error(results);
+    }
+    throw err;
+  },
+
   Form = Component.extend({
     init: function($context) {
       this.$form = $context.is('form') ? $context : $context.find('form');
@@ -67,7 +86,7 @@ define([
 
       // Error handling chain
       this.on('error', function(e) {
-        error.call([this.catch.bind(this)], e).catch(error);
+        error.call([this._catch.bind(this)], e).catch(error);
       });
     },
 
@@ -95,8 +114,8 @@ define([
     /**
      * Default error catch
      */
-    catch: function(err) {
-      if (!(err instanceof this.constructor.Error)) {
+    _catch: function(err) {
+      if (!(err instanceof Form.Error)) {
         throw err;
       }
 
@@ -111,18 +130,20 @@ define([
     submit: function(e) {
       this.trigger('before', e);
       var chain = this._submit(e);
-      chain.then(this.trigger.bind(this, 'success'), this.trigger.bind(this, 'error'));
+      chain
+      .catch(findFields.bind(this))
+      .then(this.trigger.bind(this, 'success'), this.trigger.bind(this, 'error'));
       return chain;
     },
 
     _submit: function(e) {
-      var meta = this.toJSON(),
-          validator = Array.isArray(this.validator) ?
+      var validator = Array.isArray(this.validator) ?
             pipe.apply(null, this.validator) :
             this.validator,
           resolver = new Promise(),
-          valid, error;
+          meta, valid, error;
 
+      this._cacheMeta = meta = this.toJSON();
       try {
         valid = validator(meta.data);
       }

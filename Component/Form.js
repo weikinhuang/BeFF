@@ -3,8 +3,8 @@ define([
   'nbd/util/extend',
   'nbd/util/pipe',
   '../Component',
-  './util/xhr',
-  './util/error'
+  '../util/xhr',
+  '../util/error'
 ], function(Promise, extend, pipe, Component, xhr, error) {
   'use strict';
 
@@ -86,7 +86,11 @@ define([
 
       // Error handling chain
       this.on('error', function(e) {
-        error.call([this._catch.bind(this)], e).catch(error);
+        error.call([this._catch.bind(this)], e)
+        .catch(error)
+        .finally(function() {
+          delete this._cacheMeta;
+        }.bind(this));
       });
     },
 
@@ -123,6 +127,7 @@ define([
         var $element = this.$form.find('[name=' + name + '], #' + name).first();
         if ($element.length) {
           this.trigger('error:show', $element, err[name]);
+          $element.one('input', this.trigger.bind(this, 'error:hide', $element));
         }
       }, this);
     },
@@ -132,10 +137,7 @@ define([
       var chain = this._submit(e);
       chain
       .catch(findFields.bind(this))
-      .then(this.trigger.bind(this, 'success'), this.trigger.bind(this, 'error'))
-      .finally(function() {
-        delete this._cacheMeta;
-      }.bind(this));
+      .then(this.trigger.bind(this, 'success'), this.trigger.bind(this, 'error'));
 
       return chain;
     },
@@ -196,7 +198,7 @@ define([
   }, {
     decompose: decompose,
 
-    Error: function(messages) {
+    Error: function FormError(messages) {
       extend(this, messages);
     }
   });

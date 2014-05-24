@@ -132,7 +132,11 @@ define([
       var chain = this._submit(e);
       chain
       .catch(findFields.bind(this))
-      .then(this.trigger.bind(this, 'success'), this.trigger.bind(this, 'error'));
+      .then(this.trigger.bind(this, 'success'), this.trigger.bind(this, 'error'))
+      .finally(function() {
+        delete this._cacheMeta;
+      }.bind(this));
+
       return chain;
     },
 

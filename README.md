@@ -5,8 +5,14 @@ Behance Frontend Framework
 
 #### Documentation
 
-You can generate the JSDoc3 HTML documentation via Grunt:
+[View the Docs](https://github.com/behance/BeFF/docs/markdown)
+
+You can generate the JSDoc3 Markdown documentation via Grunt:
+
+`grunt mdocs`
+
+Alternatively, you can generate an HTML version via:
 
 `grunt docs`
 
-Point your browser to `BeFF/docs/index.html` to see the generated docs.
+

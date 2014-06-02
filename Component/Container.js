@@ -28,19 +28,12 @@ define([
       this.$view = $view;
     },
 
-    /**
-     * Sets up event delegation and constructs controllers for
-     * the existing children within the $view
-     */
     bind: function() {
       this._mapEvents();
       this._nodes = this.$view.children().toArray()
       .map(this.decorate, this);
     },
 
-    /**
-     * Destroys delegation bindings
-     */
     unbind: function() {
       this._undelegateEvents();
     },

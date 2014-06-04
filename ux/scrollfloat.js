@@ -93,7 +93,8 @@ define([
   scrollfloat.off = function(fn, context) {
     context = context || 'window';
 
-    var breakpoint, cb, i;
+    var breakpoint, cb, i,
+        $context = context === 'window' ? $window : $(context);
 
     for (breakpoint in registry[context]) {
       cb = registry[context][breakpoint];
@@ -102,7 +103,15 @@ define([
       if (~i) {
         cb.original.splice(i, 1);
         cb.wrapped.splice(i, 1);
+        if (!cb.original.length) {
+          delete registry[context][breakpoint];
+        }
       }
+    }
+
+    if (!Object.keys(registry[context]).length) {
+      $context.off('scroll', scrollCache[context]);
+      delete registry[context];
     }
   };
 

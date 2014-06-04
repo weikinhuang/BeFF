@@ -1,3 +1,4 @@
+/* jshint node: true */
 module.exports = function(grunt) {
   'use strict';
 
@@ -36,13 +37,39 @@ module.exports = function(grunt) {
         reporters: ['dots'],
         browsers: ['PhantomJS', 'Firefox'/*, 'Chrome'*/]
       }
+    },
+
+    // Generates HTML JSDoc Documentation
+    jsdoc: {
+      dist: {
+        src: ['**/*.js', '!Gruntfile.js', '!node_modules/**/*.js', '!bower_components/**/*.js', '!test/**/*.js'],
+        options: {
+          destination: 'docs/html'
+        }
+      }
+    },
+
+    // Generates Markdown JSDoc Documentation
+    jsdox: {
+      generate: {
+        options: {
+          contentsTitle: 'BeFF'
+        },
+
+        src: ['**/*.js', '!Gruntfile.js', '!node_modules/**/*.js', '!bower_components/**/*.js', '!test/**/*.js'],
+        dest: 'docs/markdown'
+      }
     }
   });
 
   grunt.loadNpmTasks('grunt-contrib-jshint');
+  grunt.loadNpmTasks('grunt-jsdoc');
   grunt.loadNpmTasks('grunt-karma');
+  grunt.loadNpmTasks('grunt-jsdox');
 
   grunt.registerTask('test', ['jshint', 'karma:persistent']);
+  grunt.registerTask('docs', ['jsdoc']);
+  grunt.registerTask('mdocs', ['jsdox']);
   grunt.registerTask('travis', ['jshint', 'karma:multi']);
   grunt.registerTask('default', ['test']);
 };

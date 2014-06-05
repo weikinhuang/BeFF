@@ -57,28 +57,26 @@ define([
     },
 
     bind: function(model, firstLoad) {
-      if (!(model && model.data)) {
-        return this._super();
+      if (model && model.data) {
+        Object.defineProperty(this, 'data', {
+          enumerable: true,
+          writable: true,
+          value: model.data.bind(model)
+        });
+
+        this.listenTo(model, 'all', function reset() {
+          if (reset.throttle) { return; }
+          reset.throttle = true;
+          async(function() {
+            this.trigger('reload');
+            this.reload();
+            if (this._container) {
+              this._container.empty();
+            }
+            reset.throttle = false;
+          }.bind(this));
+        });
       }
-
-      Object.defineProperty(this, 'data', {
-        enumerable: true,
-        writable: true,
-        value: model.data.bind(model)
-      });
-
-      this.listenTo(model, 'all', function reset() {
-        if (reset.throttle) { return; }
-        reset.throttle = true;
-        async(function() {
-          this.trigger('reload');
-          this.reload();
-          if (this._container) {
-            this._container.empty();
-          }
-          reset.throttle = false;
-        }.bind(this));
-      });
 
       if (firstLoad) {
         this.reload();

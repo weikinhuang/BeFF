@@ -144,8 +144,10 @@ define([
 
     _submit: function(e) {
       var validator = Array.isArray(this.validator) ?
-            pipe.apply(null, this.validator) :
-            this.validator,
+            pipe.apply(null, this.validator.map(function(validator) {
+              return validator.bind(this);
+            }, this)) :
+            this.validator.bind(this),
           resolver = new Promise(),
           meta, valid, error;
 

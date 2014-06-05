@@ -32,17 +32,19 @@ define([
       this._mapEvents();
       this._nodes = this.$view.children().toArray()
       .map(this.decorate, this);
+      return this;
     },
 
     unbind: function() {
       this._undelegateEvents();
+      return this;
     },
 
     /**
      * Constructs an instance of the controller with the passed args
      * @return {BeFF/Controller} An instance of the controller
      */
-    decorate: function () {
+    decorate: function() {
       return construct.apply(this.Controller, arguments);
     },
 
@@ -82,6 +84,12 @@ define([
      */
     isEmpty: function() {
       return !this._nodes.length;
+    }
+  }, {
+    init: function($view, Controller) {
+      var instance = new this($view);
+      instance.Controller = Controller || instance.Controller;
+      return instance.bind();
     }
   })
   .mixin(eventMappable);

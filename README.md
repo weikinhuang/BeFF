@@ -16,3 +16,6 @@ Alternatively, you can generate an HTML version via:
 `grunt docs`
 
 
+Bower - Using the dependencies listed in the current directory's bower.json:
+
+'git config --global url."https://".insteadOf git://', then 'bower install'

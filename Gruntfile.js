@@ -27,7 +27,7 @@ module.exports = function(grunt) {
         singleRun: true
       },
       persistent: {
-        browsers: null,
+        browsers: ['PhantomJS'],
         singleRun: false
       },
       single: {

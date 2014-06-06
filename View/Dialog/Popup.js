@@ -1,7 +1,8 @@
 define([
   'jquery',
   'nbd/util/extend',
-  '../Dialog'
+  '../Dialog',
+  'jqueryui/jquery.ui.position'
 ], function($, extend, View) {
   'use strict';
 
@@ -34,22 +35,9 @@ define([
 
     position: function() {
       if (!this.$view) { return; }
-
-      var windowHeight = window.innerHeight ||
-        // IE compatibility
-        document.documentElement.offsetHeight,
-      offsetTop = (windowHeight - this.$view.outerHeight()) / 2;
-
-      // Manually center
-      this.$view.css({
-        "z-index": this._zIndex,
-        "margin-left": -~~(this.$view.width() / 2) + 'px',
-        top: Math.max(0, offsetTop)
-      })
-      // Then show in position
-      .addClass('shown');
-
-      this.$block.css("z-index", this._zIndex - 1);
+      this.$view.position({ of: window });
+      this.$view.css('zIndex', this._zIndex);
+      this.$block.css('zIndex', this._zIndex - 1);
     },
 
     show: function() {
@@ -70,7 +58,7 @@ define([
 
     toggle: function() {
       var state = this.$view.parent().is(document.body);
-      return this[ state ? 'hide': 'show' ]();
+      return this[state ? 'hide' : 'show']();
     }
   }, {
     Z_INDEX: 250

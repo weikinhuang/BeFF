@@ -46,12 +46,12 @@ define([
 
     of: function(Klass) {
       if (this._container) {
-        this._container.decorate = construct.bind(Klass);
+        this._container.Controller = Klass;
         return this;
       }
 
       this._Container.mixin({
-        decorate: construct.bind(Klass)
+        Controller: Klass
       });
       return this;
     },

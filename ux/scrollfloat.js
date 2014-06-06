@@ -1,7 +1,7 @@
 // Events for scrolling past floating regions
 define([
   'jquery',
-  '../util/throttle'
+  'nbd/util/throttle'
 ], function($, throttle) {
   'use strict';
 

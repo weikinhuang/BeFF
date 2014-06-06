@@ -2,7 +2,7 @@ define([
   'nbd/trait/promise',
   '../Dialog',
   '../../View/Dialog/Popup',
-  '../../util/throttle'
+  'nbd/util/throttle'
 ], function(promise, Dialog, Popup, throttle) {
   'use strict';
 

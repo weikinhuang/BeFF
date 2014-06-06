@@ -4,7 +4,7 @@ define([
   'nbd/trait/pubsub',
   'nbd/Controller/Entity',
   './View'
-], function($, extend, pubsub, View, Entity) {
+], function($, extend, pubsub, Entity, View) {
   'use strict';
 
   return Entity.extend({

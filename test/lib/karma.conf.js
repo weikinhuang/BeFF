@@ -15,6 +15,7 @@ module.exports = function(config) {
     // list of files / patterns to load in the browser
     files: [
       'test/lib/main.js',
+      'test/lib/mock-ajax.js',
       {pattern: '**/*.js', included: false}
     ],
 

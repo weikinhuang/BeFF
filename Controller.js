@@ -39,22 +39,9 @@ define([
       }
     },
 
-    _initView: function() {
-      this._super.apply(this, arguments);
-      this.listenTo(this._view, 'postrender', this._renderNested);
-    },
-
-    _renderNested: function($view, map) {
-      map = map || this._view.nests;
-      if (!(map && this.nests)) { return; }
-
-      Object.keys(map).forEach(function(key) {
-        var selector = map[key],
-        contained = this.nests[key],
-        $context = $view.find(selector);
-
-        return $context && contained && contained.render($context);
-      }, this);
+    destroy: function() {
+      this._super();
+      this.stopListening();
     }
   }, {
     VIEW_CLASS: View

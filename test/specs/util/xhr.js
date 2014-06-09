@@ -2,6 +2,9 @@ define(['util/xhr', 'nbd/Promise'], function(xhr, Promise) {
 	'use strict';
 
 	describe('util/xhr', function() {
+		var type = 'POST',
+		url = 'foo/bar',
+		data = { foo: 'bar'}
 
 		beforeEach(function() {
 			jasmine.Ajax.install();
@@ -14,9 +17,9 @@ define(['util/xhr', 'nbd/Promise'], function(xhr, Promise) {
 		it('makes correct AJAX call', function(){
 			
 			xhr({
-				type: 'POST',
-				url: 'foo/bar',
-				data: { foo: 'bar'}
+				type: type,
+				url: url,
+				data: data
 			});
 
 			var request = jasmine.Ajax.requests.mostRecent();
@@ -25,55 +28,52 @@ define(['util/xhr', 'nbd/Promise'], function(xhr, Promise) {
 			expect(request.data()).toEqual({foo: ['bar']});
 		});
 
-		it('resolves promise', function(){
+		it('resolves promise', function(done){
 
 			var success = jasmine.createSpy('ajaxSuccess'),
-			error = jasmine.createSpy('ajaxFailure');
-
-			xhr({
-				type: 'POST',
-				url: 'foo/bar',
-				data: { foo: 'bar'},
+			error = jasmine.createSpy('ajaxFailure'),
+			response = xhr({
+				type: type,
+				url: url,
+				data: data,
 				success: success,
 				error: error
-			});
-
-			
-			var request = jasmine.Ajax.requests.mostRecent();
-			request.response({
+			}),
+			request = jasmine.Ajax.requests.mostRecent(),
+			successfulResponse = request.response({
 				'status': 200,
 				'contentType': 'text/plain',
 				'responseText': 'you are awesome'
 			});
 
-			expect(success).toHaveBeenCalled();
-			expect(error).not.toHaveBeenCalled();
-
+			response.then(success, error).then(function(){
+				expect(success).toHaveBeenCalled();
+				expect(error).not.toHaveBeenCalled();
+			}).finally(done)
 		});
 
-		it('does not resolve promise', function(){
+		it('does not resolve promise', function(done){
 
 			var success = jasmine.createSpy('ajaxSuccess'),
-			error = jasmine.createSpy('ajaxFailure');
-
-			xhr({
-				type: 'POST',
-				url: 'foo/bar',
-				data: { foo: 'bar'},
+			error = jasmine.createSpy('ajaxFailure'),
+			response = xhr({
+				type: type,
+				url: url,
+				data: data,
 				success: success,
 				error: error
-			});
-
-			
-			var request = jasmine.Ajax.requests.mostRecent();
-			request.response({
+			}),
+			request = jasmine.Ajax.requests.mostRecent(),
+			errorResponse = request.response({
 				'status': 400,
 				'contentType': 'text/plain',
 				'responseText': 'you are not awesome'
 			});
 
-			expect(success).not.toHaveBeenCalled();
-			expect(error).toHaveBeenCalled();
+			response.then(success, error).then(function(){
+				expect(success).not.toHaveBeenCalled();
+				expect(error).toHaveBeenCalled();
+			}).finally(done)
 
 		});
 
@@ -81,20 +81,20 @@ define(['util/xhr', 'nbd/Promise'], function(xhr, Promise) {
 
 			it('is a function', function(){
 				var response = xhr({
-					type: 'POST',
-					url: 'foo/bar',
-					data: { foo: 'bar'}
+					type: type,
+					url: url,
+					data: data
 				});
 				expect(response.abort).toEqual(jasmine.any(Function));
 			});
 
-			it('promise does not resolve after abort',function(done){
+			it('will not resolve promise after abort',function(done){
 				var success = jasmine.createSpy('ajaxSuccess'),
 				error = jasmine.createSpy('ajaxFailure'),
 				response = xhr({
-					type: 'POST',
-					url: 'foo/bar',
-					data: { foo: 'bar'}
+					type: type,
+					url: url,
+					data: data
 				});
 
 				response.abort();

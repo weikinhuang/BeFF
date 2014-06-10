@@ -34,14 +34,16 @@ define(['util/xhr', 'nbd/Promise'], function(xhr, Promise) {
      error = jasmine.createSpy('ajaxFailure'),
      response = xhr(meta),
      request = jasmine.Ajax.requests.mostRecent(),
+     text = 'you are awesome',
      successfulResponse = request.response({
       'status': 200,
       'contentType': 'text/plain',
-      'responseText': 'you are awesome'
+      'responseText': text
     });
 
      response.then(success, error).then(function(){
       expect(success).toHaveBeenCalled();
+      expect(succes).toHaveBeenCalledWith(text);
       expect(error).not.toHaveBeenCalled();
     }).finally(done)
    });
@@ -52,15 +54,17 @@ define(['util/xhr', 'nbd/Promise'], function(xhr, Promise) {
      error = jasmine.createSpy('ajaxFailure'),
      response = xhr(meta),
      request = jasmine.Ajax.requests.mostRecent(),
+     text = 'you are awesome',
      errorResponse = request.response({
       'status': 400,
       'contentType': 'text/plain',
-      'responseText': 'you are not awesome'
+      'responseText': text
     });
 
      response.then(success, error).then(function(){
       expect(success).not.toHaveBeenCalled();
       expect(error).toHaveBeenCalled();
+      expect(error.calls.argsFor(0)[0].responseText).toEqual(text);
     }).finally(done)
 
    });

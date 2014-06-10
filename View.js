@@ -22,13 +22,12 @@ define([
     init: function(model) {
       this._super(model);
       this
-      .on('prerender', this._undelegateEvents)
       .on('postrender', this._mapEvents)
       .on('postrender', this._renderNested)
       .listenTo(this._model, 'all', function(key, val, old) {
-        if (key in this.nests) {
+        if (this.nests != null && key in this.nests) {
+          if (old && old.render) { old.render(shadow); }
           renderMatching.call(this, key);
-          return old && old.render && old.render(shadow);
         }
       });
     },

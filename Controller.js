@@ -2,7 +2,7 @@ define([
   'jquery',
   'nbd/util/extend',
   'nbd/trait/pubsub',
-  'nbd/Controller/Entity',
+  'nbd/Controller/Responsive',
   './View'
 ], function($, extend, pubsub, Entity, View) {
   'use strict';

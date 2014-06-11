@@ -57,7 +57,7 @@ define(['jquery', 'nbd/Class'], function($, Class) {
         map[keyCode] = map[keyCode] || $.Callbacks('unique stopOnFalse');
         // result[1] is the meta modifiers
         map[keyCode].add(result[1] ? checkMeta(result[1].split('-'), keymap[key]) : keymap[key]);
-      });
+      }, this);
 
       return map;
     },

@@ -55,6 +55,8 @@ define([
      * @returns {Array} A list of the newly constructed controllers rendered into $view
      */
     add: function(resultset) {
+      if (!resultset) { return; }
+      if (typeof resultset != 'object') { return; }
       var nodes = resultset.map(this.decorate, this).filter(Boolean);
 
       nodes.forEach(function(node) {
@@ -83,7 +85,7 @@ define([
      * @return {Boolean} Whether or not there are any managed controllers
      */
     isEmpty: function() {
-      return !this._nodes.length;
+      return !this._nodes || !this._nodes.length;
     }
   }, {
     init: function($view, Controller) {

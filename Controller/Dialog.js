@@ -1,6 +1,6 @@
 define([
   'jquery',
-  'nbd/Controller/Responsive',
+  '../Controller',
   'nbd/util/async'
 ], function($, Controller, async) {
   'use strict';

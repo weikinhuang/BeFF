@@ -8,9 +8,10 @@ define([
 
   var shadow = document.createDocumentFragment(),
   renderMatching = function(key) {
+    if (!this.$view) { return; }
     var selector = this.nests[key],
     contained = this._model.get(key),
-    $context = this.$view.find(selector);
+    $context = selector ? this.$view.find(selector) : this.$view;
 
     if (!$context) { return; }
     return contained && contained.render ?

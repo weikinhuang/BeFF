@@ -55,8 +55,7 @@ define([
      * @returns {Array} A list of the newly constructed controllers rendered into $view
      */
     add: function(resultset) {
-      if (!resultset) { return; }
-      if (typeof resultset != 'object') { return; }
+      if (!resultset || !Array.isArray(resultset)) { return; }
       var nodes = resultset.map(this.decorate, this).filter(Boolean);
 
       nodes.forEach(function(node) {

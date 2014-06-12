@@ -2,8 +2,9 @@ define([
   'jquery',
   'nbd/View/Entity',
   'nbd/util/async',
+  'nbd/trait/log',
   './trait/eventMappable'
-], function($, Entity, async, eventMappable) {
+], function($, Entity, async, log, eventMappable) {
   'use strict';
 
   var shadow = document.createDocumentFragment(),
@@ -49,5 +50,6 @@ define([
   }, {
     domify: $
   })
+  .mixin(log)
   .mixin(eventMappable);
 });

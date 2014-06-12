@@ -1,10 +1,11 @@
 define([
   'jquery',
   'nbd/util/extend',
+  'nbd/trait/log',
   'nbd/trait/pubsub',
   'nbd/Controller/Responsive',
   './View'
-], function($, extend, pubsub, Entity, View) {
+], function($, extend, log, pubsub, Entity, View) {
   'use strict';
 
   return Entity.extend({
@@ -46,5 +47,6 @@ define([
   }, {
     VIEW_CLASS: View
   })
+  .mixin(log)
   .mixin(pubsub);
 });

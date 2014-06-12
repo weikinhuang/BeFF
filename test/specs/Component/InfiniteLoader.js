@@ -214,6 +214,7 @@ define([
         done();
       });
     });
+
     describe('InfiniteLoader.init', function() {
       it('calls load with correct offset once the context is scrolled enough', function(done) {
         var Constructor = getConstructor(),
@@ -228,7 +229,7 @@ define([
         scrollAndCallback(context, 1, function() {
           expect(loader.load).not.toHaveBeenCalled();
 
-          scrollAndCallback(context, $('#scroll_content').height(), function() {
+          scrollAndCallback(context, context.find('#scroll_content').height(), function() {
             expect(loader.load).toHaveBeenCalled();
             done();
           });
@@ -242,7 +243,7 @@ define([
 
         onLoad(loader, function() {
           loader.reload();
-          expect(jasmine.Ajax.requests.length).toEqual(2);
+          expect(jasmine.Ajax.requests.count()).toEqual(2);
           jasmine.Ajax.uninstall();
           done();
         }, RESPONSES.empty);
@@ -258,7 +259,7 @@ define([
         scrollAndCallback(context, 1, function() {
           expect(loader.load).not.toHaveBeenCalled();
 
-          scrollAndCallback(context, $('#scroll_content').height(), function() {
+          scrollAndCallback(context, context.find('#scroll_content').height(), function() {
             expect(loader.load).toHaveBeenCalled();
             done();
           });
@@ -271,7 +272,7 @@ define([
         loader.bind();
         loader.bind();
 
-        expect(loader._infinitescroll.callCount).toEqual(1);
+        expect(loader._infinitescroll.calls.count()).toEqual(1);
       });
     });
 
@@ -292,11 +293,11 @@ define([
         spyOn(loader, 'load');
         loader.bind();
 
-        spyOn(loader._infinitescroll, 'remove').andCallThrough();
+        spyOn(loader._infinitescroll, 'off').and.callThrough();
         loader.unbind();
         loader.unbind();
 
-        expect(loader._infinitescroll.remove.callCount).toEqual(1);
+        expect(loader._infinitescroll.off.calls.count()).toEqual(1);
       });
     });
 
@@ -304,17 +305,12 @@ define([
       it('fires the before and success events in that order with correct responses', function(done) {
         var callSpy = jasmine.createSpy('callSpy');
 
-        loader
-        .on('before', function() {
-          callSpy('before');
-        })
-        .on('success', function() {
-          callSpy('success');
-        });
+        loader.on('all', callSpy);
 
         onLoad(loader, function() {
-          expect(callSpy.calls[0].args[0]).toEqual('before');
-          expect(callSpy.calls[1].args[0]).toEqual('success');
+          expect(callSpy.calls.count()).toBe(2);
+          expect(callSpy.calls.argsFor(0)[0]).toBe('before');
+          expect(callSpy.calls.argsFor(1)[0]).toBe('success');
           done();
         });
       });
@@ -336,11 +332,11 @@ define([
       it('waits for the first loaded call to resolve before it begins loading a second time', function(done) {
         onLoad(loader, function() {
           loader.load();
-          expect(jasmine.Ajax.requests.length).toEqual(2);
+          expect(jasmine.Ajax.requests.count()).toEqual(2);
           done();
         });
 
-        expect(jasmine.Ajax.requests.length).toEqual(1);
+        expect(jasmine.Ajax.requests.count()).toEqual(1);
       });
 
       it('rejects its promise once it realizes it has no more results', function(done) {
@@ -362,8 +358,8 @@ define([
         });
 
         onError(loader, function() {
-          expect(errorSpy.calls.length).toEqual(1);
-          expect(errorSpy.calls[0].args[0]).toEqual('error');
+          expect(errorSpy.calls.count()).toEqual(1);
+          expect(errorSpy.calls.argsFor(0)[0]).toEqual('error');
           done();
         });
       });

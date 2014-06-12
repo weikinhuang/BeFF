@@ -76,7 +76,7 @@ define([
         return;
       }
 
-      this._infinitescroll.remove(this._boundLoad, this.context);
+      this._infinitescroll.off(this._boundLoad, this.context);
       delete this._boundLoad;
       return this;
     },

@@ -76,7 +76,7 @@ define([
       this._nodes.forEach(function(item) {
         return item && item.destroy && item.destroy();
       });
-      this._nodes = [];
+      this._nodes.length = 0;
       return this.$view.empty();
     },
 

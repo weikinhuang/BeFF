@@ -16,6 +16,7 @@ define([
   });
 
   afterEach(function() {
+    loader.destroy();
     jasmine.Ajax.uninstall();
   });
 
@@ -62,10 +63,8 @@ define([
   }
 
   function scrollAndCallback(context, height, callback) {
-    var $context = $(context);
-
-    $context.one('scroll', callback);
-    $context.scrollTop(height);
+    context.one('scroll', callback);
+    context.scrollTop(height);
   }
 
   function onError(loader, fn, response) {
@@ -99,6 +98,8 @@ define([
         expect(function() {
           infiniteLoader.loaded();
         }).toThrow();
+
+        infiniteLoader.destroy();
       });
 
       it('doesnt throw an errors if configured', function() {
@@ -123,6 +124,8 @@ define([
         expect(function() {
           infiniteLoader.loaded();
         }).not.toThrow();
+
+        infiniteLoader.destroy();
       });
     });
 
@@ -163,7 +166,7 @@ define([
         });
       });
 
-      it('can configure url, data, offset using setParams', function(done) {
+      it('can configure url, data, offset using setParams', function() {
         loader.setParams(1, {dummy: 'dummy'}, '/dummy');
         expect(loader.offset).toEqual(1);
         expect(loader.data).toEqual({dummy: 'dummy'});
@@ -183,11 +186,9 @@ define([
         expect(loader.offset).toEqual(2);
         expect(loader.data).toEqual({a: 'a'});
         expect(loader.url).toEqual('/');
-
-        done();
       });
 
-      it('can configure url, data, offset using resetParams', function(done) {
+      it('can configure url, data, offset using resetParams', function() {
         var defaultOffset = loader.offset,
           defaultData = loader.data;
 
@@ -210,16 +211,14 @@ define([
         expect(loader.offset).toEqual(defaultOffset);
         expect(loader.data).toEqual(defaultData);
         expect(loader.url).toEqual('/');
-
-        done();
       });
     });
 
     describe('InfiniteLoader.init', function() {
       it('calls load with correct offset once the context is scrolled enough', function(done) {
-        var Constructor = getConstructor(),
-            offset = 3,
-            loader = new Constructor(context, offset);
+        var Constructor = getConstructor(), offset = 3;
+        loader.destroy();
+        loader = new Constructor('#scroll_container', offset);
 
         loader.load = jasmine.createSpy();
         loader.bind();
@@ -253,7 +252,7 @@ define([
     describe('bind', function() {
       it('binds an event to the context', function(done) {
         spyOn(loader, 'load');
-        loader.context = context;
+        loader.context = '#scroll_container';
         loader.bind();
 
         scrollAndCallback(context, 1, function() {
@@ -267,8 +266,7 @@ define([
       });
 
       it('only binds if not already bound', function() {
-        // spyOn(loader, '_infinitescroll').andCallThrough();
-        loader._infinitescroll = jasmine.createSpy('check');
+        spyOn(loader, '_infinitescroll').and.callThrough();
         loader.bind();
         loader.bind();
 
@@ -279,7 +277,7 @@ define([
     describe('unbind', function() {
       it('unbinds an event from the context', function(done) {
         spyOn(loader, 'load');
-        loader.context = context;
+        loader.context = '#scroll_container';
         loader.bind();
         loader.unbind();
 

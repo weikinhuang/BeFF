@@ -11,9 +11,9 @@ define([
     unbind: function() { return this; },
     destroy: function() {
       this
-      .unbind()
+      .off()
       .stopListening()
-      .off();
+      .unbind();
     }
   }, {
     displayName: 'Component',

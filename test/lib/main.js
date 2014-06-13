@@ -14,7 +14,7 @@ require.config({
 
   paths: {
     'jquery': 'bower_components/jquery/dist/jquery',
-    'nbd': 'bower_components/nbd'
+    'nbd': 'bower_components/nbd',
   },
 
   // dynamically load all test files

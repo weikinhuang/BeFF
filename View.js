@@ -11,7 +11,7 @@ define([
   renderMatching = function(key) {
     if (!this.$view) { return; }
     var selector = this.nests[key],
-    contained = this._model.get(key),
+    contained = this._model.get ? this._model.get(key) : this._model[key],
     $context = selector ? this.$view.find(selector) : this.$view;
 
     if (!$context) { return; }
@@ -25,13 +25,16 @@ define([
       this._super(model);
       this
       .on('postrender', this._mapEvents)
-      .on('postrender', this._renderNested)
-      .listenTo(this._model, 'all', function(key, val, old) {
-        if (this.nests != null && key in this.nests) {
-          if (old && old.render) { old.render(shadow); }
-          renderMatching.call(this, key);
-        }
-      });
+      .on('postrender', this._renderNested);
+
+      if (this._model && this._model.on) {
+        this.listenTo(this._model, 'all', function(key, val, old) {
+          if (this.nests != null && key in this.nests) {
+            if (old && old.render) { old.render(shadow); }
+            renderMatching.call(this, key);
+          }
+        });
+      }
     },
 
     template: function(templateData) {

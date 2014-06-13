@@ -17,8 +17,7 @@ module.exports = function(config) {
       'test/lib/main.js',
       'test/lib/mock-ajax.js',
       'test/lib/jasmine-fixture.js',
-      {pattern: '**/*.js', included: false},
-      {pattern: 'test/fixtures/scrollable.html', included: false}
+      {pattern: '**/*.js', included: false}
     ],
 
     // list of files to exclude

@@ -1,4 +1,4 @@
-BeFF
+BeFF ![Build Status](https://travis-ci.org/behance/BeFF.svg?branch=master)
 ====
 
 Behance Frontend Framework

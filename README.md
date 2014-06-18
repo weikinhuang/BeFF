@@ -5,16 +5,15 @@ Behance Frontend Framework
 
 #### Documentation
 
-[View the Docs](https://github.com/behance/BeFF/docs/markdown)
+[View the Docs](https://behance.github.io/BeFF)
 
-You can generate the JSDoc3 Markdown documentation via Grunt:
-
-`grunt mdocs`
-
-Alternatively, you can generate an HTML version via:
+You can manually generate the HTML documentation of our JSDoc blocks via:
 
 `grunt docs`
 
+That Grunt task will also push the generated html files to your fork's `gh-pages branch`
+
+### MISC
 
 Bower - Using the dependencies listed in the current directory's bower.json:
 

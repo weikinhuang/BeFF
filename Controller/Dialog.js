@@ -24,6 +24,7 @@ define([
     render: function($context) {
       var attachment = $($context).closest(this._view.attachment),
       retval = this._view.render(attachment.length ? attachment : document.body);
+      this._view.position($context);
       return retval;
     },
 

@@ -45,7 +45,13 @@ define([
      * @return {BeFF/Controller} An instance of the controller
      */
     decorate: function() {
-      return construct.apply(this.Controller, arguments);
+      var inst = construct.apply(this.Controller, arguments);
+      if (inst.on) {
+        this.listenTo(inst, 'destroy', function() {
+          this.remove(inst);
+        });
+      }
+      return inst;
     },
 
     /**
@@ -65,6 +71,13 @@ define([
       this._nodes = this._nodes.concat(nodes);
 
       return nodes;
+    },
+
+    remove: function(node) {
+      var i;
+      if (~(i = this._nodes.indexOf(node))) {
+        this._nodes.splice(i, 1);
+      }
     },
 
     /**

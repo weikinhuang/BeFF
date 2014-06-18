@@ -14,11 +14,11 @@ define(['trait/eventMappable', 'nbd/util/extend'], function(eventMappable, exten
   describe("_mapEvents", function() {
     it('maps event correctly', function() {
       var spy = jasmine.createSpy().and.callFake(function() {
-        expect(this).toBe(div)
+        expect(this).toBe(div);
       });
       test.events = {
         click: 'trafalgar'
-      }
+      };
 
       test.trafalgar = jasmine.createSpy();
       test._mapEvents();
@@ -55,27 +55,26 @@ define(['trait/eventMappable', 'nbd/util/extend'], function(eventMappable, exten
 
     it('properly handles null events', function() {
       test.events = null;
+      expect(function() {
+        test._mapEvents();
+      }).not.toThrowError();
       expect(test.events).toBeNull();
     });
 
     it('properly handles when events is empty', function() {
       test.events = { };
-      test._mapEvents();
+      expect(function() {
+        test._mapEvents();
+      }).not.toThrowError();
       expect(test.events).toEqual({});
     });
 
     it('properly handles an array of functions', function() {
       var spy = jasmine.createSpy(),
-          spy2 = jasmine.createSpy(),
-      foo = function() {
-        return spy;
-      },
-      bar = function() {
-        return spy2;
-      };
+          spy2 = jasmine.createSpy();
 
       test.events = {
-        click: [foo(), bar(), 'trafalgar']
+        click: [spy, spy2, 'trafalgar']
       };
 
       test.trafalgar = jasmine.createSpy('trafalgar');
@@ -95,7 +94,7 @@ define(['trait/eventMappable', 'nbd/util/extend'], function(eventMappable, exten
     it('does not make calls after undelegated', function() {
       test.events = {
         click: 'trafalgar'
-      }
+      };
 
       test.trafalgar = jasmine.createSpy();
 
@@ -110,7 +109,9 @@ define(['trait/eventMappable', 'nbd/util/extend'], function(eventMappable, exten
       test.events = null;
       test._mapEvents();
       expect(test.events).toBeNull();
-      test._undelegateEvents();
+      expect(function() {
+        test._undelegateEvents();
+      }).not.toThrowError();
       expect(test.events).toBeNull();
     });
 
@@ -118,28 +119,24 @@ define(['trait/eventMappable', 'nbd/util/extend'], function(eventMappable, exten
       test.events = { };
       test._mapEvents();
       expect(test.events).toEqual({});
-      test._undelegateEvents();
+      expect(function() {
+        test._undelegateEvents();
+      }).not.toThrowError();
       expect(test.events).toEqual({});
     });
 
     it('properly handles array of functions', function() {
       var spy = jasmine.createSpy(),
-          spy2 = jasmine.createSpy(),
-      foo = function() {
-        return spy;
-      },
-      bar = function() {
-        return spy2;
-      };
+          spy2 = jasmine.createSpy();
 
       test.events = {
-        click: [foo(), bar(), 'trafalgar']
+        click: [spy, spy2, 'trafalgar']
       };
 
       test.trafalgar = jasmine.createSpy('trafalgar');
 
       test._mapEvents();
-      test.$view.click()
+      test.$view.click();
       test._undelegateEvents();
       expect(test.trafalgar.calls.count()).toEqual(1);
       expect(spy.calls.count()).toEqual(1);

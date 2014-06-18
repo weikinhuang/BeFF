@@ -38,15 +38,9 @@ define([
       if ($view) {
         this._view.trigger('postrender', $view);
       }
-    },
-
-    destroy: function() {
-      this._super();
-      this.stopListening();
     }
   }, {
     VIEW_CLASS: View
   })
-  .mixin(log)
-  .mixin(pubsub);
+  .mixin(log);
 });

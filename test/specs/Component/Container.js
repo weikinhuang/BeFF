@@ -23,7 +23,7 @@ define(['Component/Container', 'Controller', 'jquery', 'trait/eventMappable'], f
         var $foo = $('<div><ul></ul></div>'),
         container = Container.init($foo, spy);
         expect(spy).toHaveBeenCalled();
-        expect(spy.calls.count()).toEqual(1)
+        expect(spy.calls.count()).toEqual(1);
         expect(render).not.toHaveBeenCalled();
       });
     });
@@ -63,30 +63,30 @@ define(['Component/Container', 'Controller', 'jquery', 'trait/eventMappable'], f
         expect(render.calls.count()).toEqual(2);
       });
       it('will not break when adding nothing', function() {
-        var instance = Container();
+        var instance = new Container();
         expect(function() {
           instance.add();
         }).not.toThrow();
       });
       it('will not break when adding null', function() {
-        var instance = Container();
+        var instance = new Container();
         expect(function() {
           instance.add(null);
         }).not.toThrow();
-      })
+      });
       it('will not break when adding a number', function() {
-        var instance = Container();
+        var instance = new Container();
         expect(instance.isEmpty()).toBe(true);
         expect(function() {
           instance.add(2);
         }).not.toThrow();
         expect(instance.isEmpty()).toBe(true);
-      })
+      });
     });
 
     describe('.decorate', function() {
       it('constructs an instance', function() {
-        var instance = Container();
+        var instance = new Container();
         expect(instance.decorate()).toEqual(jasmine.any(instance.Controller));
       });
     });
@@ -118,6 +118,6 @@ define(['Component/Container', 'Controller', 'jquery', 'trait/eventMappable'], f
         container.add(data);
         expect(container.isEmpty()).toEqual(false);
       });
-    })
+    });
   });
 });

@@ -1,34 +1,35 @@
-// A View Entity that delegates it's events
 define(function() {
   'use strict';
 
-  function decomposeEvent(method, context) {
-    var parseMethod = function parse(method) {
-      if (typeof method === 'string') {
-        return {
-          method: function() {
-            context[method].apply(context, arguments);
-          }
-        };
-      }
+  var parse = function parse(method) {
+    var self = this;
+    if (typeof method === 'string') {
+      return {
+        method: function() {
+          self[method].apply(self, arguments);
+        }
+      };
+    }
 
-      if (typeof method === 'function') {
-        return { method: method };
-      }
+    if (typeof method === 'function') {
+      return { method: method };
+    }
 
-      return Object.keys(method)
-      .map(function(selector) {
-        return {
-          selector: selector,
-          method: parse(this[selector]).method
-        };
-      }, method);
-    };
+    return Object.keys(method)
+    .map(function(selector) {
+      return {
+        selector: selector,
+        method: parse.call(this, method[selector]).method
+      };
+    }, this);
+  },
 
-    return Array.isArray(method) ?
-      Array.prototype.concat.apply([], method.map(parseMethod)) :
-      [].concat(parseMethod(method));
-  }
+  decomposeEvent = function(method) {
+    var parseMethod = parse.bind(this);
+    return [].concat(Array.isArray(method) ?
+                     method.map(parseMethod) :
+                     parseMethod(method));
+  };
 
   return {
     _mapEvents: function() {
@@ -37,7 +38,7 @@ define(function() {
       this._undelegateEvents();
       Object.keys(this.events)
       .forEach(function(event) {
-        var bindings = decomposeEvent(this.events[event], this);
+        var bindings = decomposeEvent.call(this, this.events[event]);
         event += '.delegated';
 
         bindings.forEach(function(binding) {

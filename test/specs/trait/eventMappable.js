@@ -11,7 +11,7 @@ define(['trait/eventMappable', 'nbd/util/extend'], function(eventMappable, exten
     div = test.$view[0];
   });
 
-  ddescribe("_mapEvents", function() {
+  describe("_mapEvents", function() {
     it('maps event correctly', function() {
       expect(test.$view.is('div')).toBeTruthy();
       test.events = {

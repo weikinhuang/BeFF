@@ -6,7 +6,7 @@ define(['Component/Container', 'Controller', 'jquery', 'trait/eventMappable'], f
 
     beforeEach(function() {
       spy = jasmine.createSpy();
-      render = jasmine.createSpy(),
+      render = jasmine.createSpy();
       destroy = jasmine.createSpy();
       spy.prototype.render = render;
       spy.prototype.destroy = destroy;

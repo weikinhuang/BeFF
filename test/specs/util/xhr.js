@@ -42,7 +42,7 @@ define(['util/xhr', 'nbd/Promise'], function(xhr, Promise) {
         expect(success).toHaveBeenCalled();
         expect(succes).toHaveBeenCalledWith(text);
         expect(error).not.toHaveBeenCalled();
-      }).finally(done)
+      }).finally(done);
     });
 
     it('rejects promise on xhr failure', function(done) {
@@ -61,7 +61,7 @@ define(['util/xhr', 'nbd/Promise'], function(xhr, Promise) {
         expect(success).not.toHaveBeenCalled();
         expect(error).toHaveBeenCalled();
         expect(error.calls.argsFor(0)[0].responseText).toEqual(text);
-      }).finally(done)
+      }).finally(done);
     });
 
     describe('.abort', function() {
@@ -79,7 +79,7 @@ define(['util/xhr', 'nbd/Promise'], function(xhr, Promise) {
         response.then(success, error).then(function() {
           expect(success).not.toHaveBeenCalled();
           expect(error).toHaveBeenCalled();
-        }).finally(done)
+        }).finally(done);
       });
     });
   });

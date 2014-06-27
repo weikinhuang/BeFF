@@ -65,6 +65,10 @@ define([
       if (!this._shown) { return this; }
       this._shown = false;
 
+      transitionEnd(this.$view).finally(function() {
+        this.$view.hide();
+      }.bind(this));
+
       this.$view.toggleClass(this._shownClass, this._shown);
 
       keyboard.off();

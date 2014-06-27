@@ -163,6 +163,24 @@ define(['Component/Form', 'nbd/Promise', 'util/xhr'], function(Form, Promise, xh
         done();
       }, 100);
     });
+
+    it('is a function that returns a thenable', function(done) {
+      var spy = jasmine.createSpy(),
+          yes = jasmine.createSpy(),
+          no = jasmine.createSpy(),
+          p = new Promise();
+      foo.on('error', spy);
+      p.reject('foo');
+      spyOn(foo, 'commit').and.returnValue(p);
+      foo.submit().then(yes, no).then(function() {
+        expect(yes).not.toHaveBeenCalled();
+        expect(no).toHaveBeenCalled();
+      });
+      setTimeout(function() {
+        expect(spy).toHaveBeenCalledWith('foo');
+        done();
+      }, 100);
+    });
   });
 
   describe('destroy()', function() {

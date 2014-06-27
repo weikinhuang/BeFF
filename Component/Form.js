@@ -78,6 +78,9 @@ define([
 
   Form = Component.extend({
     init: function($context) {
+      if (!$context) {
+        throw new Error("The context of the form cannot be empty");
+      }
       this.$form = $context.is('form') ? $context : $context.find('form');
 
       // Internal bindings so that we can unbind later
@@ -95,6 +98,9 @@ define([
     },
 
     destroy: function() {
+      if (!this.$form) {
+        throw new Error("Cannot destroy null form");
+      }
       this._super();
       this.$form = null;
     },
@@ -133,6 +139,9 @@ define([
     },
 
     submit: function(e) {
+      if (!this.$form) {
+        throw new Error("The form cannot be null");
+      }
       this.trigger('before', e);
       var chain = this._submit(e);
       chain

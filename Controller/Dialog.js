@@ -16,7 +16,7 @@ define([
       this.$context = $context
       .on('click.dialog', function(e) {
         if (e.isDefaultPrevented() ||
-            e.originalEvent.view === this._view) { return; }
+            e.originalEvent._view === this._view) { return; }
         this.toggle(e.delegateTarget);
       }.bind(this));
     },

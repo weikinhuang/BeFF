@@ -42,23 +42,14 @@ define([
 
     show: function() {
       if (!this.$view) { return; }
-      if (!this.$view.parent().is(document.body)) {
-        this.$view
-        .appendTo(document.body)
-        .after(this.$block);
-      }
+      this.$block.show();
       return this._super();
     },
 
     hide: function() {
       if (!this.$view) { return; }
-      this.$view.add(this.$block).detach();
+      this.$block.hide();
       return this._super();
-    },
-
-    toggle: function() {
-      var state = this.$view.parent().is(document.body);
-      return this[state ? 'hide' : 'show']();
     }
   }, {
     Z_INDEX: 250

@@ -40,16 +40,13 @@ define(['Component/Form', 'nbd/Promise', 'util/xhr'], function(Form, Promise, xh
       expect(foo.validator).toHaveBeenCalledWith({ foo: 'bar'});
     });
 
-    it('returns error when validator throws an error', function(done) {
+    it('throws an error and submit fails', function(done) {
       spyOn(foo, 'validator').and.callFake(function() {
         throw new Error('you shall not pass');
       });
       spyOn(foo, 'commit');
-      foo.submit().finally(function() {
-        expect(foo.commit).not.toHaveBeenCalled();
-      }).then(done);
-      expect(foo.validator).toHaveBeenCalledWith({ foo: 'bar'});
-      expect(foo.validator).toThrowError('you shall not pass');
+      foo.submit().catch(done);
+      expect(foo.commit).not.toHaveBeenCalled();
     });
 
     it('throws error event when validation fails', function(done) {

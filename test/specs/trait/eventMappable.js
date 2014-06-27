@@ -13,6 +13,9 @@ define(['trait/eventMappable', 'nbd/util/extend'], function(eventMappable, exten
 
   describe("_mapEvents", function() {
     it('maps event correctly', function() {
+      var spy = jasmine.createSpy().and.callFake(function() {
+        expect(this).toBe(div);
+      });
       expect(test.$view.is('div')).toBeTruthy();
       test.events = {
         click: 'trafalgar'

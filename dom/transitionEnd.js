@@ -28,6 +28,16 @@ define([
     window.webkitRequestAnimationFrame ||
     window.msRequestAnimationFrame,
 
+  bindPromise = function(key) {
+    var p = new Promise();
+    this.one(eventName, function(event) {
+      if (event.originalEvent.propertyName === key) {
+        p.resolve(event);
+      }
+    });
+    return p;
+  },
+
   // From https://developer.mozilla.org/en-US/docs/Web/CSS/CSS_animated_properties
   allowedTransitionProps = [
     'transform',
@@ -102,9 +112,11 @@ define([
   ];
 
   function hasTransition($el) {
-    var trans = $el.css('transition-duration');
-    return (trans.split(',').map(parseFloat).some(Boolean) &&
-            trans !== 'none');
+    var duration = $el.css('transition-duration'),
+        property = $el.css('transition-property');
+
+    return (property !== 'none' &&
+            duration.split(',').map(parseFloat).some(Boolean));
   }
 
   function getTransitionProps($el) {
@@ -126,23 +138,13 @@ define([
 
     timeout = timeout || 300;
 
-    function boundPromise(key) {
-      var p = new Promise();
-      $el.one(eventName, function(event) {
-        if (event.originalEvent.propertyName === key) {
-          p.resolve();
-        }
-      });
-      return p;
-    }
-
     function checkTransitionProp() {
       requestAnimationFrame(function() {
         var changed = diff(props, getTransitionProps($el)),
             keys = Object.keys(changed);
 
         if (keys.length) {
-          p.resolve(Promise.all.apply(Promise, keys.map(boundPromise)));
+          p.resolve(Promise.all.apply(Promise, keys.map(bindPromise, $el)));
         }
         else if (!halt) {
           checkTransitionProp();

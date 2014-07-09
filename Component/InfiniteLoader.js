@@ -19,6 +19,7 @@ define([
     offset: 0,
     data: {},
     url: undefined,
+    type: 'GET',
 
     _infinitescroll: scrollfloat,
     _xhr: xhr,
@@ -109,6 +110,7 @@ define([
 
       return {
         url: this.url,
+        type: this.type,
         data: data
       };
     },

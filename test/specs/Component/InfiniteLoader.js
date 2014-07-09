@@ -325,6 +325,14 @@ define([
         });
       });
 
+      it('can change loader type', function(done) {
+        loader.type = 'POST';
+        onLoad(loader, function(request) {
+          expect(request.method).toBe('POST');
+          done();
+        });
+      });
+
       it('waits for the first loaded call to resolve before it begins loading a second time', function(done) {
         onLoad(loader, function() {
           loader.load();

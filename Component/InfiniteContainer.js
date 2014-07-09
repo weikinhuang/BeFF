@@ -35,6 +35,10 @@ define([
     },
 
     at: function($context) {
+      if (!$context) {
+        throw new Error('Context must be defined');
+      }
+
       this._container = new this._Container($context);
       if ($context.css('overflowX') !== 'visible') {
         this.context = $context[0].id ?

@@ -100,6 +100,10 @@ define([
     },
 
     destroy: function() {
+      if (this._model) {
+        this.stopListening(this._model);
+        this._model = null;
+      }
       if (this._container) {
         this._container.destroy();
         this._container = null;

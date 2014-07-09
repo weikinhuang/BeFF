@@ -19,6 +19,7 @@ define([
     offset: 0,
     data: {},
     url: undefined,
+    type: 'GET',
 
     _infinitescroll: scrollfloat,
     _xhr: xhr,
@@ -38,7 +39,6 @@ define([
     resetParams: function(offset, data, url) {
       delete this.offset;
       delete this.data;
-      delete this.url;
       return this.setParams(offset, data, url);
     },
 
@@ -110,6 +110,7 @@ define([
 
       return {
         url: this.url,
+        type: this.type,
         data: data
       };
     },

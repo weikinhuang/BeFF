@@ -200,12 +200,10 @@ define([
         loader.resetParams(2);
         expect(loader.offset).toEqual(2);
         expect(loader.data).toEqual(defaultData);
-        expect(loader.url).toBeUndefined();
 
         loader.resetParams(null, {a: 'a'});
         expect(loader.offset).toEqual(defaultOffset);
         expect(loader.data).toEqual({a: 'a'});
-        expect(loader.url).toBeUndefined();
 
         loader.resetParams(null, null, '/');
         expect(loader.offset).toEqual(defaultOffset);
@@ -324,6 +322,14 @@ define([
             expect(request.url).toEqual('/?offset=1');
             done();
           });
+        });
+      });
+
+      it('can change loader type', function(done) {
+        loader.type = 'POST';
+        onLoad(loader, function(request) {
+          expect(request.method).toBe('POST');
+          done();
         });
       });
 

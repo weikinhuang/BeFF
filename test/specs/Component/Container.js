@@ -35,9 +35,20 @@ define(['Component/Container', 'Controller', 'jquery', 'trait/eventMappable'], f
       it('maps events on bind', function() {
         spyOn(Container.prototype, '_mapEvents');
         var $foo = $('<div></div>'),
-        instance = Container.init($foo, spy);
+        instance = new Container($foo);
         instance.bind();
         expect(instance._mapEvents).toHaveBeenCalled();
+      });
+
+      it('decorates existing DOM elements', function() {
+        var $foo = $('<ul><li></li><li></li><li></li></ul>'),
+        instance = new Container($foo);
+        instance.bind();
+        expect(instance._nodes.length).toEqual(3);
+        expect(instance._nodes).toEqual(jasmine.any(Array));
+        instance._nodes.forEach(function(node) {
+          expect(node).toEqual(jasmine.any(instance.Controller));
+        });
       });
     });
 

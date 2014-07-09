@@ -39,7 +39,7 @@ define([
         throw new Error('Context must be defined');
       }
 
-      this._container = new this._Container($context);
+      this._container = this._Container.init($context);
       if ($context.css('overflowX') !== 'visible') {
         this.context = $context[0].id ?
           '#' + $context[0].id :
@@ -60,13 +60,21 @@ define([
       return this;
     },
 
+    _xhrOptions: function() {
+      var options = this._super();
+      if (this._model){
+        extend(options.data, this._model.data());
+      }
+      return options;
+    },
+
     bind: function(model, firstLoad) {
+      if (this._model) {
+        this.stopListening(this._model);
+      }
+
       if (model && model.data) {
-        Object.defineProperty(this, 'data', {
-          enumerable: true,
-          writable: true,
-          value: model.data.bind(model)
-        });
+        this._model = model;
 
         this.listenTo(model, 'all', function reset() {
           if (reset.throttle) { return; }

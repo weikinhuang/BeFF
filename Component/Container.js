@@ -73,6 +73,9 @@ define([
      * @return {$} The newly emptied $view
      */
     empty: function() {
+      if (!this._nodes) {
+        return this.$view;
+      }
       this._nodes.forEach(function(item) {
         return item && item.destroy && item.destroy();
       });

@@ -38,7 +38,6 @@ define([
     resetParams: function(offset, data, url) {
       delete this.offset;
       delete this.data;
-      delete this.url;
       return this.setParams(offset, data, url);
     },
 

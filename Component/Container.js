@@ -101,6 +101,18 @@ define([
      */
     isEmpty: function() {
       return !this._nodes || !this._nodes.length;
+    },
+
+    /**
+     * @return {Array} An array of all the nodes
+     */
+    getNodes: function() {
+      var nodes = [];
+      if (!this._nodes || !this._nodes.length){ return nodes; }
+      this._nodes.forEach(function(node) {
+        nodes.push(node);
+      });
+      return nodes;
     }
   }, {
     init: function($view, Controller) {

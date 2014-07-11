@@ -62,7 +62,7 @@ define(['Component/Container', 'Controller', 'jquery', 'trait/eventMappable'], f
       });
     });
 
-    describe('.add', function() {
+    describe('.add()', function() {
       it('is rendered', function() {
         var $foo = $('<div><ul></ul></div>'),
         container = Container.init($foo, spy),
@@ -102,7 +102,7 @@ define(['Component/Container', 'Controller', 'jquery', 'trait/eventMappable'], f
       });
     });
 
-    describe('.empty', function() {
+    describe('.empty()', function() {
       it('is destroyed', function() {
         var $foo = $('<div><ul></ul></div>'),
         container = Container.init($foo, spy);
@@ -128,6 +128,28 @@ define(['Component/Container', 'Controller', 'jquery', 'trait/eventMappable'], f
         expect(container.isEmpty()).toEqual(true);
         container.add(data);
         expect(container.isEmpty()).toEqual(false);
+      });
+    });
+
+    describe('.getNodes()', function() {
+      it('returns correct number of nodes', function() {
+        var $foo = $('<ul><li></li><li></li><li></li></ul>'),
+        instance = new Container($foo);
+        instance.bind();
+        expect(instance.getNodes().length).toEqual(instance._nodes.length);
+        expect(instance.getNodes()).toEqual(jasmine.any(Array));
+        instance.getNodes().forEach(function(node) {
+          expect(node).toEqual(jasmine.any(instance.Controller));
+        });
+      });
+
+      it('returns an empty array when this._nodes is empty', function() {
+        var $foo = $('<ul></ul>'),
+        instance = new Container($foo);
+        instance.bind();
+        expect(instance.isEmpty()).toBe(true);
+        expect(instance.getNodes().length).toEqual(0);
+        expect(instance.getNodes().length).toEqual(instance._nodes.length);
       });
     });
   });

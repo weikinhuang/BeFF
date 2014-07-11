@@ -101,6 +101,13 @@ define([
      */
     isEmpty: function() {
       return !this._nodes || !this._nodes.length;
+    },
+
+    /**
+     * @return {Array} An array of all the nodes
+     */
+    getNodes: function() {
+      return this._nodes && this._nodes.slice() || [];
     }
   }, {
     init: function($view, Controller) {

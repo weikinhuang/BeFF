@@ -109,10 +109,7 @@ define([
     getNodes: function() {
       var nodes = [];
       if (!this._nodes || !this._nodes.length){ return nodes; }
-      this._nodes.forEach(function(node) {
-        nodes.push(node);
-      });
-      return nodes;
+      return this._nodes.slice();
     }
   }, {
     init: function($view, Controller) {

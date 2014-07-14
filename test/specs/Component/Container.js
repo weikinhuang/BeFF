@@ -32,6 +32,7 @@ define(['Component/Container', 'Controller', 'jquery', 'trait/eventMappable'], f
       it('is eventMappable', function() {
         expect(Container.inherits(eventMappable)).toBe(true);
       });
+
       it('maps events on bind', function() {
         spyOn(Container.prototype, '_mapEvents');
         var $foo = $('<div></div>'),
@@ -92,6 +93,32 @@ define(['Component/Container', 'Controller', 'jquery', 'trait/eventMappable'], f
           instance.add(2);
         }).not.toThrow();
         expect(instance.isEmpty()).toBe(true);
+      });
+      it('fires an update event after all nodes have been added', function() {
+        var $foo = $('<div><ul></ul></div>'),
+            container = Container.init($foo, spy),
+            data = ['<li> foo </li>', '<li> bar </li>'],
+            nodeAdded = jasmine.createSpy();
+
+        container.on('update', nodeAdded);
+        container.add(data);
+
+        expect(nodeAdded.calls.count()).toBe(1);
+      });
+    });
+
+    describe('.remove()', function() {
+      it('fires an update event when a node is removed', function() {
+       var $foo = $('<div><ul></ul></div>'),
+            container = Container.init($foo, spy),
+            data = ['<li> foo </li>', '<li> bar </li>'],
+            nodeRemoved = jasmine.createSpy();
+
+        container.on('update', nodeRemoved);
+        container.add(data);
+        container.remove(container.getNodes()[0]);
+
+        expect(nodeRemoved).toHaveBeenCalled();
       });
     });
 

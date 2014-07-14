@@ -11,10 +11,12 @@ define([
     dataKey: 'data',
     offsetKey: 'offset',
 
+    Container: Container,
+
     init: function(loaderOptions) {
       this._super();
       extend(this, loaderOptions);
-      this._Container = Container.extend();
+      this._Container = this.Container.extend();
     },
 
     hasMoreResults: function(response) {

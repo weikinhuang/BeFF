@@ -29,15 +29,12 @@ define([
     },
 
     /**
-     * @fires module:BeFF/Component/Container#postBind
      * @return {BeFF/Component/Container}
      */
     bind: function() {
       this._mapEvents();
       this._nodes = this.$view.children().toArray()
       .map(this.decorate, this);
-
-      this.trigger('postBind');
       return this;
     },
 
@@ -64,7 +61,7 @@ define([
      * Constructs a controller for every element of the resultset
      * and renders the controller into the managed $view
      * @param {Array} resultset A list of JSON objects representing new items in the container
-     * @fires module:BeFF/Component/Container#add
+     * @fires module:BeFF/Component/Container#update
      * @returns {Array} A list of the newly constructed controllers rendered into $view
      */
     add: function(resultset) {
@@ -72,23 +69,21 @@ define([
       var nodes = resultset.map(this.decorate, this).filter(Boolean);
 
       nodes.forEach(function(node) {
-        this.trigger('add', node);
         return node.render && node.render(this.$view);
       }, this);
 
       this._nodes = this._nodes.concat(nodes);
+      this.trigger('update', this._nodes);
 
       return nodes;
     },
 
-    /**
-     * @fires module:BeFF/Component/Container#removed
-     */
+    /** @fires module:BeFF/Component/Container#update */
     remove: function(node) {
       var i;
       if (~(i = this._nodes.indexOf(node))) {
         this._nodes.splice(i, 1);
-        this.trigger('removed');
+        this.trigger('update');
       }
     },
 

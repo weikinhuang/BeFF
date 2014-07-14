@@ -24,6 +24,31 @@ define(['Component/InfiniteContainer', 'util/xhr', 'nbd/Model', 'nbd/util/depara
       }).toThrowError();
     });
 
+    it('defaults its container to BeFF/Component/Container if not overriden by subclasses', function() {
+      var Container = require('Component/Container'),
+          Foo = InfiniteContainer.extend(),
+          foo = new Foo(),
+          $bar = affix('div');
+
+      foo.of(Controller).at($bar).bind(model);
+
+      expect(foo._container instanceof Container).toBeTruthy();
+    });
+
+    it('allows the Container constructor to be configurable within subclasses', function() {
+      var Container = require('Component/Container'),
+          TestContainer = Container.extend(),
+          Foo = InfiniteContainer.extend({
+            Container: TestContainer
+          }),
+          foo = new Foo(),
+          $bar = affix('div');
+
+      foo.of(Controller).at($bar).bind(model);
+
+      expect(foo._container instanceof TestContainer).toBeTruthy();
+    });
+
     it('makes sure ajax request is with empty model', function() {
       jasmine.Ajax.install();
 

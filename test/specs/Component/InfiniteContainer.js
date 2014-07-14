@@ -49,6 +49,22 @@ define(['Component/InfiniteContainer', 'util/xhr', 'nbd/Model', 'nbd/util/depara
       expect(foo._container instanceof TestContainer).toBeTruthy();
     });
 
+    it('forwards the update event from its container', function() {
+      var $bar = affix('div'),
+          data = ['<li> foo </li>', '<li> bar </li>'],
+          updated = jasmine.createSpy(),
+          Infcont = InfiniteContainer.extend(),
+          inf = new Infcont();
+
+        inf.of(Controller).at($bar).bind(model);
+
+        inf.on('update', updated);
+        inf._container.add(data);
+
+        expect(updated).toHaveBeenCalled();
+        expect(updated).toHaveBeenCalledWith(inf._container.getNodes());
+    });
+
     it('makes sure ajax request is with empty model', function() {
       jasmine.Ajax.install();
 

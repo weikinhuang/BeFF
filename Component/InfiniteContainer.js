@@ -42,6 +42,9 @@ define([
       }
 
       this._container = this._Container.init($context);
+
+      this.listenTo(this._container, 'update', this.trigger.bind(this, 'update'));
+
       if ($context.css('overflowX') !== 'visible') {
         this.context = $context[0].id ?
           '#' + $context[0].id :

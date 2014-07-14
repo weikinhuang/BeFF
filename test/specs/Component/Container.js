@@ -103,7 +103,7 @@ define(['Component/Container', 'Controller', 'jquery', 'trait/eventMappable'], f
         container.on('update', nodeAdded);
         container.add(data);
 
-        expect(nodeAdded.calls.count()).toBe(1);
+        expect(nodeAdded).toHaveBeenCalled();
       });
     });
 

@@ -73,7 +73,7 @@ define([
       }, this);
 
       this._nodes = this._nodes.concat(nodes);
-      this.trigger('update', this._nodes);
+      this.trigger('update', this.getNodes());
 
       return nodes;
     },
@@ -83,7 +83,7 @@ define([
       var i;
       if (~(i = this._nodes.indexOf(node))) {
         this._nodes.splice(i, 1);
-        this.trigger('update');
+        this.trigger('update', this.getNodes());
       }
     },
 
@@ -96,10 +96,18 @@ define([
       if (!this._nodes) {
         return this.$view;
       }
+
       this._nodes.forEach(function(item) {
-        return item && item.destroy && item.destroy();
-      });
+        if (!item) { return; }
+        if (item.off) {
+          this.stopListening(item);
+        }
+        if (item.destroy) {
+          item.destroy();
+        }
+      }, this);
       this._nodes.length = 0;
+      this.trigger('update', this.getNodes());
       return this.$view.empty();
     },
 

@@ -65,7 +65,7 @@ define([
       if (!this._shown) { return this; }
       this._shown = false;
 
-      transitionEnd(this.$view).finally(function() {
+      transitionEnd(this.$view).then(function() {
         this.$view.hide();
       }.bind(this));
 

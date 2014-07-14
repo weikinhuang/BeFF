@@ -1,8 +1,7 @@
 define([
   'nbd/Promise',
-  'nbd/util/async',
   'nbd/util/diff'
-], function(Promise, async, diff) {
+], function(Promise, diff) {
   'use strict';
 
   // Thanks modernizr
@@ -150,7 +149,7 @@ define([
           checkTransitionProp();
         }
         else {
-          p.reject();
+          p.resolve(false);
         }
       });
     }
@@ -163,7 +162,7 @@ define([
     }
     // Immediately return
     else {
-      p.reject();
+      p.resolve(false);
     }
     return p;
   };

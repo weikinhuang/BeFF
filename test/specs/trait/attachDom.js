@@ -8,10 +8,9 @@ define([
     var model;
 
     beforeEach(function() {
-      model = new Model();
+      model = Model.extend().mixin(attachDom)();
       spyOn(model, 'get').and.callThrough();
       spyOn(model, 'set').and.callThrough();
-      spyOn(model, 'trigger').and.callThrough();
     });
 
     afterEach(function() {
@@ -26,7 +25,7 @@ define([
       });
 
       it('sets model with piped dom values', function(done) {
-        attachDom.attachCheckbox.call(model, 'foo', $context);
+        model.attachCheckbox('foo', $context);
         $context.find('input:first').click();
 
         setTimeout(function() {
@@ -41,7 +40,7 @@ define([
       });
 
       it('changes based on model', function(done) {
-        attachDom.attachCheckbox.call(model, 'foo', $context);
+        model.attachCheckbox('foo', $context);
         model.trigger('foo', 'baz');
         setTimeout(function() {
           expect($context.find('input:first')[0].checked).toBe(false);
@@ -59,7 +58,7 @@ define([
       });
 
       it('sets model to dom values', function(done) {
-        attachDom.attachRadio.call(model, 'foo', $context);
+        model.attachRadio('foo', $context);
         $context.find('input:first').click();
 
         setTimeout(function() {
@@ -74,7 +73,7 @@ define([
       });
 
       it('changes based on model', function(done) {
-        attachDom.attachRadio.call(model, 'foo', $context);
+        model.attachRadio('foo', $context);
         model.trigger('foo', 'baz');
 
         setTimeout(function() {
@@ -94,7 +93,7 @@ define([
       });
 
       it('sets model with dom values', function(done) {
-        attachDom.attachSelect.call(model, 'foo', $context);
+        model.attachSelect('foo', $context);
         $context.find('option:first').prop('selected', true).change();
 
         setTimeout(function() {
@@ -109,7 +108,7 @@ define([
       });
 
       it('changes based on model', function(done) {
-        attachDom.attachSelect.call(model, 'foo', $context);
+        model.attachSelect('foo', $context);
         model.trigger('foo', 'baz');
 
         setTimeout(function() {
@@ -127,7 +126,7 @@ define([
       });
 
       it('sets model with dom values', function(done) {
-        attachDom.attachText.call(model, 'foo', $context);
+        model.attachText('foo', $context);
         $context.val('bar').change();
 
         setTimeout(function() {
@@ -137,7 +136,7 @@ define([
       });
 
       it('changes based on model', function(done) {
-        attachDom.attachText.call(model, 'foo', $context);
+        model.attachText('foo', $context);
         model.set('foo', 'baz');
 
         setTimeout(function() {

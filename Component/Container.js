@@ -11,7 +11,7 @@ define([
    * Manages a DOM region that contains a list of Controllers for each item
    * @constructor
    * @extends BeFF/Component
-   * @module  Container
+   * @module  BeFF/Component/Container
    */
   return Component.extend({
     /**
@@ -28,6 +28,9 @@ define([
       this.$view = $view;
     },
 
+    /**
+     * @return {BeFF/Component/Container}
+     */
     bind: function() {
       this._mapEvents();
       this._nodes = this.$view.children().toArray()
@@ -58,6 +61,7 @@ define([
      * Constructs a controller for every element of the resultset
      * and renders the controller into the managed $view
      * @param {Array} resultset A list of JSON objects representing new items in the container
+     * @fires module:BeFF/Component/Container#update
      * @returns {Array} A list of the newly constructed controllers rendered into $view
      */
     add: function(resultset) {
@@ -69,14 +73,17 @@ define([
       }, this);
 
       this._nodes = this._nodes.concat(nodes);
+      this.trigger('update', this.getNodes());
 
       return nodes;
     },
 
+    /** @fires module:BeFF/Component/Container#update */
     remove: function(node) {
       var i;
       if (~(i = this._nodes.indexOf(node))) {
         this._nodes.splice(i, 1);
+        this.trigger('update', this.getNodes());
       }
     },
 
@@ -89,10 +96,18 @@ define([
       if (!this._nodes) {
         return this.$view;
       }
+
       this._nodes.forEach(function(item) {
-        return item && item.destroy && item.destroy();
-      });
+        if (!item) { return; }
+        if (item.off) {
+          this.stopListening(item);
+        }
+        if (item.destroy) {
+          item.destroy();
+        }
+      }, this);
       this._nodes.length = 0;
+      this.trigger('update', this.getNodes());
       return this.$view.empty();
     },
 

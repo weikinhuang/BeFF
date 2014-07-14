@@ -24,6 +24,47 @@ define(['Component/InfiniteContainer', 'util/xhr', 'nbd/Model', 'nbd/util/depara
       }).toThrowError();
     });
 
+    it('defaults its container to BeFF/Component/Container if not overriden by subclasses', function() {
+      var Container = require('Component/Container'),
+          Foo = InfiniteContainer.extend(),
+          foo = new Foo(),
+          $bar = affix('div');
+
+      foo.of(Controller).at($bar).bind(model);
+
+      expect(foo._container instanceof Container).toBeTruthy();
+    });
+
+    it('allows the Container constructor to be configurable within subclasses', function() {
+      var Container = require('Component/Container'),
+          TestContainer = Container.extend(),
+          Foo = InfiniteContainer.extend({
+            Container: TestContainer
+          }),
+          foo = new Foo(),
+          $bar = affix('div');
+
+      foo.of(Controller).at($bar).bind(model);
+
+      expect(foo._container instanceof TestContainer).toBeTruthy();
+    });
+
+    it('forwards the update event from its container', function() {
+      var $bar = affix('div'),
+          data = ['<li> foo </li>', '<li> bar </li>'],
+          updated = jasmine.createSpy(),
+          Infcont = InfiniteContainer.extend(),
+          inf = new Infcont();
+
+        inf.of(Controller).at($bar).bind(model);
+
+        inf.on('update', updated);
+        inf._container.add(data);
+
+        expect(updated).toHaveBeenCalled();
+        expect(updated).toHaveBeenCalledWith(inf._container.getNodes());
+    });
+
     it('makes sure ajax request is with empty model', function() {
       jasmine.Ajax.install();
 

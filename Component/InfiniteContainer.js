@@ -74,11 +74,11 @@ define([
     },
 
     bind: function(model, firstLoad) {
-      if (this._model) {
-        this.stopListening(this._model);
-      }
-
       if (model && model.data) {
+        if (this._model) {
+          this.stopListening(this._model);
+        }
+
         this._model = model;
 
         this.listenTo(model, 'all', function reset() {

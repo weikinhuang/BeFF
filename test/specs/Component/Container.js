@@ -109,7 +109,7 @@ define(['Component/Container', 'Controller', 'jquery', 'trait/eventMappable'], f
 
     describe('.remove()', function() {
       it('fires an update event when a node is removed', function() {
-       var $foo = $('<div><ul></ul></div>'),
+        var $foo = $('<div><ul></ul></div>'),
             container = Container.init($foo, spy),
             data = ['<li> foo </li>', '<li> bar </li>'],
             nodeRemoved = jasmine.createSpy();

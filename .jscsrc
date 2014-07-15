@@ -11,13 +11,14 @@
   "disallowMultipleLineBreaks": true,
   "validateLineBreaks": "LF",
 
-  "requireSpaceBeforeBinaryOperators": ["/", "*", "+", "-", "=", "==", "===", "!=", "!==", ">", ">=", "<", "<="],
-  "requireSpaceAfterBinaryOperators": ["/", "*", "+", "-", "=", "==", "===", "!=", "!==", ">", ">=", "<", "<="],
+  "requireSpaceBeforeBinaryOperators": ["/", "*", "+", "-", "==", "===", "!=", "!==", ">", ">=", "<", "<=", "="],
+  "requireSpaceAfterBinaryOperators": ["/", "*", "+", "-", "==", "===", "!=", "!==", ">", ">=", "<", "<=", "=", ","],
+  "disallowSpaceBeforeBinaryOperators": [","],
+
   "disallowSpaceAfterPrefixUnaryOperators": ["++", "--", "+", "-", "!", "~"],
   "disallowSpaceBeforePostfixUnaryOperators": ["++", "--"],
-  "disallowLeftStickedOperators": ["?"],
-  "disallowRightStickedOperators": ["?", ":", ","],
-  "requireLeftStickedOperators": [","],
+
+  "requireSpacesInConditionalExpression": true,
 
   "disallowSpacesInsideParentheses": true,
   "disallowSpacesInsideArrayBrackets": true,

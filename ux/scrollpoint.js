@@ -1,6 +1,12 @@
-// Events for scrolling past points in pages
-define(['jquery'], function($) {
+define([
+  'jquery'
+], function($) {
   'use strict';
+
+  /**
+   * Events for scrolling past points in pages
+   * @module  BeFF/scrollpoint
+   */
 
   var percent = /(\d+)%/,
       $window = $(window),
@@ -12,8 +18,7 @@ define(['jquery'], function($) {
   }
 
   function normalize(breakpoint) {
-
-    if ( $.isNumeric(breakpoint) ) {
+    if ($.isNumeric(breakpoint)) {
       return parseFloat(breakpoint);
     }
 
@@ -45,7 +50,7 @@ define(['jquery'], function($) {
   function scroll(context) {
     var $context = context === 'window' ? $window : $(context);
 
-    return function () {
+    return function() {
       var breakpoint, cb, cache,
       scrolled = $context.scrollTop();
 

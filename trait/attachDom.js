@@ -48,7 +48,7 @@ define(['jquery'], function($) {
     attachRadio: function(key, $context) {
       var $radios = $context.find('input[type=radio]'),
       model = this.on(key, function(value) {
-        $radios.filter('[value="'+value+'"]').prop('checked', true);
+        $radios.filter('[value="' + value + '"]').prop('checked', true);
       });
 
       $context.on('change', 'input[type=radio]', function() {

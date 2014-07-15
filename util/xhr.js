@@ -16,5 +16,4 @@ define(['jquery', 'nbd/Promise'], function($, Promise) {
     thenable.abort = req.abort;
     return thenable;
   };
-
 });

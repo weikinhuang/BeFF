@@ -5,7 +5,7 @@ define(['jquery'], function($) {
     var $checkbox = $('<input>', {
       type: "checkbox",
       name: $el[0].id,
-      value:"1",
+      value: "1",
       checked: $el.hasClass('active')
     }).hide();
 
@@ -19,7 +19,7 @@ define(['jquery'], function($) {
      * Toggles the active class on the element,
      * backs it up using a hidden checkbox
      */
-    toggleElement : function($el) {
+    toggleElement: function($el) {
       $el.each(function(i) {
         var $checkbox = makeCheckbox(i = $(this).on('click', function() {
           var selected = !$checkbox.prop('checked');

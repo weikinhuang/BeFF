@@ -51,6 +51,18 @@ module.exports = function(grunt) {
       }
     },
 
+    jscs: {
+      src: [
+        '**/*.js',
+        '!bower_components/**/*.js',
+        '!node_modules/**/*.js',
+        '!Gruntfile.js'
+      ],
+      options: {
+        config: '.jscsrc',
+      }
+    },
+
     'gh-pages': {
       options: {
         base: 'docs/html',
@@ -62,11 +74,12 @@ module.exports = function(grunt) {
 
   grunt.loadNpmTasks('grunt-contrib-jshint');
   grunt.loadNpmTasks('grunt-jsdoc');
+  grunt.loadNpmTasks('grunt-jscs');
   grunt.loadNpmTasks('grunt-karma');
   grunt.loadNpmTasks('grunt-gh-pages');
 
   grunt.registerTask('test', ['jshint', 'karma:persistent']);
   grunt.registerTask('docs', ['jsdoc', 'gh-pages']);
-  grunt.registerTask('travis', ['jshint', 'karma:multi']);
+  grunt.registerTask('travis', ['jshint', 'jscs', 'karma:multi']);
   grunt.registerTask('default', ['test']);
 };

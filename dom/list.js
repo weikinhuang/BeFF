@@ -7,8 +7,8 @@ define([
   // Make a select from a ul/ol
   function makeSelect($ul, multiple) {
     var $select = $('<select>', {
-      name : $ul[0].id,
-      multiple : multiple || false
+      name: $ul[0].id,
+      multiple: multiple || false
     }).hide();
 
     // A singular select, empty default value
@@ -32,7 +32,7 @@ define([
         $(this).on('click', '>li', function() {
           var $li = $(this),
           val = $li.data('value'),
-          $option = $select.find('[value="'+val+'"]'),
+          $option = $select.find('[value="' + val + '"]'),
           selected = !$option.prop('selected');
 
           // Set <option> selected state
@@ -40,7 +40,7 @@ define([
           selected = $option.prop('selected');
 
           (multiple ?
-            $ul.find('[data-value="'+val+'"]') :
+            $ul.find('[data-value="' + val + '"]') :
             $li.siblings().removeClass('active').end()
           ).toggleClass('active', selected);
         }), multiple);

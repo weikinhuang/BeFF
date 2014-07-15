@@ -3,7 +3,6 @@ define(function() {
 
   /**
    * Truncates a TextNode to a number of lines
-   *
    * @param textNode {TextNode} The DOM TextNode
    * @param limit {number} Number of lines at which to truncate
    */
@@ -46,7 +45,7 @@ define(function() {
     }
 
     var content = textNode.textContent.substr(0, length);
-    content = content.replace(/\s+$/,'');
+    content = content.replace(/\s+$/, '');
 
     // Make sure the ellipsis does not wrap
     do {

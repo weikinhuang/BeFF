@@ -24,7 +24,7 @@ define(['jquery'], function($) {
     $('<img>', {
       alt: $this.data('alt'),
       src: $source.data('src'),
-      'class': $source.data('class'),
+      class: $source.data('class'),
       title: $source.data('title'),
       'data-pin-nopin': 'pin'
     }).appendTo($this);

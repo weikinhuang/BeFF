@@ -56,13 +56,13 @@ define(['Component/InfiniteContainer', 'util/xhr', 'nbd/Model', 'nbd/util/depara
           Infcont = InfiniteContainer.extend(),
           inf = new Infcont();
 
-        inf.of(Controller).at($bar).bind(model);
+      inf.of(Controller).at($bar).bind(model);
 
-        inf.on('update', updated);
-        inf._container.add(data);
+      inf.on('update', updated);
+      inf._container.add(data);
 
-        expect(updated).toHaveBeenCalled();
-        expect(updated).toHaveBeenCalledWith(inf._container.getNodes());
+      expect(updated).toHaveBeenCalled();
+      expect(updated).toHaveBeenCalledWith(inf._container.getNodes());
     });
 
     it('makes sure ajax request is with empty model', function() {

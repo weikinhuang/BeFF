@@ -76,7 +76,7 @@ define([
     },
 
     toggle: function() {
-      return this[this._shown ? 'hide': 'show']();
+      return this[this._shown ? 'hide' : 'show']();
     }
   });
 

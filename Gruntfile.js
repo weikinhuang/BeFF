@@ -56,7 +56,8 @@ module.exports = function(grunt) {
         '**/*.js',
         '!bower_components/**/*.js',
         '!node_modules/**/*.js',
-        '!Gruntfile.js'
+        '!Gruntfile.js',
+        '!test/lib/**/*.js'
       ],
       options: {
         config: '.jscsrc',

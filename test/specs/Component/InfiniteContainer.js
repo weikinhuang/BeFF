@@ -18,6 +18,19 @@ define(['Component/InfiniteContainer', 'util/xhr', 'nbd/Model', 'nbd/util/depara
       expect(foo.bind).toHaveBeenCalled();
     });
 
+    it('does not stop listening to the model on parameterless calls to bind', function(done) {
+      var foo = new InfiniteContainer();
+
+      foo.of(Controller).at($content).bind(model, true);
+      // Manually trigger a bind which should not stop infcontainer from
+      // listening to its model
+      foo.bind();
+
+      foo.on('reload', done);
+
+      model.trigger('booyah');
+    });
+
     it('throws error when no params are passed into .at()', function() {
       expect(function() {
         (new InfiniteContainer(param)).of(Controller).at().bind(model);

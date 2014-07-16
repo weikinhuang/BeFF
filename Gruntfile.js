@@ -27,7 +27,7 @@ module.exports = function(grunt) {
         singleRun: true
       },
       persistent: {
-        browsers: ['FireFox'],
+        browsers: ['Firefox'],
         singleRun: false
       },
       single: {

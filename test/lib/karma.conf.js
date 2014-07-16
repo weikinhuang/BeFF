@@ -31,6 +31,7 @@ module.exports = function(config) {
       '*.js': ['coverage'],
       'View/**/*.js': ['coverage'],
       'Controller/**/*.js': ['coverage'],
+      'Component/**/*.js': ['coverage'],
       'trait/**/*.js': ['coverage'],
       'util/**/*.js': ['coverage'],
     },

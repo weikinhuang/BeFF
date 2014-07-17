@@ -21,8 +21,12 @@ define([
 
     hasMoreResults: function(response) {
       var more = !!(response && response[this.offsetKey]);
-      if (!more && this._container.isEmpty()) {
-        this.trigger('empty');
+      if (!more) {
+        this.unbind();
+
+        if (this._container.isEmpty()) {
+          this.trigger('empty');
+        }
       }
       return more;
     },

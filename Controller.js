@@ -9,8 +9,13 @@ define([
   'use strict';
 
   return Entity.extend({
-    init: function(data) {
+    init: function(id, data) {
       var el, $view;
+
+      if (typeof data === 'undefined') {
+        data = id;
+        id = undefined;
+      }
 
       if (typeof data === 'string') {
         $view = $(data);
@@ -32,7 +37,7 @@ define([
         data = extend({}, el.dataset || $view.data());
       }
 
-      this._super(data);
+      this._super(id, data);
       this._view.$view = $view;
 
       if ($view) {

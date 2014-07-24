@@ -62,6 +62,14 @@ define(['Controller', 'View', 'jquery'], function(Controller, View, $) {
       expect(instance._model.get('foo')).toBe('bar');
     });
 
+    it('accepts an id and data', function() {
+      var id = Math.random();
+      instance = new Controller(id, { foo: 'bar' });
+
+      expect(instance._model.id()).toBe(id);
+      expect(instance._model.get('foo')).toBe('bar');
+    });
+
     it('automatically fires view postrender', function() {
       var spy = jasmine.createSpy();
       instance = new (Controller.extend({}, {

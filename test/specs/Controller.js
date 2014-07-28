@@ -70,6 +70,13 @@ define(['Controller', 'View', 'jquery'], function(Controller, View, $) {
       expect(instance._model.get('foo')).toBe('bar');
     });
 
+    it('has passthrough id access', function() {
+      var id = Math.random();
+      instance = new Controller(id, { foo: 'bar' });
+
+      expect(instance.id).toBe(id);
+    });
+
     it('automatically fires view postrender', function() {
       var spy = jasmine.createSpy();
       instance = new (Controller.extend({}, {

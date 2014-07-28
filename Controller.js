@@ -43,6 +43,12 @@ define([
       if ($view) {
         this._view.trigger('postrender', $view);
       }
+
+      Object.defineProperty(this, 'id', {
+        get: function() {
+          return this._model.id();
+        }
+      });
     }
   }, {
     VIEW_CLASS: View

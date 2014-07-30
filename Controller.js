@@ -44,9 +44,16 @@ define([
         this._view.trigger('postrender', $view);
       }
 
-      Object.defineProperty(this, 'id', {
-        get: function() {
-          return this._model.id();
+      Object.defineProperties(this, {
+        id: {
+          get: function() {
+            return this._model.id();
+          }
+        },
+        data: {
+          get: function() {
+            return this._model.data();
+          }
         }
       });
     }

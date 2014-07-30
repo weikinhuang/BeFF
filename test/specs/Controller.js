@@ -70,11 +70,17 @@ define(['Controller', 'View', 'jquery'], function(Controller, View, $) {
       expect(instance._model.get('foo')).toBe('bar');
     });
 
-    it('has passthrough id access', function() {
+    it('has passthrough id property access', function() {
       var id = Math.random();
       instance = new Controller(id, { foo: 'bar' });
 
       expect(instance.id).toBe(id);
+    });
+
+    it('has passthrough data property access', function() {
+      instance = new Controller({ foo: 'bar' });
+
+      expect(instance.data.foo).toBe('bar');
     });
 
     it('automatically fires view postrender', function() {

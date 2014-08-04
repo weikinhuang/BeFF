@@ -143,7 +143,7 @@ define([
             keys = Object.keys(changed);
 
         if (keys.length) {
-          p.resolve(Promise.all.apply(Promise, keys.map(bindPromise, $el)));
+          p.resolve(Promise.all(keys.map(bindPromise, $el)));
         }
         else if (!halt) {
           checkTransitionProp();

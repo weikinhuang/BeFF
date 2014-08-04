@@ -11,7 +11,7 @@ define([
     init: function() {
       this._super.apply(this, arguments);
       this.dismiss = function(e) {
-        if (e.originalEvent.view !== this) {
+        if (e.originalEvent._view !== this) {
           this.hide();
           e.preventDefault();
         }

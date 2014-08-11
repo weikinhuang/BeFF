@@ -118,6 +118,11 @@ define([
         this._container = null;
       }
       this._super();
+    },
+
+    /** @return {Boolean} */
+    isEmpty: function() {
+      return this._container && this._container.isEmpty();
     }
   });
 });

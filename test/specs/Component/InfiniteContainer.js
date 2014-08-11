@@ -227,5 +227,13 @@ define(['Component/InfiniteContainer', 'util/xhr', 'nbd/Model', 'nbd/util/depara
         expect(foo._container).toBeNull();
       });
     });
+
+    describe('isEmpty', function() {
+      it('returns whether or not there are contained nodes', function() {
+        $content = affix('div');
+        var foo = new InfiniteContainer(param).of(Controller).at($content).bind(model);
+        expect(foo.isEmpty()).toBeTruthy();
+      });
+    });
   });
 });

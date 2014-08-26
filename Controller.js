@@ -8,11 +8,15 @@ define([
 ], function($, extend, log, pubsub, Entity, View) {
   'use strict';
 
+  function isData(id, data) {
+    return typeof data === 'undefined' || typeof id === 'object';
+  }
+
   return Entity.extend({
     init: function(id, data) {
       var el, $view;
 
-      if (typeof data === 'undefined') {
+      if (isData(id, data)) {
         data = id;
         id = undefined;
       }

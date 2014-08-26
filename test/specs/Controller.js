@@ -62,6 +62,14 @@ define(['Controller', 'View', 'jquery'], function(Controller, View, $) {
       expect(instance._model.get('foo')).toBe('bar');
     });
 
+    it('accepts data even if the second parameter is nonsense, like when construct is called from array.map', function() {
+      instance = new Controller({
+        foo: 'bar'
+      }, 'nonsense');
+
+      expect(instance._model.get('foo')).toBe('bar');
+    });
+
     it('accepts an id and data', function() {
       var id = Math.random();
       instance = new Controller(id, { foo: 'bar' });

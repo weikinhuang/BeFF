@@ -47,8 +47,8 @@ define([
      * Constructs an instance of the controller with the passed args
      * @return {BeFF/Controller} An instance of the controller
      */
-    decorate: function() {
-      var inst = construct.apply(this.Controller, arguments);
+    decorate: function(dataOrEl) {
+      var inst = new this.Controller(dataOrEl);
       if (inst.on) {
         this.listenTo(inst, 'destroy', function() {
           this.remove(inst);

@@ -12,6 +12,15 @@ define(['Component/Container', 'Controller', 'jquery', 'trait/eventMappable'], f
       spy.prototype.destroy = destroy;
     });
 
+    it('forwards prefixed events from its internal nodes', function(done) {
+      var $foo = $('<ul><li></li><li></li><li></li></ul>'),
+          instance = new Container($foo);
+
+      instance.bind();
+      instance.on('change:foo', done);
+      instance.getNodes()[0].trigger('foo');
+    });
+
     describe('init()', function() {
       it('constructs an instance', function() {
         var $foo = $('<div></div>'),

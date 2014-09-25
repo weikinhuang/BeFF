@@ -21,6 +21,14 @@ define(['Component', 'nbd/trait/pubsub'], function(Component, pubsub) {
         var instance = Component.init();
         expect(instance.bind).toHaveBeenCalled();
       });
+
+      it('constructs an instance even with an empty bind', function() {
+        var Component2 = Component.extend({
+              bind: function() {}
+            }),
+            instance = Component2.init();
+        expect(instance).toEqual(jasmine.any(Component2));
+      });
     });
 
     var instance;

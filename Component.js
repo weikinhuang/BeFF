@@ -18,7 +18,9 @@ define([
   }, {
     displayName: 'Component',
     init: function() {
-      return construct.apply(this, arguments).bind();
+      var self = construct.apply(this, arguments);
+      self.bind();
+      return self;
     }
   })
   .mixin(log)

@@ -57,25 +57,6 @@ define([
     return chain;
   },
 
-  findFields = function(err) {
-    if (!(err instanceof Object)) { throw err; }
-    var meta = this._cacheMeta || this.toJSON(),
-
-    matches = Object.keys(meta.data)
-    .filter(err.hasOwnProperty.bind(err)),
-
-    results = matches
-    .reduce(function(o, key) {
-      o[key] = err[key];
-      return o;
-    }, {});
-
-    if (matches.length) {
-      throw new this.constructor.Error(results);
-    }
-    throw err;
-  },
-
   Form = Component.extend({
     init: function($context) {
       if (!$context) {
@@ -89,11 +70,16 @@ define([
 
       // Error handling chain
       this.on('error', function(e) {
-        error.call([this._catch.bind(this)], e)
+        error.call(this.handlers, e)
         .catch(error)
         .finally(function() {
+          this.trigger('after');
           delete this._cacheMeta;
         }.bind(this));
+      });
+
+      Object.defineProperty(this, 'handlers', {
+        value: [this._catch.bind(this)]
       });
     },
 
@@ -132,10 +118,29 @@ define([
       Object.keys(err).forEach(function(name) {
         var $element = this.$form.find('[name=' + name + '], #' + name).first();
         if ($element.length) {
-          this.trigger('error:show', $element, err[name]);
           $element.one('input', this.trigger.bind(this, 'error:hide', $element));
+          this.trigger('error:show', $element, err[name]);
         }
       }, this);
+    },
+
+    _findFormError: function(err) {
+      if (!(err instanceof Object)) { throw err; }
+      var meta = this._cacheMeta || this.toJSON(),
+
+      matches = Object.keys(meta.data)
+      .filter(err.hasOwnProperty.bind(err)),
+
+      results = matches
+      .reduce(function(o, key) {
+        o[key] = err[key];
+        return o;
+      }, {});
+
+      if (matches.length) {
+        throw new this.constructor.Error(results);
+      }
+      throw err;
     },
 
     submit: function(e) {
@@ -145,7 +150,7 @@ define([
       this.trigger('before', e);
       var chain = this._submit(e);
       chain
-      .catch(findFields.bind(this))
+      .catch(this._findFormError.bind(this))
       .then(this.trigger.bind(this, 'success'), this.trigger.bind(this, 'error'));
 
       return chain;

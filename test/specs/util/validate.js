@@ -46,6 +46,11 @@ define(['util/validate'], function(validate) {
     Password: {
       good: ['bacon123', 'password', 'ångstro?!', 'Ét)(<>@', 'r4zz13-d4zz13'],
       bad: ['abcde', 'abcdefghijklmnopqrstuvwxyz1234567']
+    },
+
+    Html: {
+      good: ['<p></p>', '<em></em>', '<u></u>', '<strong></strong>'],
+      bad: ['<script></script>', '<embed></embed>']
     }
   },
 

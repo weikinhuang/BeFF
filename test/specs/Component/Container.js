@@ -129,6 +129,20 @@ define(['Component/Container', 'Controller', 'jquery', 'trait/eventMappable'], f
 
         expect(nodeRemoved).toHaveBeenCalled();
       });
+
+      it('stops proxying a node\'s events', function() {
+        var $foo = $('<ul><li></li><li></li><li></li></ul>'),
+            instance = new Container($foo),
+            spy = jasmine.createSpy(),
+            node;
+
+        instance.bind();
+        instance.on('change:foo', spy);
+        node = instance.getNodes()[0];
+        instance.remove(node);
+        node.trigger('foo');
+        expect(spy).not.toHaveBeenCalled();
+      });
     });
 
     describe('.decorate', function() {

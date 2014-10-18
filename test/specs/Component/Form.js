@@ -25,49 +25,64 @@ define(['Component/Form', 'nbd/Promise', 'util/xhr'], function(Form, Promise, xh
     it('calls commit when valid', function(done) {
       spyOn(foo, 'validator').and.returnValue(true);
       spyOn(foo, 'commit');
+
       foo.submit().finally(function() {
         expect(foo.commit).toHaveBeenCalled();
-      }).then(done);
-      expect(foo.validator).toHaveBeenCalledWith({ foo: 'bar'});
-    });
-
-    it('does not call commit when validator is false', function(done) {
-      spyOn(foo, 'validator').and.returnValue(false);
-      spyOn(foo, 'commit');
-      foo.submit().finally(function() {
-        expect(foo.commit).not.toHaveBeenCalled();
-      }).then(done);
-      expect(foo.validator).toHaveBeenCalledWith({ foo: 'bar'});
-    });
-
-    it('throws an error and submit fails', function(done) {
-      spyOn(foo, 'validator').and.callFake(function() {
-        throw new Error('you shall not pass');
-      });
-      spyOn(foo, 'commit');
-      foo.submit().catch(done);
-      expect(foo.commit).not.toHaveBeenCalled();
-    });
-
-    it('throws error event when validation fails', function(done) {
-      var spy = jasmine.createSpy();
-      spyOn(foo, 'validator').and.callFake(function() {
-        throw new Error('you shall not pass');
-      });
-      foo.on('error', spy);
-      foo.submit();
-      setTimeout(function() {
-        expect(spy).toHaveBeenCalledWith(new Error('you shall not pass'));
+        expect(foo.validator).toHaveBeenCalledWith({ foo: 'bar'});
         done();
-      }, 100);
+      });
+    });
+
+    it('does not call commit when validator returns false', function(done) {
+      foo.validator = function() {
+        return false;
+      };
+
+      spyOn(foo, 'commit');
+
+      foo.submit().catch(function() {
+        expect(foo.commit).not.toHaveBeenCalled();
+        done();
+      });
+    });
+
+    it('does not call commit when validator throws an error', function(done) {
+      foo.validator = function() {
+        throw new Error('you shall not pass');
+      };
+
+      spyOn(foo, 'commit');
+
+      foo.submit().catch(function() {
+        expect(foo.commit).not.toHaveBeenCalled();
+        done();
+      });
+    });
+
+    it('fires error event when validation fails', function(done) {
+      var spy = jasmine.createSpy(),
+          err = new Error('you shall not pass');
+
+      foo.validator = function() {
+        throw err;
+      };
+
+      foo.on('error', function(error) {
+        expect(error).toBe(err);
+        done();
+      });
+
+      foo.submit();
     });
 
     it('can be an array of functions', function() {
       var spy = jasmine.createSpy('Jessica').and.returnValue('is awesome'),
           spy2 = jasmine.createSpy('Maria').and.returnValue('is not awesome'),
           spy3 = jasmine.createSpy('Jasmine');
+
       foo.validator = [spy, spy2, spy3];
       foo.submit();
+
       expect(spy).toHaveBeenCalledWith({ foo: 'bar'});
       expect(spy2).toHaveBeenCalledWith('is awesome');
       expect(spy3).toHaveBeenCalledWith('is not awesome');
@@ -79,30 +94,31 @@ define(['Component/Form', 'nbd/Promise', 'util/xhr'], function(Form, Promise, xh
             throw new Error('you shall not pass');
           }),
           spy3 = jasmine.createSpy('Jasmine');
+
       foo.validator = [spy, spy2, spy3];
       foo.submit().catch(done);
+
       expect(spy).toHaveBeenCalledWith({ foo: 'bar'});
       expect(spy2).toHaveBeenCalledWith('is awesome');
       expect(spy3).not.toHaveBeenCalled();
     });
 
     it('should fire the event error:show', function(done) {
-      var spy = jasmine.createSpy();
-      foo.on('error:show', spy);
       foo.validator = function() { throw { foo: "This is bad" }; };
-      foo.submit();
-      setTimeout(function() {
-        expect(spy).toHaveBeenCalled();
-        expect(spy.calls.argsFor(0)[1]).toBe('This is bad');
-        expect(spy.calls.argsFor(0)[0]).toEqual(jasmine.any(jQuery));
-        expect(spy.calls.argsFor(0)[0][0]).toBe($content.find('[name=foo]')[0]);
+
+      foo.on('error:show', function($element, msg) {
+        expect(msg).toBe('This is bad');
+        expect($element).toEqual(jasmine.any(jQuery));
+        expect($element[0]).toBe($content.find('[name=foo]')[0]);
         done();
-      }, 100);
+      });
+
+      foo.submit();
     });
   });
 
-  describe('.commit', function() {
-    it('is a value and default behavior happens', function() {
+  describe('.submit', function() {
+    it('allows default form behavior', function() {
       foo.$form.on('submit', function(event) {
         expect(event.isDefaultPrevented()).toBe(false);
         return false;
@@ -110,6 +126,19 @@ define(['Component/Form', 'nbd/Promise', 'util/xhr'], function(Form, Promise, xh
       foo.$form.submit();
     });
 
+    it('prevents default behavior', function(done) {
+      var eventSpy = jasmine.createSpyObj('event', ['preventDefault']);
+
+      foo.commit = function() { return 'foo'; };
+
+      foo.submit(eventSpy).then(function(value) {
+        expect(eventSpy.preventDefault).toHaveBeenCalled();
+        done();
+      });
+    });
+  });
+
+  describe('.commit', function() {
     it('returns its original context', function(done) {
       jasmine.Ajax.install();
 
@@ -148,35 +177,144 @@ define(['Component/Form', 'nbd/Promise', 'util/xhr'], function(Form, Promise, xh
       jasmine.Ajax.uninstall();
     });
 
-    it('is a function that returns a value', function(done) {
-      var spy = jasmine.createSpy();
+    it('is a function that passes a value to its promise', function(done) {
       foo.commit = function() { return 'foo'; };
-      foo.on('success', spy);
+
       foo.submit().then(function(value) {
         expect(value).toBe('foo');
-      });
-      setTimeout(function() {
-        expect(spy).toHaveBeenCalledWith("foo");
         done();
-      }, 100);
+      });
     });
 
-    it('is a function that returns a thenable', function(done) {
-      var spy = jasmine.createSpy(),
-          yes = jasmine.createSpy(),
-          no = jasmine.createSpy(),
-          p = new Promise();
-      foo.on('error', spy);
-      p.reject('foo');
-      spyOn(foo, 'commit').and.returnValue(p);
-      foo.submit().then(yes, no).then(function() {
-        expect(yes).not.toHaveBeenCalled();
-        expect(no).toHaveBeenCalled();
-      });
-      setTimeout(function() {
-        expect(spy).toHaveBeenCalledWith('foo');
+    it('can be a value that is passed to its promise', function(done) {
+      foo.commit = 'foo';
+
+      foo.submit().then(function(value) {
+        expect(value).toBe('foo');
         done();
-      }, 100);
+      });
+    });
+
+    it('is a function that passes a value to success event', function(done) {
+      foo.commit = function() { return 'foo'; };
+
+      foo.on('success', function(value) {
+        expect(value).toBe('foo');
+        done();
+      });
+
+      foo.submit();
+    });
+
+    it('is a function that passes errors to its promise', function(done) {
+      foo.commit = function() { throw 'foo'; };
+
+      foo.submit().catch(function(err) {
+        expect(err).toBe('foo');
+        done();
+      });
+    });
+
+    it('is a function that passes errors to the error event', function(done) {
+      foo.commit = function() { throw 'foo'; };
+
+      foo.on('error', function(value) {
+        expect(value).toBe('foo');
+        done();
+      });
+
+      foo.submit();
+    });
+  });
+
+  describe('events', function() {
+    describe('after', function() {
+      it('fires after the success event', function(done) {
+        var order = 0;
+
+        foo.commit = function() { return 'foo'; };
+
+        foo.on('success', function(value) {
+          expect(order++).toBe(0);
+        });
+
+        foo.on('after', function(value) {
+          expect(order++).toBe(1);
+          done();
+        });
+
+        foo.submit();
+      });
+
+      it('fires after the error event', function(done) {
+        var order = 0;
+
+        foo.commit = function() { throw 'foo'; };
+
+        foo.on('error', function(value) {
+          expect(order++).toBe(0);
+        });
+
+        foo.on('after', function(value) {
+          expect(order++).toBe(1);
+          done();
+        });
+
+        foo.submit();
+      });
+    });
+
+    describe('before', function() {
+      it('fires before the success event', function(done) {
+        var order = 0;
+
+        foo.commit = function() { return 'foo'; };
+
+        foo.on('before', function(value) {
+          expect(order++).toBe(0);
+        });
+
+        foo.on('success', function(value) {
+          expect(order++).toBe(1);
+          done();
+        });
+
+        foo.submit();
+      });
+
+      it('fires before the error event', function(done) {
+        var order = 0;
+
+        foo.commit = function() { throw 'foo'; };
+
+        foo.on('before', function(value) {
+          expect(order++).toBe(0);
+        });
+
+        foo.on('error', function(value) {
+          expect(order++).toBe(1);
+          done();
+        });
+
+        foo.submit();
+      });
+
+      it('fires before the data is serialized', function(done) {
+        var order = 0;
+
+        foo.validator = jasmine.createSpy().and.returnValue(false);
+
+        foo.on('before', function(value) {
+          this.$form.find('input').val('something');
+        });
+
+        foo.on('error', function(value) {
+          expect(foo.validator).toHaveBeenCalledWith({ foo: 'something' });
+          done();
+        });
+
+        foo.submit();
+      });
     });
   });
 

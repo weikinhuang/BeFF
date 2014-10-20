@@ -50,30 +50,11 @@ define([
     then = chain.thenable(),
     retval = typeof this.commit === 'function' ?
       this.commit.call(then, metadata) :
-      this.commmit;
+      this.commit;
 
     chain.resolve(retval === then ? xhr(metadata) : retval);
 
     return chain;
-  },
-
-  findFields = function(err) {
-    if (!(err instanceof Object)) { throw err; }
-    var meta = this._cacheMeta || this.toJSON(),
-
-    matches = Object.keys(meta.data)
-    .filter(err.hasOwnProperty.bind(err)),
-
-    results = matches
-    .reduce(function(o, key) {
-      o[key] = err[key];
-      return o;
-    }, {});
-
-    if (matches.length) {
-      throw new this.constructor.Error(results);
-    }
-    throw err;
   },
 
   Form = Component.extend({
@@ -87,13 +68,8 @@ define([
       this._normalizeSubmitter = normalizeSubmitter.bind(this);
       this.submit = this.submit.bind(this);
 
-      // Error handling chain
-      this.on('error', function(e) {
-        error.call([this._catch.bind(this)], e)
-        .catch(error)
-        .finally(function() {
-          delete this._cacheMeta;
-        }.bind(this));
+      Object.defineProperty(this, 'handlers', {
+        value: [this._handleFormError.bind(this)]
       });
     },
 
@@ -122,9 +98,12 @@ define([
     },
 
     /**
-     * Default error catch
+     * Default error catch, which only handles "field" errors. Otherwise, rethrows the error
+     *
+     * @param  {Object|Form.Error} err the error to handle
+     * @throws {Object} if the error is not of type Form.Error
      */
-    _catch: function(err) {
+    _handleFormError: function(err) {
       if (!(err instanceof Form.Error)) {
         throw err;
       }
@@ -132,10 +111,57 @@ define([
       Object.keys(err).forEach(function(name) {
         var $element = this.$form.find('[name=' + name + '], #' + name).first();
         if ($element.length) {
-          this.trigger('error:show', $element, err[name]);
+          // binding error:hide must come first in case error:show synchronously
+          // triggers 'input' on the element, hiding must take place.
           $element.one('input', this.trigger.bind(this, 'error:hide', $element));
+          this.trigger('error:show', $element, err[name]);
         }
       }, this);
+    },
+
+    /**
+     * Attempts to handle errors by first running through all supplied handlers
+     * and then delegating to the global error handler
+     *
+     * @param  {Object} err either a validation error or a server error
+     * @return {Promise}
+     */
+    _handleError: function(err) {
+      this.trigger('error', err);
+
+      return error.call(this.handlers, err)
+      .catch(error)
+      .finally(function() {
+        delete this._cacheMeta;
+      }.bind(this));
+    },
+
+    /**
+     * inspects an error object to see if it contains "field" errors
+     * which Form can automatically handle. If so, it throws a Form.Error
+     * containing the errors, otherwise, rethrows the original error
+     *
+     * @param  {Object} err the error to inspect
+     * @throws {Form.Error} if a "field" error is detected
+     * @throws {Object} if no "field" error is detected
+     */
+    _findFormError: function(err) {
+      if (!(err instanceof Object)) { throw err; }
+
+      var meta = this._cacheMeta || this.toJSON(),
+          results = {},
+          key;
+
+      for (key in meta.data) {
+        if (err.hasOwnProperty(key)) {
+          results[key] = err[key];
+        }
+      }
+
+      if (Object.keys(results).length) {
+        throw new this.constructor.Error(results);
+      }
+      throw err;
     },
 
     submit: function(e) {
@@ -145,8 +171,9 @@ define([
       this.trigger('before', e);
       var chain = this._submit(e);
       chain
-      .catch(findFields.bind(this))
-      .then(this.trigger.bind(this, 'success'), this.trigger.bind(this, 'error'));
+      .catch(this._findFormError.bind(this))
+      .then(this.trigger.bind(this, 'success'), this._handleError.bind(this))
+      .finally(this.trigger.bind(this, 'after'));
 
       return chain;
     },

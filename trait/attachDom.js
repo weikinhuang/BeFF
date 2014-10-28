@@ -10,11 +10,11 @@ define(['jquery'], function($) {
       $field.find(inputSelector);
 
     model = this.on(key, function(value) {
-      $field.val(value);
+      this._setElementValue($field, value);
     });
 
     $field.on('change', function(e) {
-      model.set(key, e.target.value);
+      model.set(key, $.trim(e.target.value));
     });
   };
 
@@ -27,8 +27,8 @@ define(['jquery'], function($) {
 
         $checkboxes.each(function(index, el) {
           var checked = !!~values.indexOf(el.value);
-          el.checked = checked;
-        });
+          this._setElementChecked(el, checked);
+        }.bind(this));
       });
 
       $context.on('change', 'input[type=checkbox]', function() {
@@ -48,7 +48,7 @@ define(['jquery'], function($) {
     attachRadio: function(key, $context) {
       var $radios = $context.find('input[type=radio]'),
       model = this.on(key, function(value) {
-        $radios.filter('[value="' + value + '"]').prop('checked', true);
+        this._setElementChecked($radios.filter('[value="' + value + '"]'), true);
       });
 
       $context.on('change', 'input[type=radio]', function() {
@@ -64,7 +64,7 @@ define(['jquery'], function($) {
         $field.find('select');
 
       var model = this.on(key, function(value) {
-        $field.val(value);
+        this._setElementValue($field, value);
       });
 
       $field.on('change', function() {
@@ -102,6 +102,14 @@ define(['jquery'], function($) {
     attachPassword: function(key, $field) {
       _attachTextLike.call(this, 'password', key, $field);
       return this;
-    }
+    },
+
+    _setElementValue: function($el, val) {
+      $($el).val(val);
+    },
+
+    _setElementChecked: function($el, checked) {
+      $($el).prop('checked', checked);
+    },
   };
 });

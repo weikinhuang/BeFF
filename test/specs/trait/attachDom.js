@@ -4,7 +4,7 @@ define([
 ], function(attachDom, Model) {
   'use strict';
 
-  describe('trait/attachDom', function() {
+  ddescribe('trait/attachDom', function() {
     var model;
 
     beforeEach(function() {

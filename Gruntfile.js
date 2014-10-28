@@ -26,6 +26,11 @@ module.exports = function(grunt) {
         configFile: 'test/lib/karma.conf.js',
         singleRun: true
       },
+      watch: {
+        browsers: ['PhantomJS'],
+        reporters: ['mocha'],
+        singleRun: false
+      },
       persistent: {
         browsers: ['Firefox'],
         singleRun: false
@@ -45,8 +50,8 @@ module.exports = function(grunt) {
         src: ['**/*.js', '!Gruntfile.js', '!node_modules/**/*.js', '!bower_components/**/*.js', '!test/**/*.js'],
         options: {
           destination: 'docs/html',
-          template : 'node_modules/grunt-jsdoc/node_modules/ink-docstrap/template',
-          configure : './docs/jsdoc.conf.json'
+          template: 'node_modules/grunt-jsdoc/node_modules/ink-docstrap/template',
+          configure: './docs/jsdoc.conf.json'
         }
       }
     },

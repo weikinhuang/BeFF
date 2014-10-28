@@ -4,49 +4,50 @@ define([
 ], function(attachDom, Model) {
   'use strict';
 
+  function attachDomModel() {
+    return Model.extend().mixin(attachDom)();
+  }
+
   ddescribe('trait/attachDom', function() {
-    var model;
-
-    beforeEach(function() {
-      model = Model.extend().mixin(attachDom)();
-      spyOn(model, 'get').and.callThrough();
-      spyOn(model, 'set').and.callThrough();
-    });
-
-    afterEach(function() {
-      model.destroy();
-    });
-
     describe('attachCheckbox', function() {
       var $context;
 
       beforeEach(function() {
-        $context = affix('div input[type="checkbox"][value="bar"] input[type="checkbox"][value="baz"]');
+        $context = affix('div');
+        $context.affix('input[type="checkbox"][value="bar"]');
+        $context.affix('input[type="checkbox"][value="baz"]');
       });
 
       it('sets model with piped dom values', function(done) {
+        var model = attachDomModel();
+
         model.attachCheckbox('foo', $context);
         $context.find('input:first').click();
 
+        // NOTE(sean): This must use setTimeout until a bug in nbd's pubsub implementation is fixed.
+        // Failing test added in: https://github.com/behance/nbd.js/pull/96
         setTimeout(function() {
-          expect(model.set).toHaveBeenCalledWith('foo', 'bar');
+          expect(model.get('foo')).toBe('bar');
           $context.find('input:last').click();
 
           setTimeout(function() {
-            expect(model.set).toHaveBeenCalledWith('foo', 'bar|baz');
+            expect(model.get('foo')).toBe('bar|baz');
             done();
           }, 100);
         }, 100);
       });
 
       it('changes based on model', function(done) {
+        var model = attachDomModel();
+
         model.attachCheckbox('foo', $context);
-        model.trigger('foo', 'baz');
-        setTimeout(function() {
+        model.one('foo', function() {
           expect($context.find('input:first')[0].checked).toBe(false);
           expect($context.find('input:last')[0].checked).toBe(true);
           done();
-        }, 100);
+        });
+
+        model.set('foo', 'baz');
       });
     });
 
@@ -54,33 +55,39 @@ define([
       var $context;
 
       beforeEach(function() {
-        $context = affix('div input[type="radio"][name="foo"][value="bar"] input[type="radio"][name="foo"][value="baz"]');
+        $context = affix('div');
+        $context.affix('input[type="radio"][name="foo"][value="bar"]');
+        $context.affix('input[type="radio"][name="foo"][value="baz"]');
       });
 
       it('sets model to dom values', function(done) {
+        var model = attachDomModel();
+
         model.attachRadio('foo', $context);
         $context.find('input:first').click();
 
         setTimeout(function() {
-          expect(model.set).toHaveBeenCalledWith('foo', 'bar');
+          expect(model.get('foo')).toBe('bar');
           $context.find('input:last').click();
 
           setTimeout(function() {
-            expect(model.set).toHaveBeenCalledWith('foo', 'baz');
+            expect(model.get('foo')).toBe('baz');
             done();
           }, 100);
         }, 100);
       });
 
       it('changes based on model', function(done) {
-        model.attachRadio('foo', $context);
-        model.trigger('foo', 'baz');
+        var model = attachDomModel();
 
-        setTimeout(function() {
+        model.attachRadio('foo', $context);
+        model.one('foo', function() {
           expect($context.find('input:first')[0].checked).toBe(false);
           expect($context.find('input:last')[0].checked).toBe(true);
           done();
-        }, 100);
+        });
+
+        model.set('foo', 'baz');
       });
     });
 
@@ -93,28 +100,32 @@ define([
       });
 
       it('sets model with dom values', function(done) {
+        var model = attachDomModel();
+
         model.attachSelect('foo', $context);
         $context.find('option:first').prop('selected', true).change();
 
         setTimeout(function() {
-          expect(model.set).toHaveBeenCalledWith('foo', 'bar');
+          expect(model.get('foo')).toBe('bar');
           $context.find('option:last').prop('selected', true).change();
 
           setTimeout(function() {
-            expect(model.set).toHaveBeenCalledWith('foo', 'baz');
+            expect(model.get('foo')).toBe('baz');
             done();
           }, 100);
         }, 100);
       });
 
       it('changes based on model', function(done) {
-        model.attachSelect('foo', $context);
-        model.trigger('foo', 'baz');
+        var model = attachDomModel();
 
-        setTimeout(function() {
+        model.attachSelect('foo', $context);
+        model.one('foo', function() {
           expect($context.val()).toBe('baz');
           done();
-        }, 100);
+        });
+
+        model.set('foo', 'baz');
       });
     });
 
@@ -126,23 +137,39 @@ define([
       });
 
       it('sets model with dom values', function(done) {
-        model.attachText('foo', $context);
-        $context.val('bar').change();
+        var model = attachDomModel();
 
-        setTimeout(function() {
-          expect(model.set).toHaveBeenCalledWith('foo', 'bar');
+        model.attachText('foo', $context);
+        model.one('foo', function() {
+          expect(model.get('foo')).toBe('bar');
           done();
-        }, 100);
+        });
+
+        $context.val('bar').change();
+      });
+
+      it('strips input value before setting', function(done) {
+        var model = attachDomModel();
+
+        model.attachText('foo', $context);
+        model.one('foo', function() {
+          expect(model.get('foo')).toBe('bar');
+          done();
+        });
+
+        $context.val('  bar').change();
       });
 
       it('changes based on model', function(done) {
-        model.attachText('foo', $context);
-        model.set('foo', 'baz');
+        var model = attachDomModel();
 
-        setTimeout(function() {
+        model.attachText('foo', $context);
+        model.one('foo', function() {
           expect($context.val()).toBe('baz');
           done();
-        }, 100);
+        });
+
+        model.set('foo', 'baz');
       });
     });
   });

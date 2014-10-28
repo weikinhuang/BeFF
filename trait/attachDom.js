@@ -14,7 +14,7 @@ define(['jquery'], function($) {
     });
 
     $field.on('change', function(e) {
-      model.set(key, e.target.value);
+      model.set(key, $.trim(e.target.value));
     });
   };
 

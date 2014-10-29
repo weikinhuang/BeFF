@@ -8,7 +8,7 @@ define([
     return Model.extend().mixin(attachDom)();
   }
 
-  ddescribe('trait/attachDom', function() {
+  describe('trait/attachDom', function() {
     describe('attachCheckbox', function() {
       var $context;
 

@@ -9,14 +9,21 @@ define([
   var Modal = Dialog.extend({
     switchView: function() {
       this._super.apply(this, arguments);
-      this._view
-      .on('confirm', function() {
-        this.confirm.apply(this, arguments);
-      }, this)
-      .on('hide', function() {
-        this.cancel.apply(this, arguments);
-      }, this);
+      this.listenTo(this._view, {
+        confirm: function() {
+          this.confirm.apply(this, arguments);
+        },
+        hide: function() {
+          this.cancel.apply(this, arguments);
+        }
+      });
     },
+
+    /**
+     * @abstract Function expected to generate a Promise
+     * @returns Promise delays dialog close until resolved
+     */
+    promiseGenerator: undefined,
 
     confirm: function() {
       this.resolve();
@@ -31,9 +38,10 @@ define([
     init: function(options, promiseGenerator) {
       var dialog = new this(options),
       destroy = dialog.destroy.bind(dialog);
+      promiseGenerator = promiseGenerator || dialog.promiseGenerator;
 
       function resolveGenerator() {
-        var retval = promiseGenerator();
+        var retval = promiseGenerator.call(dialog);
         if (retval && typeof retval.then === 'function') {
           retval.then(dialog.resolve.bind(dialog));
         }

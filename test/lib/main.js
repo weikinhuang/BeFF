@@ -13,8 +13,12 @@ require.config({
   baseUrl: '/base',
 
   paths: {
-    'jquery': 'bower_components/jquery/dist/jquery',
-    'nbd': 'bower_components/nbd',
+    jquery: 'bower_components/jquery/dist/jquery',
+    jqueryui: 'bower_components/jqueryui/ui',
+    nbd: 'bower_components/nbd',
+    hgn: 'bower_components/hgn/hgn',
+    hogan: 'bower_components/hogan/web/builds/3.0.5/hogan-3.0.5.amd',
+    text: 'bower_components/requirejs-text/text',
   },
 
   // dynamically load all test files

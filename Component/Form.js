@@ -109,11 +109,18 @@ define([
       }
 
       Object.keys(err).forEach(function(name) {
-        var $element = this.$form.find('[name=' + name + '], #' + name).first();
+        var $element = this.$form.find('[name=' + name + '], #' + name).first(),
+            self = this;
+
         if ($element.length) {
           // binding error:hide must come first in case error:show synchronously
           // triggers 'input' on the element, hiding must take place.
-          $element.one('input', this.trigger.bind(this, 'error:hide', $element));
+          $element.one('input change', function onChange() {
+            // one() binds the events separately, so avoid double firing
+            $element.off('input change', onChange);
+            self.trigger('error:hide', $element);
+          });
+
           this.trigger('error:show', $element, err[name]);
         }
       }, this);

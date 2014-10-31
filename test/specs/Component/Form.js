@@ -115,6 +115,50 @@ define(['Component/Form', 'nbd/Promise', 'util/xhr'], function(Form, Promise, xh
 
       foo.submit();
     });
+
+    describe('element changes', function() {
+      beforeEach(function() {
+        $content = $('<form><input name="foo" value="bar"><select name="bar"><option selected>Foo</option><option>Bar</option></select></form>');
+        foo = new Form($content);
+      });
+
+      it('should fire the event error:hide when an erroneous element changes', function(done) {
+        foo.validator = function() { throw { foo: "This is bad" }; };
+
+        foo.on('error:show', function($element, msg) {
+          foo.on('error:hide', done);
+          $element.val('foo').trigger('input');
+        });
+
+        foo.submit();
+      });
+
+      it('should fire error:hide for select menu changes (#58)', function(done) {
+        foo.validator = function() { throw { bar: "This is bad" }; };
+
+        foo.on('error:show', function($element, msg) {
+          foo.on('error:hide', done);
+          $element.trigger('change');
+        });
+
+        foo.submit();
+      });
+
+      it('should not fire error:hide twice on an input and change event of the same element', function(done) {
+        var spy = jasmine.createSpy();
+
+        foo.validator = function() { throw { foo: "This is bad" }; };
+
+        foo.on('error:show', function($element, msg) {
+          foo.on('error:hide', spy);
+          $element.val('foobar').trigger('input').trigger('change');
+          expect(spy.calls.count()).toBe(1);
+          done();
+        });
+
+        foo.submit();
+      });
+    });
   });
 
   describe('.submit', function() {

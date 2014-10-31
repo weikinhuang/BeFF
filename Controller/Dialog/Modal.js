@@ -19,6 +19,12 @@ define([
       });
     },
 
+    /**
+     * @abstract Function expected to generate a Promise
+     * @returns Promise delays dialog close until resolved
+     */
+    promiseGenerator: undefined,
+
     confirm: function() {
       this.resolve();
     },

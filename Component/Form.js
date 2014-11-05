@@ -52,12 +52,14 @@ define([
       this.commit.call(then, metadata) :
       this.commit;
 
-    chain.resolve(retval === then ? xhr(metadata) : retval);
+    chain.resolve(retval === then ? this.xhr(metadata) : retval);
 
     return chain;
   },
 
   Form = Component.extend({
+    xhr: xhr,
+
     init: function($context) {
       if (!$context) {
         throw new Error("The context of the form cannot be empty");

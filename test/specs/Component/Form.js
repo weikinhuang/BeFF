@@ -180,6 +180,20 @@ define(['Component/Form', 'nbd/Promise', 'util/xhr'], function(Form, Promise, xh
         done();
       });
     });
+
+    describe('when given an overloaded xhr', function() {
+      it('calls the correct xhr', function(done) {
+        var XHRForm = Form.extend({
+              xhr: jasmine.createSpy('xhr')
+            }),
+            bar = new XHRForm($content);
+
+        bar.submit().then(function() {
+          expect(bar.xhr).toHaveBeenCalled();
+          done();
+        });
+      });
+    });
   });
 
   describe('.commit', function() {

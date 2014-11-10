@@ -19,6 +19,11 @@ define(['Component/Form', 'nbd/Promise', 'util/xhr'], function(Form, Promise, xh
       $context = null;
       expect(function() {new Form($context);}).toThrow(new Error("The context of the form cannot be empty"));
     });
+
+    it('throws error when form is cannot be found', function() {
+      var $context = $('<div></div>');
+      expect(function() {new Form($context);}).toThrow(new Error("Unable to find form within context"));
+    });
   });
 
   describe('.validator', function() {
@@ -193,6 +198,20 @@ define(['Component/Form', 'nbd/Promise', 'util/xhr'], function(Form, Promise, xh
           done();
         });
       });
+    });
+  });
+
+  describe('.reset', function() {
+    it('sets form back to original state', function() {
+      var $form = $('<form id="testform"><input type="text" value="original" id="foo" /></form>'),
+          form = new Form($form),
+          $field = $form.find('#foo');
+
+      $field.val(2);
+
+      form.reset();
+
+      expect($field.val()).toEqual('original');
     });
   });
 

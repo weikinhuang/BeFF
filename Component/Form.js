@@ -66,6 +66,10 @@ define([
       }
       this.$form = $context.is('form') ? $context : $context.find('form');
 
+      if (!this.$form.length) {
+        throw new Error("Unable to find form within context");
+      }
+
       // Internal bindings so that we can unbind later
       this._normalizeSubmitter = normalizeSubmitter.bind(this);
       this.submit = this.submit.bind(this);
@@ -81,6 +85,15 @@ define([
       }
       this._super();
       this.$form = null;
+    },
+
+    /**
+     * Wrapper for resetting form without needing to know the DOM
+     */
+    reset: function() {
+      this.$form[0].reset();
+
+      return this;
     },
 
     /**

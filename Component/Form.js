@@ -66,10 +66,9 @@ define([
       }
       this.$form = $context.is('form') ? $context : $context.find('form');
 
-      // Temporarily commented out while fixing spots on network that would throw this
-      // if (!this.$form.length) {
-      //   throw new Error("Unable to find form within context");
-      // }
+      if (!this.$form.length) {
+        throw new Error("Unable to find form within context");
+      }
 
       // Internal bindings so that we can unbind later
       this._normalizeSubmitter = normalizeSubmitter.bind(this);

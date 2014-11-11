@@ -20,7 +20,7 @@ define(['Component/Form', 'nbd/Promise', 'util/xhr'], function(Form, Promise, xh
       expect(function() {new Form($context);}).toThrow(new Error("The context of the form cannot be empty"));
     });
 
-    it('throws error when form is cannot be found', function() {
+    xit('throws error when form is cannot be found', function() {
       var $context = $('<div></div>');
       expect(function() {new Form($context);}).toThrow(new Error("Unable to find form within context"));
     });

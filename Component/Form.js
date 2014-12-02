@@ -47,12 +47,13 @@ define([
 
   innerChain = function(metadata) {
     var chain = new Promise(),
-    then = chain.thenable(),
-    retval = typeof this.commit === 'function' ?
-      this.commit.call(then, metadata) :
-      this.commit;
+        then = chain.thenable(),
+        retval = typeof this.commit === 'function' ?
+          this.commit.call(then, metadata) :
+          this.commit;
 
     chain.resolve(retval === then ? this.xhr(metadata) : retval);
+    this.trigger('commit');
 
     return chain;
   },

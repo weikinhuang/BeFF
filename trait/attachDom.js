@@ -1,13 +1,12 @@
 define(['jquery'], function($) {
   'use strict';
 
-  var _attachTextLike = function(type, key, $field) {
-    var inputSelector = 'input[type=' + type + ']',
-        model;
+  var _attachTextLike = function(selector, key, $field) {
+    var model;
 
-    $field = $field.is(inputSelector) ?
+    $field = $field.is(selector) ?
       $field :
-      $field.find(inputSelector);
+      $field.find(selector);
 
     model = this.on(key, function(value) {
       this._setElementValue($field, value);
@@ -74,33 +73,38 @@ define(['jquery'], function($) {
       return this;
     },
 
+    attachTextArea: function(key, $field) {
+      _attachTextLike.call(this, 'textarea', key, $field);
+      return this;
+    },
+
     attachText: function(key, $field) {
-      _attachTextLike.call(this, 'text', key, $field);
+      _attachTextLike.call(this, 'input[type=text]', key, $field);
       return this;
     },
 
     attachSearch: function(key, $field) {
-      _attachTextLike.call(this, 'search', key, $field);
+      _attachTextLike.call(this, 'input[type=search]', key, $field);
       return this;
     },
 
     attachEmail: function(key, $field) {
-      _attachTextLike.call(this, 'email', key, $field);
+      _attachTextLike.call(this, 'input[type=email]', key, $field);
       return this;
     },
 
     attachUrl: function(key, $field) {
-      _attachTextLike.call(this, 'url', key, $field);
+      _attachTextLike.call(this, 'input[type=url]', key, $field);
       return this;
     },
 
     attachTel: function(key, $field) {
-      _attachTextLike.call(this, 'tel', key, $field);
+      _attachTextLike.call(this, 'input[type=tel]', key, $field);
       return this;
     },
 
     attachPassword: function(key, $field) {
-      _attachTextLike.call(this, 'password', key, $field);
+      _attachTextLike.call(this, 'input[type=password]', key, $field);
       return this;
     },
 

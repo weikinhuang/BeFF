@@ -129,6 +129,43 @@ define([
       });
     });
 
+    describe('attachTextArea', function() {
+      var $context;
+
+      beforeEach(function() {
+        $context = affix('textarea');
+      });
+
+      it('sets model with dom values', function(done) {
+        var model = attachDomModel();
+
+        model.attachTextArea('foo', $context);
+        $context.val('bar').change();
+
+        setTimeout(function() {
+          expect(model.get('foo')).toBe('bar');
+          $context.val('baz').change();
+
+          setTimeout(function() {
+            expect(model.get('foo')).toBe('baz');
+            done();
+          }, 100);
+        }, 100);
+      });
+
+      it('changes based on model', function(done) {
+        var model = attachDomModel();
+
+        model.attachTextArea('foo', $context);
+        model.one('foo', function() {
+          expect($context.val()).toBe('baz');
+          done();
+        });
+
+        model.set('foo', 'baz');
+      });
+    });
+
     describe('attachText', function() {
       var $context;
 

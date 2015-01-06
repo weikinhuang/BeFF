@@ -2,7 +2,7 @@ define([
   'jquery',
   'nbd/util/extend',
   '../Dialog',
-  'jqueryui/jquery.ui.position'
+  'jqueryui/position'
 ], function($, extend, View) {
   'use strict';
 

@@ -3,7 +3,7 @@ define([
   'nbd/util/async',
   'nbd/util/extend',
   '../Dialog',
-  'jqueryui/jquery.ui.position'
+  'jqueryui/position'
 ], function($, async, extend, View) {
   'use strict';
 

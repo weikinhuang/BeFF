@@ -57,7 +57,7 @@ define([
         };
       }
 
-      dialog.render(document.body);
+      dialog.toggle(document.body);
       dialog.then(destroy, destroy);
       return dialog;
     }

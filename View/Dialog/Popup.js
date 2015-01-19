@@ -30,6 +30,9 @@ define([
       this.$block = this.$block || $('<div>', {
         class: "blocking-div"
       })
+      .on('click', function(e) {
+        e.stopPropagation();
+      })
       .insertAfter(this.$view);
     },
 

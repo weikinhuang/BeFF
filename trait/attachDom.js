@@ -19,6 +19,27 @@ define(['jquery'], function($) {
 
   // Two-way binding of inputs to a model
   return {
+    attach: function($els) {
+      var map = {
+        'input[type=text]': 'attachText',
+        'input[type=radio]': 'attachRadio',
+        'input[type=checkbox]': 'attachCheckbox',
+        textarea: 'attachTextArea',
+        select: 'attachSelect'
+      };
+
+      $els.each(function(i, el) {
+        Object.keys(map).some(function(selector) {
+          var $el = $(el),
+              matches = $el.is(selector);
+          if (matches) {
+            this[map[selector]](el.name, $el);
+          }
+          return matches;
+        }, this);
+      }.bind(this));
+    },
+
     attachCheckbox: function(key, $context) {
       var $checkboxes = $context.find('input[type=checkbox]'),
       model = this.on(key, function(piped) {

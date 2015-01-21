@@ -209,5 +209,51 @@ define([
         model.set('foo', 'baz');
       });
     });
+
+    describe('attach', function() {
+      var model;
+
+      beforeEach(function() {
+        model = attachDomModel();
+      });
+
+      it('calls attachText on text elements', function() {
+        var $context = affix('input[type="text"]');
+        spyOn(model, 'attachText');
+        model.attach($context);
+        expect(model.attachText).toHaveBeenCalled();
+      });
+
+      it('calls attachTextarea on textarea elements', function() {
+        var $context = affix('textarea');
+        spyOn(model, 'attachTextArea');
+        model.attach($context);
+        expect(model.attachTextArea).toHaveBeenCalled();
+      });
+
+      it('calls attachSelect on select elements', function() {
+        var $context = affix('select option[value="bar"]');
+        $context.affix('option[value="baz"]');
+        spyOn(model, 'attachSelect');
+        model.attach($context);
+        expect(model.attachSelect).toHaveBeenCalled();
+      });
+
+      it('calls attachRadio on radio elements', function() {
+        var $context = affix('select option[value="bar"]');
+        $context = affix('input[type="radio"][name="foo"][value="bar"]');
+        $context.affix('input[type="radio"][name="foo"][value="baz"]');
+        spyOn(model, 'attachRadio');
+        model.attach($context);
+        expect(model.attachRadio).toHaveBeenCalled();
+      });
+
+      it('calls attachCheckbox on checkbox elements', function() {
+        var $context = affix('input[type="checkbox"][value="bar"]');
+        spyOn(model, 'attachCheckbox');
+        model.attach($context);
+        expect(model.attachCheckbox).toHaveBeenCalled();
+      });
+    });
   });
 });

@@ -47,22 +47,17 @@ define([
       if ($view) {
         this._view.trigger('postrender', $view);
       }
-
-      Object.defineProperties(this, {
-        id: {
-          get: function() {
-            return this._model.id();
-          }
-        },
-        data: {
-          get: function() {
-            return this._model.data();
-          }
-        }
-      });
     }
   }, {
     VIEW_CLASS: View
   })
-  .mixin(log);
+  .mixin(log)
+  .mixin({
+    get id() {
+      return this._model.id();
+    },
+    get data() {
+      return this._model.data();
+    }
+  });
 });

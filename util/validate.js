@@ -86,7 +86,7 @@ define(function() {
       message: "This field must be a valid address"
     },
     City:{
-      test: test.bind(/^[\wA-Za-z\u00C0-\u00FF\u0100-\u0259\u0386\u0388-\u04E9\u05D0-\u06D3\u1E80-\u200F \' \. \-]+$/),
+      test: test.bind(/^[\wA-Za-z\u00C0-\u00FF\u0100-\u0259\u0386\u0388-\u04E9\u05D0-\u06D3\u1E80-\u200F \' \. \/ \-]+$/),
       message: "This field must be a valid city"
     },
     Province:{

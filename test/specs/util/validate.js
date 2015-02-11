@@ -48,6 +48,11 @@ define(['util/validate'], function(validate) {
       bad: ['abcde', 'abcdefghijklmnopqrstuvwxyz1234567']
     },
 
+    City: {
+      good: ['Boston', 'Aloi/Alcoy', 'Cote D\'Ivoire'],
+      bad: ['Cote D>Ivoire', 'Wat?']
+    },
+
     Html: {
       good: ['<p></p>', '<em></em>', '<u></u>', '<strong></strong>'],
       bad: ['<script></script>', '<embed></embed>']

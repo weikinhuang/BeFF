@@ -3,14 +3,9 @@ define(['util/validate'], function(validate) {
 
   var tests = {
 
-    required: {
-      good: [' ', 'anything', '!@#$%^&*()-=', '\''],
-      bad: ['', null, undefined]
-    },
-
     Generic: {
       good: [' ', 'anything', '!@#$%^&*()-=', '\''],
-      bad: ['<script type="jarvascript">document.write', '', null, undefined]
+      bad: ['<script type="jarvascript">document.write', null, undefined]
     },
 
     AlphaNumeric: {
@@ -59,11 +54,21 @@ define(['util/validate'], function(validate) {
     }
   },
 
+  /**
+   * Verify value for rules are valid. Context should be set to rules.
+   *
+   * @param {string} corpus value being validated
+   */
   good = function(corpus) {
     expect(validate(corpus, this)).toBe(true);
     expect(validate.message).not.toBeDefined();
   },
 
+  /**
+   * Verify value for rules are not valid. Context should be set to rules.
+   *
+   * @param {string} corpus value being validated
+   */
   bad = function(corpus) {
     expect(validate(corpus, this)).toBe(false);
     expect(validate.message).toBeDefined();
@@ -71,14 +76,33 @@ define(['util/validate'], function(validate) {
 
   describe('lib/validate', function() {
     var key;
-    function verify(key) {
+    function verifyRequired(key) {
+      var validator = 'required,' + key;
+      tests[key].good.forEach(good, validator);
+      tests[key].bad.forEach(bad, validator);
+    }
+
+    function verifyOptional(key) {
+      good.call(key, '');
+      bad.call(key, null);
+      bad.call(key, undefined);
+
       tests[key].good.forEach(good, key);
       tests[key].bad.forEach(bad, key);
     }
 
     for (key in tests) {
-      it('verifies ' + key, verify.bind(this, key));
+      it('verifies required ' + key, verifyRequired.bind(this, key));
     }
+
+    for (key in tests) {
+      it('verifies optional values correctly for ' + key, verifyOptional.bind(this, key));
+    }
+
+    it('verifies required', function() {
+      validate('', 'required,Generic');
+      expect(validate.message).toEqual('This field is required');
+    });
 
     it('verifies length', function() {
       var tests = {
@@ -86,8 +110,8 @@ define(['util/validate'], function(validate) {
         bad: ['', 'aaa']
       };
 
-      tests.good.forEach(good, "length[1,2]");
-      tests.bad.forEach(bad, "length[1,2]");
+      tests.good.forEach(good, "required,length[1,2]");
+      tests.bad.forEach(bad, "required,length[1,2]");
     });
 
     it('verifies optional', function() {

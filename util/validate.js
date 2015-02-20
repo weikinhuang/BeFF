@@ -214,21 +214,20 @@ define(function() {
   }
 
   function validate(body, rules) {
-    var optional;
+    if (typeof body !== 'string') {
+      validate.message = 'You must enter a value';
+      return false;
+    }
 
     delete validate.message;
     rules = rules ? commaSplit(rules) : [];
-    body = (body === null || body === undefined) ? '' : body;
 
-    optional = rules.indexOf('optional');
+    // When optional field with no value
+    if (rules.indexOf('required') === -1 && body === '') {
+      return true;
+    }
 
-    if (optional > -1) {
-      rules.splice(optional, optional + 1);
-      return !body || rules.every(check, body);
-    }
-    else {
-      return rules.every(check, body);
-    }
+    return rules.every(check, body);
   }
 
   // Per rule check
@@ -241,6 +240,7 @@ define(function() {
       meta = res[2];
     }
 
+    // Skip over invalid rule
     if (!(tests[rule] && tests[rule].test)) {
       return true;
     }

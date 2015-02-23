@@ -214,13 +214,13 @@ define(function() {
   }
 
   function validate(body, rules) {
-    if (typeof body !== 'string') {
-      validate.message = 'You must enter a value';
-      return false;
-    }
-
     delete validate.message;
     rules = rules ? commaSplit(rules) : [];
+
+    // /.+/.test(null) passes as true for required check
+    if (body == null) {
+      body = '';
+    }
 
     // When optional field with no value
     if (rules.indexOf('required') === -1 && body === '') {

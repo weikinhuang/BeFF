@@ -82,13 +82,17 @@ define(['util/validate'], function(validate) {
       tests[key].bad.forEach(bad, validator);
     }
 
+    function notNullUndefined(val) {
+      return val != null;
+    }
+
     function verifyOptional(key) {
       good.call(key, '');
-      bad.call(key, null);
-      bad.call(key, undefined);
+      good.call(key, null);
+      good.call(key, undefined);
 
       tests[key].good.forEach(good, key);
-      tests[key].bad.forEach(bad, key);
+      tests[key].bad.filter(notNullUndefined).forEach(bad, key);
     }
 
     for (key in tests) {
@@ -102,6 +106,24 @@ define(['util/validate'], function(validate) {
     it('verifies required', function() {
       validate('', 'required,Generic');
       expect(validate.message).toEqual('This field is required');
+    });
+
+    it('verifies required null', function() {
+      validate(null, 'required,Generic');
+      expect(validate.message).toEqual('This field is required');
+    });
+
+    it('verifies required undefined', function() {
+      validate(undefined, 'required,Generic');
+      expect(validate.message).toEqual('This field is required');
+    });
+
+    it('passes required 0', function() {
+      good.call('required,Integer', 0);
+    });
+
+    it('runs validator for 0', function() {
+      bad.call('Alpha', 0);
     });
 
     it('verifies length', function() {

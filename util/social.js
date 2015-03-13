@@ -13,7 +13,7 @@ define(['jquery'], function($) {
     },
 
     twitter: function($context) {
-      if ($('.viral-button-twitter', $context).length) {
+      if ($('.js-viral-button-twitter', $context).length) {
         require(['//platform.twitter.com/widgets.js'], function() {
           try {
             twttr.widgets.load();
@@ -24,7 +24,7 @@ define(['jquery'], function($) {
     },
 
     linkedin: function($context) {
-      if ($('.viral-button-linkedin', $context).length) {
+      if ($('.js-viral-button-linkedin', $context).length) {
         require(['//platform.linkedin.com/in.js'], function() {
           if (typeof IN !== 'undefined' && IN.parse) { IN.parse(); }
         });
@@ -32,7 +32,7 @@ define(['jquery'], function($) {
     },
 
     facebook: function($context) {
-      if ($('.fb-like', $context).length) {
+      if ($('.js-viral-button-fb', $context).length) {
         require(['//connect.facebook.net/en_US/all.js#xfbml=1'], function() {
           if (typeof FB !== 'undefined' && FB.XFBML) { FB.XFBML.parse(); }
         });
@@ -40,7 +40,7 @@ define(['jquery'], function($) {
     },
 
     pinterest: function pinterest($context) {
-      $('.viral-button-pinterest', $context).on('click', function() {
+      $('.js-viral-button-pinterest', $context).on('click', function() {
         require(['//assets.pinterest.com/js/pinmarklet.js'], function() {
           if (typeof pinterest === 'undefined') {
             return;
@@ -59,7 +59,9 @@ define(['jquery'], function($) {
     },
 
     stumbledupon: function($context) {
-      if ($('.viral-button-stumble', $context).length && window.location.protocol === 'https:') {
+      // Do not show stumbleupon when on secure pages as they throw security
+      // warnings because they load insecure subresources, last checked 3/13/2015
+      if (window.location.protocol !== 'https:' && $('.js-viral-button-stumble', $context).length) {
         require(['//platform.stumbleupon.com/1/widgets.js'], function() {
           if (typeof STMBLPN !== 'undefined') { STMBLPN.processWidgets(); }
         });

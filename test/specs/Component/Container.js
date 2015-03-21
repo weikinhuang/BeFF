@@ -29,8 +29,8 @@ define(['Component/Container', 'Controller', 'jquery', 'trait/eventMappable'], f
         expect(spy).not.toHaveBeenCalled();
       });
       it('is not rendered', function() {
-        var $foo = $('<div><ul></ul></div>'),
-        container = Container.init($foo, spy);
+        var $foo = $('<div><ul></ul></div>');
+        Container.init($foo, spy);
         expect(spy).toHaveBeenCalled();
         expect(spy.calls.count()).toEqual(1);
         expect(render).not.toHaveBeenCalled();

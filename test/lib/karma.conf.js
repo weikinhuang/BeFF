@@ -30,11 +30,13 @@ module.exports = function(config) {
     // available preprocessors: https://npmjs.org/browse/keyword/karma-preprocessor
     preprocessors: {
       '*.js': ['coverage'],
-      'View/**/*.js': ['coverage'],
       'Controller/**/*.js': ['coverage'],
       'Component/**/*.js': ['coverage'],
+      'dom/**/*.js': ['coverage'],
       'trait/**/*.js': ['coverage'],
       'util/**/*.js': ['coverage'],
+      'ux/**/*.js': ['coverage'],
+      'View/**/*.js': ['coverage'],
     },
 
     // test results reporter to use

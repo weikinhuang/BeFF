@@ -18,7 +18,7 @@ define(['Controller/Dialog/Modal', 'nbd/Promise'], function(Modal, Promise) {
 
       it('creates a thenable', function() {
         dialog = Modal.init();
-        expect(dialog.then).toEqual(jasmine.any(Function));;
+        expect(dialog.then).toEqual(jasmine.any(Function));
       });
 
       it('immediately renders', function() {
@@ -67,15 +67,18 @@ define(['Controller/Dialog/Modal', 'nbd/Promise'], function(Modal, Promise) {
     });
 
     describe('#promiseGenerator', function() {
-      it('is used as default promiseGenerator of Modal.init()', function() {
+      it('is used as default promiseGenerator of Modal.init()', function(done) {
+        var promise = Promise.resolve();
+
         var dialog = Modal.extend({
-          promiseGenerator: jasmine.createSpy().and.callFake(function() {
-            expect(this).toBe(dialog);
-          })
+          promiseGenerator: jasmine.createSpy().and.returnValue(promise)
         }).init();
 
         dialog.confirm();
+
         expect(dialog.promiseGenerator).toHaveBeenCalled();
+
+        dialog.then(done);
       });
     });
   });

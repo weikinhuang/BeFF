@@ -1,13 +1,29 @@
 {
+  "extends": "../.jshintrc",
   "globals": {
-    "jasmine": true,
-    "describe": true,
-    "xdescribe": true,
-    "it": true,
-    "xit": true,
-    "beforEach": true,
-    "afterEach": true,
-    "describe": true,
-    "spyOn": true
+    "require": false,
+    "requirejs": false,
+    "define": false,
+    "jasmine": false,
+    "beforeEach": false,
+    "afterEach": false,
+    "describe": false,
+    "it": false,
+    "xdescribe": false,
+    "xit": false,
+    "expect": false,
+    "spyOn": false,
+    "affix": false,
+    "mostRecentAjaxRequest": false,
+    "ajaxRequests": false,
+    "clearAjaxRequests": false,
+    "loadFixtures": false,
+    "loadStyleFixtures": false,
+    "setStyleFixtures": false,
+    "setFixtures": false,
+    "AsyncSpec": false,
+    "waits": false,
+    "waitsFor": false,
+    "runs": false
   }
 }

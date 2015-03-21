@@ -2,11 +2,6 @@
   "strict": true,
   "unused": true,
 
-  //move to JSCS eventually
-  "curly": true,
-  "trailing": true,
-  "newcap": true,
-
   "maxcomplexity": 8,
   "maxstatements": 20,
 

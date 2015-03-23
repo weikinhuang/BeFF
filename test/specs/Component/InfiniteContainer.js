@@ -160,13 +160,12 @@ define(['Component/InfiniteContainer', 'util/xhr', 'nbd/Model', 'nbd/util/depara
       jasmine.Ajax.install();
 
       var  $bar = affix('div'),
-      success = jasmine.createSpy('ajaxSuccess'),
-      error = jasmine.createSpy('ajaxFailure'),
       foo = new InfiniteContainer(param);
       foo.of(Controller).at($bar).bind(model);
 
-      var request = jasmine.Ajax.requests.mostRecent(),
-      successResponse = request.response({
+      var request = jasmine.Ajax.requests.mostRecent();
+
+      request.response({
         status: 200,
         contentType: 'application/json',
         responseText: JSON.stringify({ data: [{}, {}, {}]})
@@ -188,16 +187,15 @@ define(['Component/InfiniteContainer', 'util/xhr', 'nbd/Model', 'nbd/util/depara
       jasmine.Ajax.install();
 
       var  $bar = affix('div'),
-      success = jasmine.createSpy('ajaxSuccess'),
-      error = jasmine.createSpy('ajaxFailure'),
       foo = new InfiniteContainer(param),
       spy = jasmine.createSpy();
 
       foo.of(Controller).at($bar).bind(model);
       foo.on('empty', spy);
 
-      var request = jasmine.Ajax.requests.mostRecent(),
-      successResponse = request.response({
+      var request = jasmine.Ajax.requests.mostRecent();
+
+      request.response({
         status: 200,
         contentType: 'application/json',
         responseText: JSON.stringify({ data: []})

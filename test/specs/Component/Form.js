@@ -1,4 +1,4 @@
-define(['Component/Form', 'nbd/Promise', 'util/xhr'], function(Form, Promise, xhr) {
+define(['jquery', 'Component/Form', 'nbd/Promise', 'util/xhr'], function($, Form, Promise, xhr) {
   'use strict';
 
   var foo, $content;
@@ -65,8 +65,7 @@ define(['Component/Form', 'nbd/Promise', 'util/xhr'], function(Form, Promise, xh
     });
 
     it('fires error event when validation fails', function(done) {
-      var spy = jasmine.createSpy(),
-          err = new Error('you shall not pass');
+      var err = new Error('you shall not pass');
 
       foo.validator = function() {
         throw err;
@@ -113,7 +112,7 @@ define(['Component/Form', 'nbd/Promise', 'util/xhr'], function(Form, Promise, xh
 
       foo.on('error:show', function($element, msg) {
         expect(msg).toBe('This is bad');
-        expect($element).toEqual(jasmine.any(jQuery));
+        expect($element).toEqual(jasmine.any($));
         expect($element[0]).toBe($content.find('[name=foo]')[0]);
         done();
       });
@@ -229,12 +228,13 @@ define(['Component/Form', 'nbd/Promise', 'util/xhr'], function(Form, Promise, xh
               foo: 'bar'
             },
           }),
-          request = jasmine.Ajax.requests.mostRecent(),
-          successResponse = request.response({
-            status: 200,
-            contentType: 'text/plain',
-            responseText: 'hi'
-          });
+          request = jasmine.Ajax.requests.mostRecent();
+
+      request.response({
+        status: 200,
+        contentType: 'text/plain',
+        responseText: 'hi'
+      });
 
       foo.commit = function() {
         expect(this.then).toEqual(jasmine.any(Function));
@@ -377,8 +377,6 @@ define(['Component/Form', 'nbd/Promise', 'util/xhr'], function(Form, Promise, xh
       });
 
       it('fires before the data is serialized', function(done) {
-        var order = 0;
-
         foo.validator = jasmine.createSpy().and.returnValue(false);
 
         foo.on('before', function(value) {

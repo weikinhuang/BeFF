@@ -31,8 +31,9 @@ define(['util/xhr', 'nbd/Promise'], function(xhr, Promise) {
       error = jasmine.createSpy('ajaxFailure'),
       response = xhr(meta),
       request = jasmine.Ajax.requests.mostRecent(),
-      text = 'you are awesome',
-      successfulResponse = request.response({
+      text = 'you are awesome';
+
+      request.response({
         status: 200,
         contentType: 'text/plain',
         responseText: text
@@ -40,7 +41,7 @@ define(['util/xhr', 'nbd/Promise'], function(xhr, Promise) {
 
       response.then(success, error).then(function() {
         expect(success).toHaveBeenCalled();
-        expect(succes).toHaveBeenCalledWith(text);
+        expect(success).toHaveBeenCalledWith(text);
         expect(error).not.toHaveBeenCalled();
       }).finally(done);
     });
@@ -50,8 +51,9 @@ define(['util/xhr', 'nbd/Promise'], function(xhr, Promise) {
       error = jasmine.createSpy('ajaxFailure'),
       response = xhr(meta),
       request = jasmine.Ajax.requests.mostRecent(),
-      text = 'you are awesome',
-      errorResponse = request.response({
+      text = 'you are awesome';
+
+      request.response({
         status: 400,
         contentType: 'text/plain',
         responseText: text

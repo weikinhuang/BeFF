@@ -6,19 +6,13 @@ module.exports = function(grunt) {
     pkg: grunt.file.readJSON('package.json'),
     jshint: {
       options: {
-        jshintrc: '.jshintrc',
-        ignores: [
-          'Gruntfile.js'
-        ]
+        jshintrc: true
       },
       test: [
-        '*.js',
-        'Component/**/*.js',
-        'Controller/**/*.js',
-        'View/**/*.js',
-        'trait/**/*.js',
-        'util/**/*.js',
-        'ux/**/*.js'
+        '**/*.js',
+        '!node_modules/**/*.js',
+        '!bower_components/**/*.js',
+        '!test/lib/**/*.js',
       ]
     },
     karma: {

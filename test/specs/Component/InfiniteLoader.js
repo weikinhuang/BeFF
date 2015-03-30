@@ -83,7 +83,7 @@ define([
     return promise;
   }
 
-  describe('lib/infiniteLoader', function() {
+  describe('Component/InfiniteLoader', function() {
     describe('initialization', function() {
       it('throws errors if not configured', function() {
         var infiniteLoader = InfiniteLoader.init();

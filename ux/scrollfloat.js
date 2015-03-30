@@ -1,8 +1,7 @@
 // Events for scrolling past floating regions
 define([
-  'jquery',
-  'nbd/util/throttle'
-], function($, throttle) {
+  'jquery'
+], function($) {
   'use strict';
 
   var $window = $(window),
@@ -75,9 +74,19 @@ define([
     }
 
     function onHit() {
-      var retval = throttle(callback);
+      if (onHit.blocking) { return; }
+      onHit.blocking = true;
+
+      var retval = callback.apply(null, arguments);
+
       if (retval && typeof retval.then === 'function') {
-        retval.then(scrollCache[context]);
+        retval.then(function() {
+          onHit.blocking = false;
+          scrollCache[context]();
+        });
+      }
+      else {
+        onHit.blocking = false;
       }
     }
 

@@ -2,17 +2,17 @@ define([
   'jquery',
   'nbd/util/extend',
   'nbd/trait/log',
-  'nbd/trait/pubsub',
-  'nbd/Controller/Responsive',
+  'nbd/trait/responsive',
+  'nbd/Controller',
   './View'
-], function($, extend, log, pubsub, Entity, View) {
+], function($, extend, log, responsive, Controller, View) {
   'use strict';
 
   function isData(id, data) {
     return typeof data === 'undefined' || typeof id === 'object';
   }
 
-  return Entity.extend({
+  return Controller.extend({
     init: function(id, data) {
       var el, $view;
 
@@ -52,12 +52,5 @@ define([
     VIEW_CLASS: View
   })
   .mixin(log)
-  .mixin({
-    get id() {
-      return this._model.id();
-    },
-    get data() {
-      return this._model.data();
-    }
-  });
+  .mixin(responsive);
 });

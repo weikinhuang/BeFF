@@ -6,8 +6,6 @@ define([
   'use strict';
 
   var constructor = Controller.extend({
-    $context: null,
-
     setContext: function($context) {
       if (this.$context) {
         this.$context.off('click.dialog');

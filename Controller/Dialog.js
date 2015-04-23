@@ -1,8 +1,7 @@
 define([
   'jquery',
-  '../Controller',
-  'nbd/util/async'
-], function($, Controller, async) {
+  '../Controller'
+], function($, Controller) {
   'use strict';
 
   var constructor = Controller.extend({
@@ -20,10 +19,9 @@ define([
     },
 
     render: function($context) {
-      var attachment = $($context).closest(this._view.attachment),
-      retval = this._view.render(attachment.length ? attachment : document.body);
-      this._view.position($context);
-      return retval;
+      var attachment = $($context).closest(this._view.attachment);
+      return this._super(attachment.length ? attachment : document.body)
+      .then(this._view.position.bind(this._view));
     },
 
     toggle: function($context) {
@@ -32,8 +30,8 @@ define([
         this._view.position($context);
       }
       else {
-        this.render($context || this.$context);
-        async(this._view.show.bind(this._view));
+        this.render($context || this.$context)
+        .then(this._view.show.bind(this._view));
       }
     }
   });

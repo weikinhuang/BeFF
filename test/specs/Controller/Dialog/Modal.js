@@ -18,11 +18,11 @@ define(['Controller/Dialog/Modal', 'nbd/Promise'], function(Modal, Promise) {
 
       it('creates a thenable', function() {
         dialog = Modal.init();
-        expect(dialog.then).toEqual(jasmine.any(Function));;
+        expect(dialog.then).toEqual(jasmine.any(Function));
       });
 
       it('immediately renders', function() {
-        spyOn(Modal.prototype, 'render');
+        spyOn(Modal.prototype, 'render').and.returnValue(new Promise());
         dialog = Modal.init();
         expect(dialog.render).toHaveBeenCalled();
       });

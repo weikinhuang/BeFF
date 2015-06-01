@@ -50,15 +50,17 @@ define([
     show: function() {
       if (this._shown) { return this; }
       this._shown = true;
-      this.$view.show();
+
+      var $view = this.$view;
+      $view.show();
       async(function() {
-        this.$view.toggleClass(this._shownClass, this._shown);
+        $view.toggleClass(this._shownClass, this._shown);
       }.bind(this));
 
       keyboard.on({
         escape: this.hide.bind(this)
       });
-      return this.trigger('show', this.$view);
+      return this.trigger('show', $view);
     },
 
     hide: function() {

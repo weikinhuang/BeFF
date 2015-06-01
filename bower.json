@@ -24,8 +24,8 @@
     "tests"
   ],
   "dependencies": {
-    "nbd": "nbd.js#^1.0.5",
-    "hgn": "https://github.com/behance/requirejs-hogan-plugin.git#~0.4.0",
+    "nbd": "nbd.js#~1.1.0",
+    "hgn": "https://github.com/behance/requirejs-hogan-plugin.git",
     "jquery": "~2.1.1",
     "jqueryui": "~1.11"
   }

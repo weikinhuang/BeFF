@@ -22,7 +22,7 @@ define(['Controller/Dialog/Modal', 'nbd/Promise'], function(Modal, Promise) {
       });
 
       it('immediately renders', function() {
-        spyOn(Modal.prototype, 'render');
+        spyOn(Modal.prototype, 'render').and.returnValue(new Promise());
         dialog = Modal.init();
         expect(dialog.render).toHaveBeenCalled();
       });

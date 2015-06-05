@@ -19,6 +19,7 @@ require.config({
     hgn: 'bower_components/hgn/hgn',
     hogan: 'bower_components/hogan/web/builds/3.0.5/hogan-3.0.5.amd',
     text: 'bower_components/requirejs-text/text',
+    fixtures: 'test/fixtures',
   },
 
   // dynamically load all test files

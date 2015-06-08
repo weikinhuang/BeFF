@@ -37,6 +37,8 @@ define([
       return this._blob ? [this._blob] : [];
     },
 
+    getKey: function() {},
+
     setParams: function(params) {
       this._params = params;
     },

@@ -137,6 +137,25 @@ define([
     },
 
     /**
+     * Returns the AWS bucket url that files are being uploaded to.
+     *
+     * @return {String}
+     */
+    getUploadEndpoint: function() {
+      return this._config.request.endpoint;
+    },
+
+    /**
+     * Returns the AWS key of the uploaded file.
+     *
+     * @param  {Number} id
+     * @return {String}
+     */
+    getUploadPath: function(id) {
+      return this._uploader.getKey(id);
+    },
+
+    /**
      * Opens the file chooser
      *
      * @param  {Number} [idx=0] - The index of the input field to get (if there are multiple)
@@ -311,7 +330,9 @@ define([
       this.trigger('complete', {
         response: response,
         id: id,
-        file: this._getFile(id)
+        file: this._getFile(id),
+        uploadEndpoint: this.getUploadEndpoint(),
+        uploadPath: this.getUploadPath(id)
       });
     },
 

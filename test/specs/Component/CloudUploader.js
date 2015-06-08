@@ -15,7 +15,11 @@ define([
     beforeEach(function() {
       this.uploader = Uploader.extend({
         _getSignatureConfig: function() { return {}; },
-        _getRequestConfig: function() { return {}; },
+        _getRequestConfig: function() {
+          return {
+            endpoint: 'http://example.com/example'
+          };
+        },
         _isDisabled: function() { return false; }
       }).init();
     });
@@ -30,9 +34,13 @@ define([
       });
 
       it('fires the complete event on a successful upload', function(done) {
+        spyOn(this.uploader._uploader, 'getKey').and.returnValue('1.jpg');
+
         this.uploader.on('complete', function(data) {
           expect(data.response.http_code).toBe(200);
           expect(data.id).toBe(0);
+          expect(data.uploadEndpoint).toBe('http://example.com/example');
+          expect(data.uploadPath).toBe('1.jpg');
           done();
         });
 

@@ -14,13 +14,18 @@ define([
 
     beforeEach(function() {
       this.uploader = Uploader.extend({
-        _getSignatureConfig: function() { return {}; },
-        _getRequestConfig: function() {
-          return {
-            endpoint: 'http://example.com/example'
+        init: function(options) {
+          options = options || {};
+          options.signature = {
+            endpoint: 'http://example.com/signature'
           };
-        },
-        _isDisabled: function() { return false; }
+          options.request = {
+            endpoint: 'http://example.com/example',
+            accessKey: '12345'
+          };
+          options.disabled = false;
+          return this._super(options);
+        }
       }).init();
     });
 

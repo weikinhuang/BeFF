@@ -33,7 +33,7 @@ define([
      */
     _defaultOptions: {
       multiple: false,
-
+      disabled: false,
       messages: {
         typeError: 'Please upload a file with these extensions: {extensions}.',
         sizeError: '{file} is too large, the maximum file size is {sizeLimit}.',
@@ -53,8 +53,29 @@ define([
       }
     },
 
+    /**
+     * Intiliazes the uploader with the provided options.
+     *
+     * @example
+     *
+     * CloudUploader.init({
+     *   request: {
+     *      endpoint: 'https://s3.amazonaws.com/bucketname',
+     *      accessKey: '123456789'
+     *    },
+     *    signature: {
+     *      endpoint: '/path/to/sign_request_url'
+     *    }
+     *  });
+     *
+     * @param  {Object} options
+     * @param  {Object} options.request
+     * @param  {Object} options.signature
+     */
     init: function(options) {
       var config = {};
+
+      this._verifyOptions(options);
 
       // using $.extend for ability to do deep recursive extension
       $.extend(true, config, this._defaultOptions, options, {
@@ -69,9 +90,7 @@ define([
         chunking: {
           enabled: true,
           mandatory: true
-        },
-        signature: this._getSignatureConfig(),
-        request: this._getRequestConfig()
+        }
       });
 
       if (!config.button) {
@@ -195,57 +214,44 @@ define([
     },
 
     /**
+     * Verifies that the passed in options contain the minimum required config
+     *
+     * @throws {Error} If configuration is invalid
+     */
+    _verifyOptions: function(options) {
+      if (!options.request || !options.request.endpoint || !options.request.accessKey) {
+        throw new Error('Please provide a proper `request` configuration property');
+      }
+
+      if (!options.signature || !options.signature.endpoint) {
+        throw new Error('Please provide a proper `signature` configuration property');
+      }
+    },
+
+    /**
      * Returns whether or not uploads are currently disabled. Serves as an extension point for implementation-specific override.
      *
-     * @abstract
      * @return {Boolean}
      */
     _isDisabled: function() {
-      throw new Error('Please override the _isDisabled function.');
+      return this._config.disabled;
     },
 
     /**
-     * Returns an object that describes the `signature` property of the fineUploader options object.
-     * The object at minimum must contain an `endpoint` property, which tells fineUploader where to retrieve a signed request
-     * for AWS from.
-     *
-     * @example
-     * { endpoint: '/sign_request' }
-     *
-     * @abstract
-     * @return {Object}
-     */
-    _getSignatureConfig: function() {
-      throw new Error('Please override the _getSignatureConfig function.');
-    },
-
-    /**
-     * Returns an object that describes the `request` property of the fineUploader options object.
-     * The object at minimum must contain an `endpoint` property and an `accessKey` property,
-     * which tells fineUploader which AWS bucket to upload content to.
-     *
-     * @example
-     * {
-     *   endpoint: 'https://s3.amazonaws.com/name-of-bucket',
-     *   accessKey: 'MYACCESSKEYHERE'
-     * }
-     *
-     * @abstract
-     * @return {Object}
-     */
-    _getRequestConfig: function() {
-      throw new Error('Please override the _getRequestConfig function.');
-    },
-
-    /**
-     * Extension point for custom validation of the submitted file. Return false or a rejected promise
-     * to cancel the submission of the provided file.
+     * Executes the provided validator, or returns true if no validator was provided
      *
      * @param {File} file [description]
      * @return {Promise|Boolean}
      */
-    _fileValidator: function(/*file*/) {
-      return true;
+    _validator: function(file) {
+      var result = this._config.validator ? this._config.validator(file) : true;
+
+      // convert false into a rejected Promise to stop submission when the validator returns false
+      if (result === false) {
+        return Promise.reject();
+      }
+
+      return result;
     },
 
     /**
@@ -278,27 +284,6 @@ define([
     },
 
     /**
-     * Wrapper function for providing fileReaderData to the user extended _fileValidator function and
-     * converting the result into a promise.
-     *
-     * @param  {File} file
-     * @return {Promise}
-     */
-    _fileValidatorPromise: function(file) {
-      return BeFileReader.promise(file).then(function(readerData) {
-        file.readerData = readerData;
-        var result = this._fileValidator(file);
-
-        // convert false into a rejected Promise to stop submission when the validator returns false
-        if (result === false) {
-          return Promise.reject();
-        }
-
-        return result;
-      }.bind(this));
-    },
-
-    /**
      * Returns the uploader's file with the given id
      * @param  {Number} id
      * @return {FineUploader File}
@@ -312,7 +297,12 @@ define([
 
       file.id = file.id || id;
 
-      return this._fileValidatorPromise(file).then(function() {
+      return BeFileReader.promise(file)
+      .then(function(readerData) {
+        file.readerData = readerData;
+        return this._validator(file);
+      }.bind(this))
+      .then(function() {
         this.trigger('submit', file);
       }.bind(this));
     },

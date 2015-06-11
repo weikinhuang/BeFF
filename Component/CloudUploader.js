@@ -1,10 +1,12 @@
 define([
   'jquery',
   'nbd/Promise',
+  'nbd/trait/pubsub',
+  'nbd/util/extend',
   '../Component',
   '../dom/FileReader',
   'fineuploader/all.fine-uploader'
-], function($, Promise, Component, BeFileReader, fineUploader) {
+], function($, Promise, pubsub, extend, Component, BeFileReader, fineUploader) {
   'use strict';
 
   /**
@@ -85,7 +87,8 @@ define([
           onComplete: this._onComplete.bind(this),
           onCancel: this._onCancel.bind(this),
           onError: this._onError.bind(this),
-          onAllComplete: this._onAllComplete.bind(this)
+          onAllComplete: this._onAllComplete.bind(this),
+          onValidateBatch: this._onValidateBatch.bind(this)
         },
         chunking: {
           enabled: true,
@@ -292,7 +295,7 @@ define([
       return this._uploader.getFile(id);
     },
 
-    _onSubmit: function(id) {
+    _onSubmit: function(id, name) {
       var file = this._getFile(id);
 
       file.id = file.id || id;
@@ -303,8 +306,18 @@ define([
         return this._validator(file);
       }.bind(this))
       .then(function() {
-        this.trigger('submit', file);
+        this.trigger('submit', {
+          file: file,
+          id: id,
+          name: name
+        });
       }.bind(this));
+    },
+
+    _onValidateBatch: function(files) {
+      this.trigger('validateBatch', {
+        files: files
+      });
     },
 
     _onProgress: function(id, name, loaded, total) {
@@ -320,6 +333,7 @@ define([
       this.trigger('complete', {
         response: response,
         id: id,
+        name: name,
         file: this._getFile(id),
         uploadEndpoint: this.getUploadEndpoint(),
         uploadPath: this.getUploadPath(id)
@@ -343,6 +357,57 @@ define([
         name: name,
         message: message,
         xhr: xhr
+      });
+    }
+  }, {
+    promise: function(options) {
+      var Uploader = this;
+      return new Promise(function(resolve, reject) {
+        var uploader = Uploader.init(options),
+            submittedCount = 0,
+            fileMap = {},
+            fileList;
+
+        function resolveCheck() {
+          submittedCount++;
+          if (submittedCount === fileList.length) {
+            resolve(fileList);
+          }
+        }
+
+        uploader
+        .on('validateBatch', function(data) {
+          fileList = data.files.map(function(file) {
+            fileMap[file.name] = {
+              file: null,
+              promise: extend(new Promise(), pubsub)
+            };
+            return fileMap[file.name];
+          });
+        })
+        .on('cancel error', function(data) {
+          fileMap[data.name].promise.reject(data);
+          // an xhr is only present when an error
+          // occured beyond validation
+          if (!data.xhr) {
+            resolveCheck();
+          }
+        })
+        .on('submit', function(data) {
+          fileMap[data.name].file = data.file;
+          resolveCheck();
+        })
+        .on('progress', function(data) {
+          fileMap[data.name].promise.trigger('progress', data);
+        })
+        .on('complete', function(data) {
+          fileMap[data.name].promise.resolve(data);
+        })
+        .on('allComplete', function() {
+          uploader.destroy();
+        });
+
+        uploader.choose();
       });
     }
   });

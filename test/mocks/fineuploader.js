@@ -58,40 +58,39 @@ define([
     /**
      * Fakes a submit
      *
+     * @param  {id}
+     * @param  {name}
      * @return {Promise}
      */
-    fakeSubmit: function() {
-      return this._options.callbacks.onSubmit(0, this._blob.name);
+    fakeSubmit: function(id, name) {
+      return this._options.callbacks.onSubmit(id || 0, name || this._blob.name);
     },
 
     /**
      * Fakes progress
      *
+     * @param  {id}
+     * @param  {name}
      * @return {Promise}
      */
-    fakeProgress: function() {
-      var promise = new Promise();
-
-      this.fakeSubmit().then(function() {
-        this._options.callbacks.onProgress(0, this._blob.name, 10, 100);
-        promise.resolve();
-      }.bind(this));
-
-      return promise;
+    fakeProgress: function(id, name, percent, total) {
+      this._options.callbacks.onProgress(id || 0, name || this._blob.name, percent || 10, total || 100);
     },
 
     /**
-     * Fakes a complete. Response may be supplied with an error code to simulate a server-invalid upload
+     * Fakes a submit then a complete. Response may be supplied with an error code to simulate a server-invalid upload
      *
+     * @param  {id}
+     * @param  {name}
      * @param  {Object} response server response
      * @return {Promise}
      */
-    fakeComplete: function(response) {
+    fakeSubmitAndComplete: function(id, name, response) {
       var promise = new Promise();
 
       response = response || {};
-      this.fakeSubmit().then(function() {
-        this._options.callbacks.onComplete(0, this._blob.name, response);
+      this.fakeSubmit(id, name).then(function() {
+        this.fakeComplete(id, name, response);
         promise.resolve();
       }.bind(this));
 
@@ -100,9 +99,13 @@ define([
 
     /**
      * Fakes a complete. Response may be supplied with an error code to simulate a server-invalid upload
-     *
-     * @param  {Object} response server response
-     * @return {Promise}
+     */
+    fakeComplete: function(id, name, response) {
+      this._options.callbacks.onComplete(id || 0, name || this._blob.name, response);
+    },
+
+    /**
+     * Fakes an allComplete. Response may be supplied with an error code to simulate a server-invalid upload
      */
     fakeAllComplete: function() {
       this._options.callbacks.onAllComplete();
@@ -111,13 +114,15 @@ define([
     /**
      * Fakes a cancel
      *
+     * @param  {id}
+     * @param  {name}
      * @return {Promise}
      */
-    fakeCancel: function() {
+    fakeCancel: function(id, name) {
       var promise = new Promise();
 
-      this.fakeSubmit().then(function() {
-        this._options.callbacks.onCancel();
+      this.fakeSubmit(id, name).then(function() {
+        this._options.callbacks.onCancel(id || 0, name || this._blob.name);
         promise.resolve();
       }.bind(this));
 
@@ -127,19 +132,44 @@ define([
     /**
      * Fakes an error
      *
+     * @param  {id}
+     * @param  {name}
+     * @param  {String} [error]
+     * @return {Promise}
+     */
+    fakeValidationError: function(id, name, error) {
+      this._options.callbacks.onError(id || 0, name || this._blob.name, error);
+
+      return Promise.resolve();
+    },
+
+    /**
+     * Fakes an error
+     *
+     * @param  {id}
+     * @param  {name}
      * @param  {String} [error]
      * @param  {Object} [xhr]
      * @return {Promise}
      */
-    fakeError: function(error, xhr) {
+    fakeSubmitAndUploadError: function(id, name, error, xhr) {
       var promise = new Promise();
 
-      this.fakeSubmit().then(function() {
-        this._options.callbacks.onError(0, this._blob.name, error, xhr);
+      this.fakeSubmit(id, name).then(function() {
+        this._options.callbacks.onError(id || 0, name || this._blob.name, error, xhr);
         promise.resolve();
       }.bind(this));
 
       return promise;
+    },
+
+    /**
+     * Fakes a validate batch call
+     *
+     * @param  {Array} [files]
+     */
+    fakeValidateBatch: function(files) {
+      this._options.callbacks.onValidateBatch(files);
     }
   };
 

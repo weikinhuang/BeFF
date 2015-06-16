@@ -18,6 +18,7 @@ module.exports = function(config) {
       'test/lib/mock-ajax.js',
       'test/lib/jasmine-fixture.js',
       'test/lib/Blob.js',
+      {pattern: 'test/fixtures/**/*', included: false},
       {pattern: '**/*.js', included: false},
       {pattern: 'template/**/*.mustache', included: false}
     ],

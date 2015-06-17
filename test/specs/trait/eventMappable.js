@@ -54,7 +54,7 @@ define(['trait/eventMappable', 'nbd/util/extend'], function(eventMappable, exten
 
       it('triggers events when method is not found', function() {
         test.events = {
-          click: 'trafalgar'
+          click: ':trafalgar'
         };
 
         test._mapEvents();

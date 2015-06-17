@@ -6,7 +6,13 @@ define(function() {
     if (typeof method === 'string') {
       return {
         method: function() {
-          self[method].apply(self, arguments);
+          if (self[method]) {
+            self[method].apply(self, arguments);
+          }
+          else {
+            Array.prototype.unshift.call(arguments, method);
+            self.trigger.apply(self, arguments);
+          }
         }
       };
     }

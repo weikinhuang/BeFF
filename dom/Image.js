@@ -43,6 +43,16 @@ define([
     },
 
     /**
+     * Returns true when an image has already loaded or error and has a sane src attribute.
+     * This works around the fact that the dom will list an image with an empty src as "complete".
+     *
+     * @return {Boolean}
+     */
+    isComplete: function() {
+      return this.image.complete && this.image.src;
+    },
+
+    /**
      * Returns the display width of the image, constrained by page layout
      *
      * @return {Number}
@@ -110,7 +120,28 @@ define([
           reject(arguments);
         })
         .src(url);
-      }.bind(this));
+      });
+    },
+
+    /**
+     * Returns a promise that is resolved when the image tag is complete (i.e. loaded or error and has valid src attribute).
+     *
+     * @param  {HTMLImageElement} imageElement
+     * @return {Promise}
+     */
+    whenComplete: function(imgElement) {
+      var Image = this;
+
+      return new Promise(function(resolve, reject) {
+        var img = new Image(imgElement);
+
+        if (img.isComplete()) {
+          resolve();
+        }
+        else {
+          img.on('load error', resolve);
+        }
+      });
     }
   });
 });

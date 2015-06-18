@@ -1,12 +1,23 @@
 define(function() {
   'use strict';
 
-  var parse = function parse(method) {
-    var self = this;
+  var isEvent = /^:(.+)/,
+
+  parse = function parse(method) {
+    var self = this, event;
     if (typeof method === 'string') {
       return {
         method: function() {
-          self[method].apply(self, arguments);
+          if (self[method]) {
+            self[method].apply(self, arguments);
+          }
+          else if (event = isEvent.exec(method)) {
+            Array.prototype.unshift.call(arguments, event[1]);
+            self.trigger.apply(self, arguments);
+          }
+          else {
+            throw new Error('Method "' + method + '" not found');
+          }
         }
       };
     }
@@ -25,10 +36,8 @@ define(function() {
   },
 
   decomposeEvent = function(method) {
-    var parseMethod = parse.bind(this);
-    return [].concat(Array.isArray(method) ?
-                     method.map(parseMethod) :
-                     parseMethod(method));
+    method = Array.isArray(method) ? method : [method];
+    return Array.prototype.concat.apply([], method.map(parse, this));
   };
 
   return {

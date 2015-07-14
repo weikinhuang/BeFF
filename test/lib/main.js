@@ -22,6 +22,7 @@ require.config({
     text: 'bower_components/requirejs-text/text',
     fixtures: 'test/fixtures',
     mocks: 'test/mocks',
+    Ractive: 'node_modules/ractive/ractive'
   },
 
   // dynamically load all test files

@@ -39,6 +39,7 @@ module.exports = function(config) {
       'util/**/*.js': ['coverage'],
       'ux/**/*.js': ['coverage'],
       'View/**/*.js': ['coverage'],
+      'ractive/**/*.js': ['coverage'],
     },
 
     // test results reporter to use

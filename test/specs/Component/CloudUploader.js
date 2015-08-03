@@ -12,6 +12,7 @@ define([
     Uploader = CloudUploader.extend({
       init: function(options) {
         options = options || {};
+        options.drift = 1;
         options.signature = {
           endpoint: 'http://example.com/signature'
         };
@@ -37,6 +38,69 @@ define([
 
     afterEach(function() {
       this.uploader.destroy();
+    });
+
+    describe('options', function() {
+      beforeEach(function() {
+        this.incorrectConfig = {
+          drift: 1,
+          signature: {
+            endpoint: 'http://example.com/signature'
+          },
+          request: {
+            endpoint: 'http://example.com/example',
+            accessKey: '12345'
+          }
+        };
+      });
+
+      it('should error if drift is missing', function() {
+        delete this.incorrectConfig.drift;
+
+        expect(function() {
+          CloudUploader.init(this.incorrectConfig);
+        }.bind(this)).toThrow(new Error('Please provide a proper `drift` configuration property'));
+      });
+
+      it('should error if signature endpoint is missing', function() {
+        delete this.incorrectConfig.signature.endpoint;
+
+        expect(function() {
+          CloudUploader.init(this.incorrectConfig);
+        }.bind(this)).toThrow(new Error('Please provide a proper `signature` configuration property'));
+      });
+
+      it('should error if signature is missing', function() {
+        delete this.incorrectConfig.signature;
+
+        expect(function() {
+          CloudUploader.init(this.incorrectConfig);
+        }.bind(this)).toThrow(new Error('Please provide a proper `signature` configuration property'));
+      });
+
+      it('should error if request endpoint is missing', function() {
+        delete this.incorrectConfig.request.endpoint;
+
+        expect(function() {
+          CloudUploader.init(this.incorrectConfig);
+        }.bind(this)).toThrow(new Error('Please provide a proper `request` configuration property'));
+      });
+
+      it('should error if request accessKey is missing', function() {
+        delete this.incorrectConfig.request.accessKey;
+
+        expect(function() {
+          CloudUploader.init(this.incorrectConfig);
+        }.bind(this)).toThrow(new Error('Please provide a proper `request` configuration property'));
+      });
+
+      it('should error if request is missing', function() {
+        delete this.incorrectConfig.request;
+
+        expect(function() {
+          CloudUploader.init(this.incorrectConfig);
+        }.bind(this)).toThrow(new Error('Please provide a proper `request` configuration property'));
+      });
     });
 
     describe('events', function() {

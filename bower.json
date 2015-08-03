@@ -26,7 +26,7 @@
   "dependencies": {
     "nbd": "nbd.js#~1.1.0",
     "hgn": "https://github.com/behance/requirejs-hogan-plugin.git",
-    "fineuploader": "https://github.com/behance/fine-uploader.git#5.1.3-behance",
+    "fineuploader": "https://github.com/behance/fine-uploader.git#5.1.3-clock-drift",
     "jquery": "~2.1.1",
     "jqueryui": "~1.11"
   }

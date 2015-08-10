@@ -1,12 +1,25 @@
 define([
   'jquery',
   'nbd/Promise',
-  'dom/Image'
-], function($, Promise, Image) {
+  'dom/Image',
+  'fixtures/dom/Image/fileReaderData',
+], function($, Promise, Image, Images) {
   'use strict';
 
   describe('dom/Image', function() {
     var imgUrl = '/base/test/fixtures/dom/Image/grant.jpeg';
+
+    function loadImage(src) {
+      return new Promise(function(resolve) {
+        var image = new Image();
+
+        image.on('load', function() {
+          resolve(image);
+        });
+
+        image.src(src);
+      });
+    }
 
     describe('#getDimensions', function() {
       it('resolves with an object describing the image dimensions', function(done) {
@@ -18,6 +31,22 @@ define([
             width: 423,
             height: 640
           });
+          done();
+        });
+      });
+    });
+
+    describe('#isCMYK', function() {
+      it('detects a CMYK image properly', function(done) {
+        loadImage(Images.cmykKoala.result).then(function(image) {
+          expect(image.isCMYK()).toBeTruthy();
+          done();
+        });
+      });
+
+      it('detects a non-CMYK image properly', function(done) {
+        loadImage(Images.rgbGrant.result).then(function(image) {
+          expect(image.isCMYK()).toBeFalsy();
           done();
         });
       });

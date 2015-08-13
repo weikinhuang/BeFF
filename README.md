@@ -18,3 +18,10 @@ That Grunt task will also push the generated html files to your fork's `gh-pages
 Bower - Using the dependencies listed in the current directory's bower.json:
 
 'git config --global url."https://".insteadOf git://', then 'bower install'
+
+### Cutting a Release
+
+1. `npm version <version number>`
+1. `git push upstream master --follow-tags`
+1. `npm publish`
+1. Edit the release at https://github.com/behance/BeFF/releases

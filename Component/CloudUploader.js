@@ -320,7 +320,7 @@ define([
           name: name
         });
       }.bind(this), function(reason) {
-        // ensures any rejections from _validator are propogated as errors
+        // ensures any rejections from _validator are propagated as errors
         // while still ending in a rejected promise so that fineuploader prevents submission
         this._onError(id, name, reason);
         throw reason;

@@ -37,16 +37,53 @@ define([
     });
 
     describe('#isCMYK', function() {
-      it('detects a CMYK image properly', function(done) {
+      it('detects a CMYK jpeg image properly', function(done) {
         loadImage(Images.cmykKoala.result).then(function(image) {
           expect(image.isCMYK()).toBeTruthy();
           done();
         });
       });
 
-      it('detects a non-CMYK image properly', function(done) {
+      it('detects a non-CMYK jpeg image properly', function(done) {
         loadImage(Images.rgbGrant.result).then(function(image) {
           expect(image.isCMYK()).toBeFalsy();
+          done();
+        });
+      });
+
+      it('detects a non-jpeg image properly', function(done) {
+        loadImage(Images.animatedGif.result).then(function(image) {
+          expect(image.isCMYK()).toBeFalsy();
+          done();
+        });
+      });
+
+      it('throws when called on a non-base64 image', function(done) {
+        loadImage(imgUrl).then(function(image) {
+          expect(function() { image.isCMYK(); }).toThrow();
+          done();
+        });
+      });
+    });
+
+    describe('#isAnimatedGif', function() {
+      it('detects an animated gif properly', function(done) {
+        loadImage(Images.animatedGif.result).then(function(image) {
+          expect(image.isAnimatedGif()).toBeTruthy();
+          done();
+        });
+      });
+
+      it('detects a non-gif image properly', function(done) {
+        loadImage(Images.rgbGrant.result).then(function(image) {
+          expect(image.isAnimatedGif()).toBeFalsy();
+          done();
+        });
+      });
+
+      it('throws when called on a non-base64 image', function(done) {
+        loadImage(imgUrl).then(function(image) {
+          expect(function() { image.isAnimatedGif(); }).toThrow();
           done();
         });
       });

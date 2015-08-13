@@ -97,23 +97,46 @@ define([
     },
 
     /**
+     * Returns whether the src property is a data-uri of an animated gif.
+     *
+     * @throws {Error} If the src attribute is not a data-uri.
+     * @return {Boolean}
+     */
+    isAnimatedGif: function() {
+      var decoded = this._getBinaryData(),
+          gifHeaderHex = '\x00\x21\xF9\x04',
+          gifFrameHex = '\x00\x2C';
+
+      return decoded.indexOf(gifHeaderHex) > -1 && decoded.split(gifFrameHex).length > 2;
+    },
+
+    /**
      * Returns whether the src property is a data-uri of a CMYK jpeg.
      *
      * @throws {Error} If the src attribute is not a data-uri.
      * @return {Boolean}
      */
     isCMYK: function() {
+      // JPEG's with less than 4 color channels can't be CMYK. More importantly,
+      // this logic matches the image service logic that has been used in production
+      // since at least 2012.
+      return this._getChannelCount(this._getBinaryData()) > 3;
+    },
+
+    /**
+     * Returns a binary string representation of the image
+     *
+     * @throws {Error} If the src attribute is not a data-uri.
+     * @return {String}
+     */
+    _getBinaryData: function() {
       if (this.image.src.indexOf('data:') !== 0) {
         throw new Error('src attribute is not a data-uri');
       }
 
-      var base64 = this.image.src.split(',')[1],
-          decoded = window.atob(base64);
+      var base64 = this.image.src.split(',')[1];
 
-      // JPEG's with less than 4 color channels can't be CMYK. More importantly,
-      // this logic matches the image service logic that has been used in production
-      // since at least 2012.
-      return this._getChannelCount(decoded) > 3;
+      return window.atob(base64);
     },
 
     /**

@@ -21,6 +21,7 @@ define([
           accessKey: '12345'
         };
         options.disabled = false;
+        options.validator = function() {};
         this._super(options);
 
         if (options.mock !== false) {
@@ -140,11 +141,39 @@ define([
           expect(data.id).toBe(0);
           expect(data.name).toBe(fineuploaderMock.getFakeImageName());
           expect(data.message).toBe('image upload error');
-          expect('xhr' in data).toBeTruthy();
+          expect(data.xhr).toBe('xhr');
           done();
         }.bind(this));
 
-        fineuploaderMock.fakeSubmitAndUploadError(null, null, 'image upload error');
+        fineuploaderMock.fakeSubmitAndUploadError(null, null, 'image upload error', 'xhr');
+      });
+
+      it('fires the error event on a validation error', function(done) {
+        this.uploader.on('error', function(data) {
+          expect(data.id).toBe(0);
+          expect(data.name).toBe(fineuploaderMock.getFakeImageName());
+          expect(data.message).toBe('image validation error');
+          expect(data.xhr).toBeUndefined();
+          done();
+        }.bind(this));
+
+        fineuploaderMock.fakeValidationError(null, null, 'image validation error');
+      });
+
+      it('fires the error event on a validator function rejection error', function(done) {
+        spyOn(this.uploader._config, 'validator').and.callFake(function() {
+          throw 'boom!';
+        });
+
+        this.uploader.on('error', function(data) {
+          expect(data.id).toBe(0);
+          expect(data.name).toBe(fineuploaderMock.getFakeImageName());
+          expect(data.message).toBe('boom!');
+          expect(data.xhr).toBeUndefined();
+          done();
+        }.bind(this));
+
+        fineuploaderMock.fakeSubmit();
       });
 
       it('fires the cancel event on an upload cancel', function(done) {

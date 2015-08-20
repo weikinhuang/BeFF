@@ -135,6 +135,6 @@ define(['jquery'], function($) {
 
     _setElementChecked: function($el, checked) {
       $($el).prop('checked', checked);
-    },
+    }
   };
 });

@@ -138,7 +138,7 @@ define(['util/validate'], function(validate) {
 
     it('verifies optional', function() {
       var tests = {
-        good: ['', 'text?', 'aaa'],
+        good: ['', 'text?', 'aaa']
       };
 
       tests.good.forEach(good, "optional");

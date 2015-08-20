@@ -2,7 +2,7 @@ define([
   'jquery',
   'nbd/Promise',
   'dom/Image',
-  'fixtures/dom/Image/fileReaderData',
+  'fixtures/dom/Image/fileReaderData'
 ], function($, Promise, Image, Images) {
   'use strict';
 

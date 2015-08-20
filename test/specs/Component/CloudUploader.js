@@ -1,9 +1,10 @@
 define([
   'jquery',
+  'nbd/util/async',
   'nbd/Promise',
   'mocks/fineuploader',
   'Component/CloudUploader'
-], function($, Promise, fineUploaderMock, CloudUploader) {
+], function($, async, Promise, fineUploaderMock, CloudUploader) {
   'use strict';
 
   describe('Component/CloudUploader', function() {
@@ -28,9 +29,7 @@ define([
           this._uploader = new fineUploaderMock.s3.FineUploaderBasic(this._config);
           fineuploaderMock = this._uploader;
         }
-      },
-
-      choose: {}
+      }
     });
 
     beforeEach(function() {
@@ -244,6 +243,26 @@ define([
 
       it('returns MB for megabytes', function() {
         expect(this.unmockedUploader.formatSize(1024 * 1024)).toBe('1.0MB');
+      });
+    });
+
+    describe('#choose', function() {
+      beforeEach(function() {
+        this.$wrapper = affix('div button');
+        this.uploader = Uploader.init({ button: this.$wrapper.find('button')[0], mock: false });
+      });
+
+      afterEach(function() {
+        this.uploader.destroy();
+      });
+
+      it('does not bubble events above the mananged button', function(done) {
+        this.$wrapper.on('click', function() {
+          throw new Error('CloudUploader: click event bubbled out of managed button');
+        });
+
+        this.uploader.choose();
+        async(done);
       });
     });
   });

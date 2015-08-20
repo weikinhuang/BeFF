@@ -114,7 +114,7 @@ define([
     },
 
     bind: function() {
-      $(this._config.button).on('click.cloud-uploader', 'input', function() {
+      $(this._config.button).on('click.cloud-uploader', 'input', function(e) {
         if (this._isDisabled()) {
           return false;
         }
@@ -122,6 +122,13 @@ define([
         if (!this._isBrowserSupported()) {
           this.trigger('unsupportedBrowser');
           return false;
+        }
+
+        // fine uploader requires the configured button be clicked to trigger the "choose" OS
+        // picker. This guard is to block the programmatic triggering of the click event from
+        // bubbling out of the DOM managed by CloudUploader.
+        if (!e.originalEvent) {
+          e.stopPropagation();
         }
       }.bind(this));
     },

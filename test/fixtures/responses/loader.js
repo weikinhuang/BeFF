@@ -18,5 +18,5 @@ define({
       section_content: [],
       data: []
     })
-  },
+  }
 });

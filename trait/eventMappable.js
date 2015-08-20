@@ -64,6 +64,6 @@ define(function() {
     _undelegateEvents: function() {
       if (!this.$view) { return; }
       this.$view.off('.delegated');
-    },
+    }
   };
 });

@@ -226,7 +226,7 @@ define(['jquery', 'Component/Form', 'nbd/Promise', 'util/xhr'], function($, Form
             url: 'foo/bar',
             data: {
               foo: 'bar'
-            },
+            }
           }),
           request = jasmine.Ajax.requests.mostRecent();
 

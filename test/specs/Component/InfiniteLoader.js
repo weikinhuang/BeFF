@@ -1,7 +1,7 @@
 define([
   'jquery',
   'Component/InfiniteLoader',
-  'fixtures/responses/loader',
+  'fixtures/responses/loader'
 ], function($, InfiniteLoader, RESPONSES) {
   'use strict';
 

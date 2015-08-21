@@ -14,7 +14,7 @@ define([
 
     bind: function() {
       $('.js-zendesk').bind('click.be-zendesk', function() {
-        this._prequire(['//assets.zendesk.com/embeddable_framework/main.js'])
+        this._prequire('//assets.zendesk.com/embeddable_framework/main.js')
         .then(function() {
           window.zEmbed.activate({ hideOnClose: true });
         });

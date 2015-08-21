@@ -1,4 +1,4 @@
 {
-  "preset": "preset-behance",
+  "preset": "./node_modules/jscs-preset-behance/jscs.json",
   "esnext": null
 }

@@ -68,7 +68,9 @@ define([
       this._shown = false;
 
       transitionEnd(this.$view).then(function() {
-        this.$view.hide();
+        if (this.$view) {
+          this.$view.hide();
+        }
       }.bind(this));
 
       this.$view.toggleClass(this._shownClass, this._shown);

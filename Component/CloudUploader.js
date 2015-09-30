@@ -133,6 +133,10 @@ define([
       }
     },
 
+    addFiles: function(files) {
+      this._uploader.addFiles(files);
+    },
+
     reset: function() {
       this._uploader.reset();
     },
@@ -382,7 +386,7 @@ define([
       });
     }
   }, {
-    promise: function(options) {
+    promise: function(options, files) {
       var Uploader = this;
       return new Promise(function(resolve, reject) {
         var uploader = Uploader.init(options),
@@ -429,7 +433,12 @@ define([
           uploader.destroy();
         });
 
-        uploader.choose();
+        if (files) {
+          uploader.addFiles(files);
+        }
+        else {
+          uploader.choose();
+        }
       });
     }
   });

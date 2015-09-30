@@ -123,13 +123,6 @@ define([
           this.trigger('unsupportedBrowser');
           return false;
         }
-
-        // fine uploader requires the configured button be clicked to trigger the "choose" OS
-        // picker. This guard is to block the programmatic triggering of the click event from
-        // bubbling out of the DOM managed by CloudUploader.
-        if (!e.originalEvent) {
-          e.stopPropagation();
-        }
       }.bind(this));
     },
 
@@ -194,7 +187,16 @@ define([
      * @param  {Number} [idx=0] - The index of the input field to get (if there are multiple)
      */
     choose: function(idx) {
-      $(this._getInput(idx)).click();
+      $(this._getInput(idx))
+      .one('click.cloud-uploader', function(e) {
+        // fine uploader requires the configured button be clicked to trigger the "choose" OS
+        // picker. This guard is to block the programmatic triggering of the click event from
+        // bubbling out of the DOM managed by CloudUploader.
+        if (!e.originalEvent) {
+          e.stopPropagation();
+        }
+      })
+      .trigger('click.cloud-uploader');
     },
 
     /**

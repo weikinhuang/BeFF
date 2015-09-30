@@ -249,7 +249,7 @@ define([
     describe('#choose', function() {
       beforeEach(function() {
         this.$wrapper = affix('div button');
-        this.uploader = Uploader.init({ button: this.$wrapper.find('button')[0], mock: false });
+        this.uploader = new Uploader({ button: this.$wrapper.find('button')[0], mock: false });
       });
 
       afterEach(function() {

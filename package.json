@@ -10,7 +10,7 @@
     "hgn": "behance/requirejs-hogan-plugin",
     "fineuploader": "behance/fine-uploader.git#5.1.3-clock-drift",
     "jquery": "~2.1.1",
-    "jqueryui": "jquery/jquery-ui#1.11.0"
+    "jqueryui": "jquery/jquery-ui#1.11.4"
   },
   "devDependencies": {
     "bower": "^1.3.5",

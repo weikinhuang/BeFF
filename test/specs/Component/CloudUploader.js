@@ -185,7 +185,16 @@ define([
       });
     });
 
-    describe('#promise', function() {
+    describe('.promise', function() {
+      it('returns a rejected promise with an incorrect config', function(done) {
+        // use the imported/not overwritten CloudUploader
+        // to trigger error correctly
+        CloudUploader.promise({}).catch(function(e) {
+          expect(e).toEqual(new Error('Please provide a proper `request` configuration property'));
+          done();
+        });
+      });
+
       it('returns a promise resolved with an array of progress aware subpromises', function(done) {
         var loaded = 5,
             total = 100;
@@ -206,6 +215,52 @@ define([
         });
 
         Uploader.promise().then(function(fileArray) {
+          expect(fileArray[0].file.readerData).toBeDefined();
+          expect(fileArray[1].file).toBe(null);
+          Promise.all([
+            fileArray[0].promise,
+            fileArray[1].promise.catch(function() {
+              return Promise.resolve('caught');
+            }),
+            new Promise(function(resolve) {
+              fileArray[0].promise.one('progress', resolve);
+            })
+          ]).then(function(retvals) {
+            expect(retvals[0].file).toBe(fileArray[0].file);
+            expect(retvals[1]).toBe('caught');
+            expect(retvals[2].loaded).toBe(loaded);
+            expect(retvals[2].total).toBe(total);
+            done();
+          });
+        });
+      });
+
+      it('returns a promise resolved with an array of progress aware subpromises after passing in files', function(done) {
+        var loaded = 5,
+            total = 100,
+            files = [{
+              id: 1,
+              name: "file1.png",
+              blob: 'blobdata1'
+            }, {
+              id: 2,
+              name: "file2.png",
+              blob: 'blobdata2'
+            }];
+
+        spyOn(Uploader.prototype, 'addFiles').and.callFake(function(files) {
+          fineuploaderMock.fakeValidateBatch([files[0], files[1]]);
+          Promise.all([
+            fineuploaderMock.fakeSubmit(files[0].id, files[0].name),
+            fineuploaderMock.fakeValidationError(files[1].id, files[1].name, 'oopsy')
+          ]).then(function() {
+            fineuploaderMock.fakeProgress(files[0].id, files[0].name, loaded, total);
+            fineuploaderMock.fakeComplete(files[0].id, files[0].name);
+            fineuploaderMock.fakeAllComplete();
+          });
+        });
+
+        Uploader.promise({}, files).then(function(fileArray) {
           expect(fileArray[0].file.readerData).toBeDefined();
           expect(fileArray[1].file).toBe(null);
           Promise.all([

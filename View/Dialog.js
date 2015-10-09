@@ -44,6 +44,10 @@ define([
 
     position: function() {},
 
+    _transitionEnd: function() {
+      return transitionEnd(this.$view);
+    },
+
     _shown: false,
     _shownClass: 'shown',
 
@@ -67,8 +71,10 @@ define([
       if (!this._shown) { return this; }
       this._shown = false;
 
-      transitionEnd(this.$view).then(function() {
-        this.$view.hide();
+      this._hiding = this._transitionEnd().then(function() {
+        if (this.$view) {
+          this.$view.hide();
+        }
       }.bind(this));
 
       this.$view.toggleClass(this._shownClass, this._shown);

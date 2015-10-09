@@ -1,6 +1,6 @@
 {
   "name": "beff",
-  "version": "2.4.0",
+  "version": "2.4.1",
   "description": "Behance Frontend Framework",
   "directories": {
     "test": "test"

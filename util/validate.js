@@ -66,7 +66,7 @@ define(function() {
       message: "This field must be a valid date"
     },
     Email:{
-      test: test.bind(/^[\w\.\+\-]+@(([a-zA-Z0-9]|[a-zA-Z0-9][a-zA-Z0-9\-]*[a-zA-Z0-9])\.)*([A-Za-z0-9]|[A-Za-z0-9][A-Za-z0-9\-]*[A-Za-z0-9])$/),
+      test: test.bind(/^[\w\.\+\-]+@[a-zA-Z0-9](?:[a-zA-Z0-9\-]*[a-zA-Z0-9])?(?:\.[a-zA-Z0-9](?:[a-zA-Z0-9\-]*[a-zA-Z0-9])?)*\.?$/),
       message: "This field must be a valid email address"
     },
     Name:{

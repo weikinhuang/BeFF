@@ -75,7 +75,7 @@ define(function() {
     },
     Username:{
       test: test.bind(/^[A-Za-z0-9_\-]+$/),
-      message: "This field contains invalid characters. Please use only letters, numbers, dash or underscore characters."
+      message: "This field contains invalid characters. Please use only letters (a-z, A-Z), numbers, dash or underscore characters."
     },
     Password:{
       test: test.bind(/^\S{6,32}$/),

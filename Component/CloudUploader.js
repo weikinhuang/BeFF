@@ -96,9 +96,11 @@ define([
         }
       });
 
-      // move the drift option to a location that a hacked version of fineuploader can find it
-      config.signature.params = config.signature.params || {};
-      config.signature.params.drift = options.drift;
+      // TODO: remove this bit of parameter hockey once all consumers of cloud uploader use the
+      // new 'clockDrift' property being supported by fineuploader itself.
+      if (!('clockDrift' in config.request)) {
+        config.request.clockDrift = options.drift;
+      }
 
       if (!config.button) {
         config.button = $('<div>').css({
@@ -247,7 +249,7 @@ define([
         throw new Error('Please provide a proper `signature` configuration property');
       }
 
-      if (!('drift' in options)) {
+      if (!('drift' in options) && !('clockDrift' in options.request)) {
         throw new Error('Please provide a proper `drift` configuration property');
       }
     },

@@ -49,17 +49,37 @@ define([
           },
           request: {
             endpoint: 'http://example.com/example',
-            accessKey: '12345'
+            accessKey: '12345',
+            clockDrift: 1
           }
         };
       });
 
-      it('should error if drift is missing', function() {
-        delete this.incorrectConfig.drift;
+      describe('drift option', function() {
+        it('should error if drift is missing from both possible locations', function() {
+          delete this.incorrectConfig.drift;
+          delete this.incorrectConfig.request.clockDrift;
 
-        expect(function() {
-          CloudUploader.init(this.incorrectConfig);
-        }.bind(this)).toThrow(new Error('Please provide a proper `drift` configuration property'));
+          expect(function() {
+            CloudUploader.init(this.incorrectConfig);
+          }.bind(this)).toThrow(new Error('Please provide a proper `drift` configuration property'));
+        });
+
+        it('should not error if drift is missing from drift location', function() {
+          delete this.incorrectConfig.drift;
+
+          expect(function() {
+            CloudUploader.init(this.incorrectConfig);
+          }.bind(this)).not.toThrow();
+        });
+
+        it('should not error if drift is missing from request.clockDrift location', function() {
+          delete this.incorrectConfig.request.clockDrift;
+
+          expect(function() {
+            CloudUploader.init(this.incorrectConfig);
+          }.bind(this)).not.toThrow();
+        });
       });
 
       it('should error if signature endpoint is missing', function() {

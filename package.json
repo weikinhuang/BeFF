@@ -8,7 +8,7 @@
   "dependencies": {
     "nbd": "^1.1.5",
     "hgn": "behance/requirejs-hogan-plugin",
-    "fineuploader": "behance/fine-uploader#5.1.3-clock-drift",
+    "fineuploader": "behance/fine-uploader#5.5.0-behance",
     "jquery": "~2.1.1",
     "jqueryui": "jquery/jquery-ui#1.11.4"
   },

@@ -26,7 +26,7 @@ require.config({
   },
 
   // dynamically load all test files
-  deps: ['test/lib/es5-shim'].concat(allTestFiles),
+  deps: allTestFiles,
 
   // we have to kickoff jasmine, as it is asynchronous
   callback: window.__karma__.start

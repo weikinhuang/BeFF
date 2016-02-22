@@ -11,7 +11,13 @@ define([
 
     // Overriden since FileReader.readAsDataUrl results in broken image data during testing
     FileReader.prototype._read = jasmine.createSpy().and.callFake(function(file) {
-      this.reader.readAsText(file);
+      this.reader.onload({
+        target: {
+          name: file.name,
+          type: file.type,
+          result: file.data
+        }
+      });
     });
 
     // Our fake/pre-uploaded image

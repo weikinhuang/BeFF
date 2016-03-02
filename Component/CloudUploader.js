@@ -47,6 +47,7 @@ define([
         maxWidthImageError: 'Please choose an image that is less than {maxWidth} pixels wide.',
         minHeightImageError: 'Please choose an image that is at least {minHeight} pixels tall.',
         minWidthImageError: 'Please choose an image that is at least {minWidth} pixels wide.',
+        uploadError: '{file} failed to upload. Please try again.',
         retryFailTooManyItems: 'You have reached your upload limit. Please check back later to upload more images.',
         onLeave: 'The files are being uploaded, if you leave now the upload will be canceled.'
       },
@@ -378,6 +379,10 @@ define([
     },
 
     _onError: function(id, name, message, xhr) {
+      if (xhr) {
+        message = this._config.messages.uploadError.replace('{file}', name);
+      }
+
       this.trigger('error', {
         id: id,
         name: name,

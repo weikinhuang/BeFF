@@ -10,7 +10,13 @@ define([
     // since we also want to render the image in production.
     var FileReaderBlob = FileReader.extend({
           _read: function(file) {
-            this.reader.readAsText(file);
+            this.reader.onload({
+              target: {
+                name: file.name,
+                type: file.type,
+                result: file.data
+              }
+            });
           }
         });
 

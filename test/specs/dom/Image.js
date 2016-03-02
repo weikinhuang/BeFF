@@ -96,7 +96,7 @@ define([
         $context.affix('img[class="has-src"]');
         $context.affix('img[class="empty-src"]');
 
-        this.emptySrcEl = $('.empty-src').attr('src', '')[0];
+        this.emptySrcEl = $('.empty-src')[0];
         this.noSrcEl = $('.no-src').attr('data-src', imgUrl)[0];
         this.hasSrcEl = $('.has-src').attr('src', imgUrl)[0];
 

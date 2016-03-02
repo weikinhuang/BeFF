@@ -11,7 +11,13 @@ define([
 
     // Overriden since FileReader.readAsDataUrl results in broken image data during testing
     FileReader.prototype._read = jasmine.createSpy().and.callFake(function(file) {
-      this.reader.readAsText(file);
+      this.reader.onload({
+        target: {
+          name: file.name,
+          type: file.type,
+          result: file.data
+        }
+      });
     });
 
     // Our fake/pre-uploaded image
@@ -86,15 +92,15 @@ define([
      * @return {Promise}
      */
     fakeSubmitAndComplete: function(id, name, response) {
-      var promise = new Promise();
+      var self = this;
 
-      response = response || {};
-      this.fakeSubmit(id, name).then(function() {
-        this.fakeComplete(id, name, response);
-        promise.resolve();
-      }.bind(this));
-
-      return promise;
+      return new Promise(function(resolve) {
+        response = response || {};
+        self.fakeSubmit(id, name).then(function() {
+          self.fakeComplete(id, name, response);
+          resolve();
+        });
+      });
     },
 
     /**
@@ -119,14 +125,14 @@ define([
      * @return {Promise}
      */
     fakeCancel: function(id, name) {
-      var promise = new Promise();
+      var self = this;
 
-      this.fakeSubmit(id, name).then(function() {
-        this._options.callbacks.onCancel(id || 0, name || this._blob.name);
-        promise.resolve();
-      }.bind(this));
-
-      return promise;
+      return new Promise(function(resolve) {
+        self.fakeSubmit(id, name).then(function() {
+          self._options.callbacks.onCancel(id || 0, name || self._blob.name);
+          resolve();
+        });
+      });
     },
 
     /**
@@ -153,14 +159,14 @@ define([
      * @return {Promise}
      */
     fakeSubmitAndUploadError: function(id, name, error, xhr) {
-      var promise = new Promise();
+      var self = this;
 
-      this.fakeSubmit(id, name).then(function() {
-        this._options.callbacks.onError(id || 0, name || this._blob.name, error, xhr);
-        promise.resolve();
-      }.bind(this));
-
-      return promise;
+      return new Promise(function(resolve) {
+        self.fakeSubmit(id, name).then(function() {
+          self._options.callbacks.onError(id || 0, name || self._blob.name, error, xhr);
+          resolve();
+        });
+      });
     },
 
     /**

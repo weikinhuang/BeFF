@@ -135,16 +135,18 @@ define([
         fineuploaderMock.fakeSubmit();
       });
 
-      it('fires the error event on an upload error', function(done) {
+      it('fires the error event with a suitable message on an upload error', function(done) {
+        var filename = fineuploaderMock.getFakeImageName();
+
         this.uploader.on('error', function(data) {
           expect(data.id).toBe(0);
-          expect(data.name).toBe(fineuploaderMock.getFakeImageName());
-          expect(data.message).toBe('image upload error');
+          expect(data.name).toBe(filename);
+          expect(data.message).toBe(filename + ' failed to upload. Please try again.');
           expect(data.xhr).toBe('xhr');
           done();
         }.bind(this));
 
-        fineuploaderMock.fakeSubmitAndUploadError(null, null, 'image upload error', 'xhr');
+        fineuploaderMock.fakeSubmitAndUploadError(null, null, 'a developer specific error message not suitable for user display', 'xhr');
       });
 
       it('fires the error event on a validation error', function(done) {

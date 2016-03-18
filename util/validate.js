@@ -256,5 +256,7 @@ define(function() {
     return res;
   };
 
+  validate.tests = tests;
+
   return validate;
 });

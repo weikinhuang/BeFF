@@ -103,6 +103,22 @@ define(['util/validate'], function(validate) {
       it('verifies optional values correctly for ' + key, verifyOptional.bind(this, key));
     }
 
+    it('allows new rules to be added', function() {
+      expect(validate.tests.requireTrimmed).not.toBeDefined();
+
+      validate.tests.requireTrimmed = {
+        test: function(corpus) {
+          return corpus.trim() !== '';
+        },
+        message: 'This field must not be blank'
+      };
+
+      validate('  ', 'requireTrimmed');
+      expect(validate.message).toEqual('This field must not be blank');
+
+      delete validate.tests.requireTrimmed;
+    });
+
     it('verifies required', function() {
       validate('', 'required,Generic');
       expect(validate.message).toEqual('This field is required');

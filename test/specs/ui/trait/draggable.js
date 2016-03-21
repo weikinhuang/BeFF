@@ -6,10 +6,10 @@ define([
 
   describe('ui/trait/draggable', function() {
     beforeEach(function() {
-      var $view = affix('div');
+      this._$view = affix('div');
 
       this.view = extend({
-        $view: $view
+        $view: this._$view
       }, draggable);
     });
 
@@ -29,6 +29,12 @@ define([
       expect($altView.draggable('option', 'handle')).toEqual('.test-handle');
       expect($altView.draggable('option', 'containment')).toEqual('.test-containment');
       expect($altView.draggable('option', 'cancel')).toEqual('input,textarea,button,select,option, .test-cancel');
+    });
+
+    it('allows a user to nullify the handle option', function() {
+      this.view.makeDraggable(this._$view, '');
+
+      expect(this.view.$view.draggable('option', 'handle')).toEqual('');
     });
   });
 });

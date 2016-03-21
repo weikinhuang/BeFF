@@ -7,7 +7,7 @@ define([
       var cancelDefault;
 
       $view = $view || this.$view;
-      handle = handle || '.js-drag-handle';
+      handle = handle === undefined ? '.js-drag-handle' : handle;
       containment = containment || 'window';
       cancelSelector = cancelSelector || '.js-drag-cancel';
 

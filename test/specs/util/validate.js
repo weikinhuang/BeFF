@@ -104,24 +104,32 @@ define(['util/validate'], function(validate) {
     }
 
     it('allows new rules to be added', function() {
-      expect(validate.tests.requireTrimmed).not.toBeDefined();
+      expect(validate.tests.amazingRule).not.toBeDefined();
 
-      validate.tests.requireTrimmed = {
+      validate.tests.amazingRule = {
         test: function(corpus) {
-          return corpus.trim() !== '';
+          return corpus.charAt(0) === 'A';
         },
-        message: 'This field must not be blank'
+        message: 'This field must begin with A'
       };
 
-      validate('  ', 'requireTrimmed');
-      expect(validate.message).toEqual('This field must not be blank');
+      validate('  ', 'amazingRule');
+      expect(validate.message).toEqual('This field must begin with A');
 
-      delete validate.tests.requireTrimmed;
+      delete validate.tests.amazingRule;
     });
 
     it('verifies required', function() {
       validate('', 'required,Generic');
       expect(validate.message).toEqual('This field is required');
+    });
+
+    it('verifies requireTrimmed', function() {
+      good.call('requireTrimmed', ' foo');
+      good.call('requireTrimmed', 'foo ');
+
+      validate('  ', 'requireTrimmed');
+      expect(validate.message).toEqual('This field must not be blank');
     });
 
     it('verifies required null', function() {

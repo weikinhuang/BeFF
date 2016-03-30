@@ -144,6 +144,14 @@ define(function() {
       test: test.bind(/.+/),
       message: "This field is required"
     },
+
+    requireTrimmed:{
+      test: function(corpus) {
+        return corpus.trim() !== '';
+      },
+      message: "This field must not be blank"
+    },
+
     length:{
       test: function(corpus, meta) {
         var limits = /\[(,?\d+(?:,\d+)?)\]/.exec(meta);

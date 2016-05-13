@@ -2,9 +2,10 @@ define([
   'jquery',
   'nbd/util/async',
   'nbd/Promise',
+  'fineuploader/all.fine-uploader',
   'mocks/fineuploader',
   'Component/CloudUploader'
-], function($, async, Promise, fineUploaderMock, CloudUploader) {
+], function($, async, Promise, fineUploader, fineUploaderMock, CloudUploader) {
   'use strict';
 
   describe('Component/CloudUploader', function() {
@@ -281,6 +282,34 @@ define([
             done();
           });
         });
+      });
+    });
+
+    describe('.setDropElement', function() {
+      beforeEach(function() {
+        spyOn(fineUploader, 'DragAndDrop');
+      });
+
+      it('returns an instance of fineuploader\'s DragAndDrop module', function() {
+        expect(CloudUploader.setDropElement(document.body)).toEqual(jasmine.any(fineUploader.DragAndDrop));
+      });
+
+      it('creates a DragAndDrop instance with the provided drop zone', function() {
+        CloudUploader.setDropElement(document.body);
+        expect(fineUploader.DragAndDrop).toHaveBeenCalledWith(jasmine.objectContaining({
+          dropZoneElements: [document.body]
+        }));
+      });
+
+      it('creates a DragAndDrop instance with the provided callback', function() {
+        var processingDoneFn = jasmine.createSpy();
+
+        CloudUploader.setDropElement(document.body, processingDoneFn);
+        expect(fineUploader.DragAndDrop).toHaveBeenCalledWith(jasmine.objectContaining({
+          callbacks: {
+            processingDroppedFilesComplete: processingDoneFn
+          }
+        }));
       });
     });
 

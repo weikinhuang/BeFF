@@ -1,4 +1,4 @@
-define(['util/xhr', 'nbd/Promise'], function(xhr, Promise) {
+define(['util/xhr', 'nbd/Promise', 'util/csrfCookie'], function(xhr, Promise, csrfCookie) {
   'use strict';
 
   describe('util/xhr', function() {
@@ -16,6 +16,7 @@ define(['util/xhr', 'nbd/Promise'], function(xhr, Promise) {
 
     afterEach(function() {
       jasmine.Ajax.uninstall();
+      csrfCookie.expire();
     });
 
     it('makes correct AJAX call', function() {
@@ -82,6 +83,40 @@ define(['util/xhr', 'nbd/Promise'], function(xhr, Promise) {
           expect(success).not.toHaveBeenCalled();
           expect(error).toHaveBeenCalled();
         }).finally(done);
+      });
+    });
+
+    describe('CSRF', function() {
+      it('adds header when string is provided', function() {
+        var request;
+
+        xhr('be/xhr');
+
+        request = jasmine.Ajax.requests.mostRecent();
+        expect(request.requestHeaders['X-BCP']).toBe(csrfCookie.get());
+      });
+
+      it('adds header when object is provided', function() {
+        var request;
+
+        xhr({ data: 'foostring' });
+
+        request = jasmine.Ajax.requests.mostRecent();
+        expect(request.requestHeaders['X-BCP']).toBe(csrfCookie.get());
+      });
+
+      it('preserves pre-flight modifications of the request', function() {
+        var request;
+
+        xhr({
+          beforeSend: function(req) {
+            req.setRequestHeader('X-FOO-HEADER', 'bar');
+          }
+        });
+
+        request = jasmine.Ajax.requests.mostRecent();
+        expect(request.requestHeaders['X-BCP']).toBe(csrfCookie.get());
+        expect(request.requestHeaders['X-FOO-HEADER']).toBe('bar');
       });
     });
   });

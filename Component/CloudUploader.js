@@ -445,6 +445,15 @@ define([
           uploader.choose();
         }
       });
+    },
+
+    setDropElement: function(element, cb) {
+      return new fineUploader.DragAndDrop({
+        dropZoneElements: [element],
+        callbacks: {
+          processingDroppedFilesComplete: cb
+        }
+      });
     }
   });
 });

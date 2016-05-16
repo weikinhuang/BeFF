@@ -32,7 +32,9 @@ define([
       })
       .on('click', function(e) {
         e.stopPropagation();
-      })
+
+        this.hide();
+      }.bind(this))
       .insertAfter(this.$view);
     },
 

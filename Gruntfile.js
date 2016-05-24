@@ -44,7 +44,7 @@ module.exports = function(grunt) {
         src: ['**/*.js', '!Gruntfile.js', '!node_modules/**/*.js', '!bower_components/**/*.js', '!test/**/*.js'],
         options: {
           destination: 'docs/html',
-          template: 'node_modules/grunt-jsdoc/node_modules/ink-docstrap/template',
+          template: 'node_modules/ink-docstrap/template',
           configure: './docs/jsdoc.conf.json'
         }
       }

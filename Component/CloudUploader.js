@@ -145,7 +145,7 @@ define([
     /**
      * Specifies an element as a drop target for drag and drop files
      *
-     * @param  {DOM Node} element
+     * @param  {DOMNode} element
      * @return {Component/CloudUploader}
      */
     setDropElement: function(element) {
@@ -292,7 +292,7 @@ define([
      * Wrapper around a fineUploader hack to get access to the generated input field
      *
      * @param  {Number} [idx=0] - The index of the input field to get (if there are multiple)
-     * @return {DOM Node}
+     * @return {DOMNode}
      */
     _getInput: function(idx) {
       return this._getButton(idx).getInput();
@@ -311,7 +311,7 @@ define([
     /**
      * Returns the uploader's file with the given id
      * @param  {Number} id
-     * @return {FineUploader File}
+     * @return {FineUploader#File}
      */
     _getFile: function(id) {
       return this._uploader.getFile(id);

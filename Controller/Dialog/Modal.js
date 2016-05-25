@@ -20,7 +20,8 @@ define([
     },
 
     /**
-     * @abstract Function expected to generate a Promise
+     * Function expected to generate a Promise
+     * @abstract
      * @returns Promise delays dialog close until resolved
      */
     promiseGenerator: undefined,

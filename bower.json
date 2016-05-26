@@ -27,6 +27,7 @@
     "hgn": "https://github.com/behance/requirejs-hogan-plugin.git",
     "fineuploader": "https://github.com/behance/fine-uploader.git#5.1.3-xhr-passthru",
     "jquery": "~2.1.1",
-    "jqueryui": "~1.11"
+    "jqueryui": "~1.11",
+    "intersection-observer-polyfill": "https://github.com/jeremenichelli/intersection-observer-polyfill.git#464b24f928710834d945d7a33f8a334d0db0f1c4"
   }
 }

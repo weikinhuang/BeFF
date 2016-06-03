@@ -59,6 +59,7 @@ define([
       $view.show();
       async(function() {
         $view.toggleClass(this._shownClass, this._shown);
+        this.trigger('visible', $view);
       }.bind(this));
 
       keyboard.on({
@@ -75,6 +76,7 @@ define([
         if (this.$view) {
           this.$view.hide();
         }
+        this.trigger('hidden', this.$view);
       }.bind(this));
 
       this.$view.toggleClass(this._shownClass, this._shown);

@@ -34,8 +34,8 @@ define(['util/validate'], function(validate) {
     },
 
     Email: {
-      good: ['a@b.c', 'a.b@c.d', 'a+b@d.c', 'a_b@d.c', 'a@b.c.d', 'a@b-c.d'],
-      bad: ['a @b.c', 'a!b@c.d', 'aßb@c.d', 'a@b c.d', 'a@b!c.d', 'a@bß.c', 'a@b_c.d', 'a@b..c']
+      good: ['a@b.co', 'a.b@c.do', 'a+b@d.co', 'a_b@d.co', 'a@b.c.do', 'a@b-c.do'],
+      bad: ['a@b', 'a@b.c', 'a @b.c', 'a!b@c.d', 'aßb@c.d', 'a@b c.d', 'a@b!c.d', 'a@bß.c', 'a@b_c.d', 'a@b..c']
     },
 
     Password: {

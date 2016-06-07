@@ -22,7 +22,8 @@ require.config({
     text: 'bower_components/requirejs-text/text',
     fixtures: 'test/fixtures',
     mocks: 'test/mocks',
-    Ractive: 'node_modules/ractive/ractive'
+    Ractive: 'node_modules/ractive/ractive',
+    'intersection-observer-polyfill': 'bower_components/intersection-observer-polyfill/intersection-observer-polyfill'
   },
 
   // dynamically load all test files

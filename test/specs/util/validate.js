@@ -43,6 +43,16 @@ define(['util/validate'], function(validate) {
       bad: ['abcde', 'abcdefghijklmnopqrstuvwxyz1234567']
     },
 
+    Url: {
+      good: ['http://foo.com', 'http://foo', 'https://foo.com/bar', 'www.foo.com', 'http://foo.com/?bar#what'],
+      bad: ['htts://foo.com', 'ww.foo.com', 'https://foo.hack"attr']
+    },
+
+    UrlWithProtocol: {
+      good: ['http://foo.com', 'https://foo.com/bar', 'http://foo.com/?bar#what', 'http://1.2.3.4', 'http://some.very.long.domain', 'http://a.co', 'http://punycode.XN--TCKWE'],
+      bad: ['http://-foo.com', 'http://foo.-cm', 'htts://foo.com', 'http://foo', 'ww.foo.com', 'www.foo.com', 'https://foo.hack"attr']
+    },
+
     City: {
       good: ['Boston', 'Aloi/Alcoy', 'Cote D\'Ivoire'],
       bad: ['Cote D>Ivoire', 'Wat?']
@@ -57,20 +67,22 @@ define(['util/validate'], function(validate) {
   /**
    * Verify value for rules are valid. Context should be set to rules.
    *
-   * @param {string} corpus value being validated
+   * @param {string} rule rule to validate against
+   * @param {string} testCase value being validated
    */
-  good = function(corpus) {
-    expect(validate(corpus, this)).toBe(true);
+  good = function(rule, testCase) {
+    expect(validate(testCase, rule)).toBe(true);
     expect(validate.message).not.toBeDefined();
   },
 
   /**
    * Verify value for rules are not valid. Context should be set to rules.
    *
-   * @param {string} corpus value being validated
+   * @param {string} rule rule to validate against
+   * @param {string} testCase value being validated
    */
-  bad = function(corpus) {
-    expect(validate(corpus, this)).toBe(false);
+  bad = function(rule, testCase) {
+    expect(validate(testCase, rule)).toBe(false);
     expect(validate.message).toBeDefined();
   };
 
@@ -78,8 +90,8 @@ define(['util/validate'], function(validate) {
     var key;
     function verifyRequired(key) {
       var validator = 'required,' + key;
-      tests[key].good.forEach(good, validator);
-      tests[key].bad.forEach(bad, validator);
+      tests[key].good.forEach(function(testCase) { good(validator, testCase); });
+      tests[key].bad.filter(notNullUndefined).forEach(function(testCase) { bad(validator, testCase); });
     }
 
     function notNullUndefined(val) {
@@ -87,12 +99,12 @@ define(['util/validate'], function(validate) {
     }
 
     function verifyOptional(key) {
-      good.call(key, '');
-      good.call(key, null);
-      good.call(key, undefined);
+      good(key, '');
+      good(key, null);
+      good(key, undefined);
 
-      tests[key].good.forEach(good, key);
-      tests[key].bad.filter(notNullUndefined).forEach(bad, key);
+      tests[key].good.forEach(function(testCase) { good(key, testCase); });
+      tests[key].bad.filter(notNullUndefined).forEach(function(testCase) { bad(key, testCase); });
     }
 
     for (key in tests) {
@@ -125,8 +137,8 @@ define(['util/validate'], function(validate) {
     });
 
     it('verifies requireTrimmed', function() {
-      good.call('requireTrimmed', ' foo');
-      good.call('requireTrimmed', 'foo ');
+      good('requireTrimmed', ' foo');
+      good('requireTrimmed', 'foo ');
 
       validate('  ', 'requireTrimmed');
       expect(validate.message).toEqual('This field must not be blank');
@@ -143,11 +155,11 @@ define(['util/validate'], function(validate) {
     });
 
     it('passes required 0', function() {
-      good.call('required,Integer', 0);
+      good('required,Integer', 0);
     });
 
     it('runs validator for 0', function() {
-      bad.call('Alpha', 0);
+      bad('Alpha', 0);
     });
 
     it('verifies length', function() {
@@ -156,8 +168,8 @@ define(['util/validate'], function(validate) {
         bad: ['', 'aaa']
       };
 
-      tests.good.forEach(good, "required,length[1,2]");
-      tests.bad.forEach(bad, "required,length[1,2]");
+      tests.good.forEach(function(testCase) { good('required,length[1,2]', testCase); });
+      tests.bad.forEach(function(testCase) { bad('required,length[1,2]', testCase); });
     });
 
     it('verifies optional', function() {
@@ -165,7 +177,7 @@ define(['util/validate'], function(validate) {
         good: ['', 'text?', 'aaa']
       };
 
-      tests.good.forEach(good, "optional");
+      tests.good.forEach(function(testCase) { good('optional', testCase); });
     });
   });
 

@@ -122,7 +122,11 @@ define(function() {
       message: "This field must be a valid video extension"
     },
     Url:{
-      test: test.bind(/^(http(?:s)?:\/\/|www.)[^<>]*$/),
+      test: test.bind(/^(http(?:s)?:\/\/|www\.)[^<>"]*$/),
+      message: "This field must be a URL starting with http:// or www."
+    },
+    UrlWithProtocol:{
+      test: test.bind(/^https?:\/\/(?:[a-zA-Z0-9](?:[a-zA-Z0-9\-]*[a-zA-Z0-9])?\.)+(?:(?:[Xx][Nn]--)?[a-zA-Z0-9]{2,63}|\d{1,3})[^<>"]*$/),
       message: "This field must be a URL starting with http:// or www."
     },
     UrlExt:{

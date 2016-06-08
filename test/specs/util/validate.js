@@ -43,6 +43,16 @@ define(['util/validate'], function(validate) {
       bad: ['abcde', 'abcdefghijklmnopqrstuvwxyz1234567']
     },
 
+    Url: {
+      good: ['http://foo.com', 'http://foo', 'https://foo.com/bar', 'www.foo.com', 'http://foo.com/?bar#what'],
+      bad: ['htts://foo.com', 'ww.foo.com', 'https://foo.hack"attr']
+    },
+
+    UrlWithProtocol: {
+      good: ['http://foo.com', 'https://foo.com/bar', 'http://foo.com/?bar#what', 'http://1.2.3.4', 'http://some.very.long.domain', 'http://a.co', 'http://punycode.XN--TCKWE'],
+      bad: ['http://-foo.com', 'http://foo.-cm', 'htts://foo.com', 'http://foo', 'ww.foo.com', 'www.foo.com', 'https://foo.hack"attr']
+    },
+
     City: {
       good: ['Boston', 'Aloi/Alcoy', 'Cote D\'Ivoire'],
       bad: ['Cote D>Ivoire', 'Wat?']

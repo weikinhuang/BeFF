@@ -61,6 +61,11 @@ define(['util/validate'], function(validate) {
     Html: {
       good: ['<p></p>', '<em></em>', '<u></u>', '<strong></strong>'],
       bad: ['<script></script>', '<embed></embed>']
+    },
+
+    ContainsUrl: {
+      good: ['Text before link http://google.com', 'http://google.com Text after link', 'http://google.com', 'www.google.com', 'Text before http://google.com and after link', 'http://google.com?foo=bar'],
+      bad: ['Text without a link']
     }
   },
 

@@ -287,6 +287,25 @@ define([
           img.on('load error', resolve);
         }
       });
+    },
+
+    /**
+     * Returns a promise that resolves with the image of a given url
+     *
+     * @param  {string} source url
+     * @return {Promise}
+     */
+    load: function(src) {
+      var Image = this;
+
+      return new Promise(function(resolve, reject) {
+        var img = new Image();
+
+        img
+        .on('load', function() { return resolve(img); })
+        .on('error', reject)
+        .src(src);
+      });
     }
   });
 });

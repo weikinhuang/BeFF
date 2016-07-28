@@ -7,6 +7,8 @@ define([
   'use strict';
 
   var constructor = View.extend({
+    _selector: '.popup',
+
     dialogData: {
       dialogType: "popup",
       toolbar: true
@@ -21,8 +23,20 @@ define([
     },
 
     render: function() {
-      constructor.Z_INDEX += 2;
-      this._zIndex = constructor.Z_INDEX;
+      var zIndexes = $(this._selector).toArray()
+      .map(function(el) {
+        var elZIndex = Number($(el).css('zIndex'));
+
+        if (isNaN(elZIndex)) {
+          return 0;
+        }
+
+        return elZIndex + 2;
+      });
+
+      zIndexes.push(constructor.Z_INDEX);
+      this._zIndex = Math.max.apply(Math, zIndexes);
+
       return this._super.apply(this, arguments);
     },
 

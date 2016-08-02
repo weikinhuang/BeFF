@@ -29,5 +29,37 @@ define([
         done();
       }.bind(this));
     });
+
+    describe('#position', function() {
+      it('sets the proper z index', function() {
+        this._popup.position();
+        expect(this._popup.$view.css('zIndex')).toEqual('250');
+      });
+
+      it('sets the proper stacking z index when positioning popups on top of each other', function() {
+        this._popup.position();
+
+        var secondPopup = new Popup();
+        secondPopup.render(this._$parent);
+        secondPopup.position();
+
+        var thirdPopup = new Popup();
+        thirdPopup.render(this._$parent);
+        thirdPopup.position();
+
+        expect(this._popup.$view.css('zIndex')).toEqual('250');
+        expect(secondPopup.$view.css('zIndex')).toEqual('252');
+        expect(thirdPopup.$view.css('zIndex')).toEqual('254');
+      });
+
+      it('sets the proper z-index when a previous dialog has not been positioned', function() {
+        var secondPopup = new Popup();
+        secondPopup.render(this._$parent);
+        secondPopup.position();
+
+        expect(this._popup.$view.css('zIndex')).toEqual('auto');
+        expect(secondPopup.$view.css('zIndex')).toEqual('250');
+      });
+    });
   });
 });

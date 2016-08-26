@@ -6,7 +6,7 @@ define([
 
   var queue = [],
       api = {},
-      levels = ['INFO', 'ERROR'],
+      levels = ['EMERGENCY', 'ALERT', 'CRITICAL', 'ERROR', 'WARNING', 'NOTICE', 'INFO', 'DEBUG'],
       interval;
 
   /**
@@ -38,13 +38,13 @@ define([
    * @param {Object} context
    */
   function _push(level, channel, message, context) {
-    context = (typeof context === 'object') ? context : {},
-    level = level || 'ERROR',
-    message = message || '[No message]',
+    context = (typeof context === 'object') ? context : {};
+    level = level || 'ERROR';
+    message = message || '[No message]';
     channel = channel || 'client_log';
 
     if (levels.indexOf(level) === -1) {
-      throw new Error("Unacceptable Level: " + level);
+      throw new Error('Unacceptable Level: ' + level);
     }
 
     queue.push({

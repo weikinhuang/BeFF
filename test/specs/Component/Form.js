@@ -15,14 +15,14 @@ define(['jquery', 'Component/Form', 'nbd/Promise', 'util/xhr'], function($, Form
 
     it('throws error when form is undefined or null', function() {
       var $context;
-      expect(function() {new Form($context);}).toThrow(new Error("The context of the form cannot be empty"));
+      expect(function() {new Form($context);}).toThrow(new Error('The context of the form cannot be empty'));
       $context = null;
-      expect(function() {new Form($context);}).toThrow(new Error("The context of the form cannot be empty"));
+      expect(function() {new Form($context);}).toThrow(new Error('The context of the form cannot be empty'));
     });
 
     it('throws error when form is cannot be found', function() {
       var $context = $('<div></div>');
-      expect(function() {new Form($context);}).toThrow(new Error("Unable to find form within context"));
+      expect(function() {new Form($context);}).toThrow(new Error('Unable to find form within context'));
     });
   });
 
@@ -33,7 +33,7 @@ define(['jquery', 'Component/Form', 'nbd/Promise', 'util/xhr'], function($, Form
 
       foo.submit().finally(function() {
         expect(foo.commit).toHaveBeenCalled();
-        expect(foo.validator).toHaveBeenCalledWith({ foo: 'bar'});
+        expect(foo.validator).toHaveBeenCalledWith({ foo: 'bar' });
         done();
       });
     });
@@ -87,7 +87,7 @@ define(['jquery', 'Component/Form', 'nbd/Promise', 'util/xhr'], function($, Form
       foo.validator = [spy, spy2, spy3];
       foo.submit();
 
-      expect(spy).toHaveBeenCalledWith({ foo: 'bar'});
+      expect(spy).toHaveBeenCalledWith({ foo: 'bar' });
       expect(spy2).toHaveBeenCalledWith('is awesome');
       expect(spy3).toHaveBeenCalledWith('is not awesome');
     });
@@ -102,13 +102,13 @@ define(['jquery', 'Component/Form', 'nbd/Promise', 'util/xhr'], function($, Form
       foo.validator = [spy, spy2, spy3];
       foo.submit().catch(done);
 
-      expect(spy).toHaveBeenCalledWith({ foo: 'bar'});
+      expect(spy).toHaveBeenCalledWith({ foo: 'bar' });
       expect(spy2).toHaveBeenCalledWith('is awesome');
       expect(spy3).not.toHaveBeenCalled();
     });
 
     it('should fire the event error:show', function(done) {
-      foo.validator = function() { throw { foo: "This is bad" }; };
+      foo.validator = function() { throw { foo: 'This is bad' }; };
 
       foo.on('error:show', function($element, msg) {
         expect(msg).toBe('This is bad');
@@ -127,9 +127,9 @@ define(['jquery', 'Component/Form', 'nbd/Promise', 'util/xhr'], function($, Form
       });
 
       it('should fire the event error:hide when an erroneous element changes', function(done) {
-        foo.validator = function() { throw { foo: "This is bad" }; };
+        foo.validator = function() { throw { foo: 'This is bad' }; };
 
-        foo.on('error:show', function($element, msg) {
+        foo.on('error:show', function($element) {
           foo.on('error:hide', done);
           $element.val('foo').trigger('input');
         });
@@ -138,9 +138,9 @@ define(['jquery', 'Component/Form', 'nbd/Promise', 'util/xhr'], function($, Form
       });
 
       it('should fire error:hide for select menu changes (#58)', function(done) {
-        foo.validator = function() { throw { bar: "This is bad" }; };
+        foo.validator = function() { throw { bar: 'This is bad' }; };
 
-        foo.on('error:show', function($element, msg) {
+        foo.on('error:show', function($element) {
           foo.on('error:hide', done);
           $element.trigger('change');
         });
@@ -151,9 +151,9 @@ define(['jquery', 'Component/Form', 'nbd/Promise', 'util/xhr'], function($, Form
       it('should not fire error:hide twice on an input and change event of the same element', function(done) {
         var spy = jasmine.createSpy();
 
-        foo.validator = function() { throw { foo: "This is bad" }; };
+        foo.validator = function() { throw { foo: 'This is bad' }; };
 
-        foo.on('error:show', function($element, msg) {
+        foo.on('error:show', function($element) {
           foo.on('error:hide', spy);
           $element.val('foobar').trigger('input').trigger('change');
           expect(spy.calls.count()).toBe(1);
@@ -179,7 +179,7 @@ define(['jquery', 'Component/Form', 'nbd/Promise', 'util/xhr'], function($, Form
 
       foo.commit = function() { return 'foo'; };
 
-      foo.submit(eventSpy).then(function(value) {
+      foo.submit(eventSpy).then(function() {
         expect(eventSpy.preventDefault).toHaveBeenCalled();
         done();
       });
@@ -311,11 +311,11 @@ define(['jquery', 'Component/Form', 'nbd/Promise', 'util/xhr'], function($, Form
 
         foo.commit = function() { return 'foo'; };
 
-        foo.on('success', function(value) {
+        foo.on('success', function() {
           expect(order++).toBe(0);
         });
 
-        foo.on('after', function(value) {
+        foo.on('after', function() {
           expect(order++).toBe(1);
           done();
         });
@@ -328,11 +328,11 @@ define(['jquery', 'Component/Form', 'nbd/Promise', 'util/xhr'], function($, Form
 
         foo.commit = function() { throw 'foo'; };
 
-        foo.on('error', function(value) {
+        foo.on('error', function() {
           expect(order++).toBe(0);
         });
 
-        foo.on('after', function(value) {
+        foo.on('after', function() {
           expect(order++).toBe(1);
           done();
         });
@@ -347,11 +347,11 @@ define(['jquery', 'Component/Form', 'nbd/Promise', 'util/xhr'], function($, Form
 
         foo.commit = function() { return 'foo'; };
 
-        foo.on('before', function(value) {
+        foo.on('before', function() {
           expect(order++).toBe(0);
         });
 
-        foo.on('success', function(value) {
+        foo.on('success', function() {
           expect(order++).toBe(1);
           done();
         });
@@ -364,11 +364,11 @@ define(['jquery', 'Component/Form', 'nbd/Promise', 'util/xhr'], function($, Form
 
         foo.commit = function() { throw 'foo'; };
 
-        foo.on('before', function(value) {
+        foo.on('before', function() {
           expect(order++).toBe(0);
         });
 
-        foo.on('error', function(value) {
+        foo.on('error', function() {
           expect(order++).toBe(1);
           done();
         });
@@ -379,11 +379,11 @@ define(['jquery', 'Component/Form', 'nbd/Promise', 'util/xhr'], function($, Form
       it('fires before the data is serialized', function(done) {
         foo.validator = jasmine.createSpy().and.returnValue(false);
 
-        foo.on('before', function(value) {
+        foo.on('before', function() {
           this.$form.find('input').val('something');
         });
 
-        foo.on('error', function(value) {
+        foo.on('error', function() {
           expect(foo.validator).toHaveBeenCalledWith({ foo: 'something' });
           done();
         });
@@ -397,13 +397,13 @@ define(['jquery', 'Component/Form', 'nbd/Promise', 'util/xhr'], function($, Form
     it('throws error when destroying null form', function() {
       foo.destroy();
       expect(foo.$form).toEqual(null);
-      expect(function() {foo.destroy();}).toThrow(new Error("Cannot destroy null form"));
+      expect(function() {foo.destroy();}).toThrow(new Error('Cannot destroy null form'));
     });
 
     it('throws error when you submit after destroy', function() {
       foo.destroy();
       expect(foo.$form).toEqual(null);
-      expect(function() {foo.submit();}).toThrow(new Error("The form cannot be null"));
+      expect(function() {foo.submit();}).toThrow(new Error('The form cannot be null'));
     });
   });
 });

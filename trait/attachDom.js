@@ -42,14 +42,14 @@ define(['jquery'], function($) {
 
     attachCheckbox: function(key, $context) {
       var $checkboxes = $context.find('input[type=checkbox]'),
-      model = this.on(key, function(piped) {
-        var values = piped.split('|');
+          model = this.on(key, function(piped) {
+            var values = piped.split('|');
 
-        $checkboxes.each(function(index, el) {
-          var checked = !!~values.indexOf(el.value);
-          this._setElementChecked(el, checked);
-        }.bind(this));
-      });
+            $checkboxes.each(function(index, el) {
+              var checked = !!~values.indexOf(el.value);
+              this._setElementChecked(el, checked);
+            }.bind(this));
+          });
 
       $context.on('change', 'input[type=checkbox]', function() {
         var piped = $checkboxes
@@ -67,9 +67,9 @@ define(['jquery'], function($) {
 
     attachRadio: function(key, $context) {
       var $radios = $context.find('input[type=radio]'),
-      model = this.on(key, function(value) {
-        this._setElementChecked($radios.filter('[value="' + value + '"]'), true);
-      });
+          model = this.on(key, function(value) {
+            this._setElementChecked($radios.filter('[value="' + value + '"]'), true);
+          });
 
       $context.on('change', 'input[type=radio]', function() {
         model.set(key, this.value);

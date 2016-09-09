@@ -243,11 +243,11 @@ define([
             total = 100,
             files = [{
               id: 1,
-              name: "file1.png",
+              name: 'file1.png',
               blob: 'blobdata1'
             }, {
               id: 2,
-              name: "file2.png",
+              name: 'file2.png',
               blob: 'blobdata2'
             }];
 

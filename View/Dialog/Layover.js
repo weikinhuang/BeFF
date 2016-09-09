@@ -6,7 +6,7 @@ define([
 
   var constructor = View.extend({
     dialogData: {
-      dialogType: "layover",
+      dialogType: 'layover',
       toolbar: true
     },
 

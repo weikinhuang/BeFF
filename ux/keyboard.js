@@ -99,7 +99,7 @@ define(['jquery', 'nbd/Class'], function($, Class) {
       }
     },
 
-    keyupHandler: function keyup(e) {}
+    keyupHandler: function keyup() {}
   }, {
     keyCodes: {
       backspace: 8,

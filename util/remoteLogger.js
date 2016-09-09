@@ -44,7 +44,7 @@ define([
     channel = channel || 'client_log';
 
     if (levels.indexOf(level) === -1) {
-      throw new Error("Unacceptable Level: " + level);
+      throw new Error('Unacceptable Level: ' + level);
     }
 
     queue.push({

@@ -29,7 +29,7 @@ define([
           }
         }
       };
-      ractive = new Ractive({data: data});
+      ractive = new Ractive({ data: data });
       ractiveModel = new RactiveModel('foo.pages', ractive);
     });
 

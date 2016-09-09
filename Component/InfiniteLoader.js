@@ -24,15 +24,15 @@ define([
     _infinitescroll: scrollfloat,
     _xhr: xhr,
 
-    hasMoreResults: function(response) {
+    hasMoreResults: function(/* response */) {
       throw "InfiniteLoader requires a 'hasMoreResults(response)' function. Please extend and implement.";
     },
 
-    getNextOffset: function(response) {
+    getNextOffset: function(/* response */) {
       throw "InfiniteLoader requires a 'getNextOffset(response)' function. Please extend and implement.";
     },
 
-    loaded: function(response) {
+    loaded: function(/* response */) {
       throw "InfiniteLoader requires a 'loaded(response)' function. Please extend and implement.";
     },
 

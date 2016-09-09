@@ -50,7 +50,7 @@ define(['View', 'trait/eventMappable', 'jquery'], function(View, eventMappable, 
 
     describe('.domify', function() {
       it('returns jQuery objects', function() {
-        var html = "<span>foobar</span>";
+        var html = '<span>foobar</span>';
         expect(View.domify(html)).toEqual(jasmine.any($));
       });
     });

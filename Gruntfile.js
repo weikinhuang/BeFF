@@ -4,17 +4,6 @@ module.exports = function(grunt) {
 
   grunt.initConfig({
     pkg: grunt.file.readJSON('package.json'),
-    jshint: {
-      options: {
-        jshintrc: true
-      },
-      test: [
-        '**/*.js',
-        '!node_modules/**/*.js',
-        '!bower_components/**/*.js',
-        '!test/lib/**/*.js',
-      ]
-    },
     karma: {
       options: {
         configFile: 'test/lib/karma.conf.js',
@@ -50,17 +39,14 @@ module.exports = function(grunt) {
       }
     },
 
-    jscs: {
+    eslint: {
       src: [
         '**/*.js',
         '!bower_components/**/*.js',
         '!node_modules/**/*.js',
         '!Gruntfile.js',
         '!test/lib/**/*.js'
-      ],
-      options: {
-        config: '.jscsrc',
-      }
+      ]
     },
 
     'gh-pages': {
@@ -72,14 +58,14 @@ module.exports = function(grunt) {
     }
   });
 
-  grunt.loadNpmTasks('grunt-contrib-jshint');
+
+  grunt.loadNpmTasks('grunt-eslint');
   grunt.loadNpmTasks('grunt-jsdoc');
-  grunt.loadNpmTasks('grunt-jscs');
   grunt.loadNpmTasks('grunt-karma');
   grunt.loadNpmTasks('grunt-gh-pages');
 
-  grunt.registerTask('test', ['jshint', 'karma:persistent']);
+  grunt.registerTask('test', ['eslint', 'karma:persistent']);
   grunt.registerTask('docs', ['jsdoc', 'gh-pages']);
-  grunt.registerTask('travis', ['jshint', 'jscs', 'karma:multi']);
+  grunt.registerTask('travis', ['eslint', 'karma:multi']);
   grunt.registerTask('default', ['test']);
 };

@@ -52,7 +52,7 @@ define([
 
     return function() {
       var breakpoint, cb, cache,
-      scrolled = $context.scrollTop();
+          scrolled = $context.scrollTop();
 
       for (breakpoint in registry[context]) {
         cb = registry[context][breakpoint];

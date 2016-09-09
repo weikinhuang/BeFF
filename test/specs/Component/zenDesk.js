@@ -31,7 +31,7 @@ define([
 
     describe('behaviors', function() {
       it('calls identify and activate the first time clicked', function(done) {
-        this.resolvedProm = Promise.resolve().then(function(deps) {
+        this.resolvedProm = Promise.resolve().then(function() {
           // emulate what downloading the zendesk file does
           window.zEmbed.identify = jasmine.createSpy();
           window.zEmbed.activate = jasmine.createSpy();

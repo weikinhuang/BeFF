@@ -1,0 +1,20 @@
+{
+  "extends": "./node_modules/eslint-preset-behance/.eslintrc",
+  "parserOptions": {
+    "sourceType": "script"
+  },
+  "env": {
+    "browser": true
+  },
+  "rules": {
+    "behance/no-deprecated": "off",
+    "complexity": ["error", 8],
+    "max-depth": ["error", 3],
+    "max-statements": ["error", 20],
+    "object-curly-spacing": ["error", "always"],
+    "object-shorthand": "off",
+    "one-var": "off",
+    "spaced-comment": ["error", "always"],
+    "wrap-iife": ["error", "inside"]
+  }
+}

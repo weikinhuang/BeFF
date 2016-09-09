@@ -14,7 +14,7 @@ define(['util/error', 'nbd/Promise'], function(error, Promise) {
 
     it('calls handlers', function(done) {
       var spy = jasmine.createSpy(),
-      p = new Promise();
+          p = new Promise();
 
       error.handlers.push(spy);
 
@@ -29,9 +29,9 @@ define(['util/error', 'nbd/Promise'], function(error, Promise) {
 
     it('chains errors through handlers', function(done) {
       var spy1 = jasmine.createSpy().and.throwError('pokemon'),
-      spy2 = jasmine.createSpy().and.throwError('gengar'),
-      spy3 = jasmine.createSpy(),
-      p = new Promise();
+          spy2 = jasmine.createSpy().and.throwError('gengar'),
+          spy3 = jasmine.createSpy(),
+          p = new Promise();
 
       error.handlers.push(spy1, spy2, spy3);
 
@@ -48,9 +48,9 @@ define(['util/error', 'nbd/Promise'], function(error, Promise) {
 
     it('escapes when error not thrown', function(done) {
       var spy1 = jasmine.createSpy().and.throwError('pokemon'),
-      spy2 = jasmine.createSpy(),
-      spy3 = jasmine.createSpy(),
-      p = new Promise();
+          spy2 = jasmine.createSpy(),
+          spy3 = jasmine.createSpy(),
+          p = new Promise();
 
       error.handlers.push(spy1, spy2, spy3);
 

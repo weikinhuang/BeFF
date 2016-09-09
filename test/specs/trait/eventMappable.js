@@ -1,18 +1,16 @@
 define(['trait/eventMappable', 'nbd/util/extend'], function(eventMappable, extend) {
   'use strict';
 
-  var test, div;
+  var test;
 
   beforeEach(function() {
     test = extend({
       $view: affix('div .foo')
     }, eventMappable);
-
-    div = test.$view[0];
   });
 
   describe('trait/eventMappable', function() {
-    describe("_mapEvents", function() {
+    describe('_mapEvents', function() {
       it('maps event correctly', function() {
         expect(test.$view.is('div')).toBeTruthy();
         test.events = {
@@ -43,11 +41,11 @@ define(['trait/eventMappable', 'nbd/util/extend'], function(eventMappable, exten
         expect(test.trafalgar).not.toHaveBeenCalled();
         expect(test.bar).not.toHaveBeenCalled();
 
-        test.$view.find(".foo").click();
+        test.$view.find('.foo').click();
         expect(test.trafalgar).toHaveBeenCalled();
         expect(test.bar).not.toHaveBeenCalled();
 
-        test.$view.find(".foo").select();
+        test.$view.find('.foo').select();
         expect(test.trafalgar.calls.count()).toEqual(1);
         expect(test.bar).toHaveBeenCalled();
       });
@@ -83,7 +81,7 @@ define(['trait/eventMappable', 'nbd/util/extend'], function(eventMappable, exten
 
       it('properly handles an array of functions', function() {
         var spy = jasmine.createSpy(),
-          spy2 = jasmine.createSpy();
+            spy2 = jasmine.createSpy();
 
         test.events = {
           click: [spy, spy2, 'trafalgar']
@@ -102,7 +100,7 @@ define(['trait/eventMappable', 'nbd/util/extend'], function(eventMappable, exten
       });
     });
 
-    describe("_undelegateEvents", function() {
+    describe('_undelegateEvents', function() {
       it('does not make calls after undelegated', function() {
         test.events = {
           click: 'trafalgar'
@@ -113,7 +111,7 @@ define(['trait/eventMappable', 'nbd/util/extend'], function(eventMappable, exten
         test._mapEvents();
         test.$view.click();
         test._undelegateEvents();
-        test.$view.find(".foo").select();
+        test.$view.find('.foo').select();
         expect(test.trafalgar.calls.count()).toEqual(1);
       });
 
@@ -139,7 +137,7 @@ define(['trait/eventMappable', 'nbd/util/extend'], function(eventMappable, exten
 
       it('properly handles array of functions', function() {
         var spy = jasmine.createSpy(),
-          spy2 = jasmine.createSpy();
+            spy2 = jasmine.createSpy();
 
         test.events = {
           click: [spy, spy2, 'trafalgar']

@@ -13,11 +13,11 @@ define([
 
     // A singular select, empty default value
     if (!multiple) {
-      $('<option>', {selected:true, disabled:true}).appendTo($select);
+      $('<option>', { selected: true, disabled: true }).appendTo($select);
     }
 
     $ul.children('li').each(function() {
-      $('<option>', {value: $(this).data('value')}).appendTo($select);
+      $('<option>', { value: $(this).data('value') }).appendTo($select);
     });
 
     $select.insertAfter($ul);
@@ -31,9 +31,9 @@ define([
       var $select = makeSelect(
         $(this).on('click', '>li', function() {
           var $li = $(this),
-          val = $li.data('value'),
-          $option = $select.find('[value="' + val + '"]'),
-          selected = !$option.prop('selected');
+              val = $li.data('value'),
+              $option = $select.find('[value="' + val + '"]'),
+              selected = !$option.prop('selected');
 
           // Set <option> selected state
           $option.prop('selected', selected);

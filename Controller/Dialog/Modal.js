@@ -38,7 +38,7 @@ define([
 
     init: function(options, promiseGenerator) {
       var dialog = new this(options),
-      destroy = dialog.destroy.bind(dialog);
+          destroy = dialog.destroy.bind(dialog);
       promiseGenerator = promiseGenerator || dialog.promiseGenerator;
 
       function resolveGenerator() {

@@ -34,7 +34,7 @@ define(['Controller/Dialog/Modal', 'nbd/Promise'], function(Modal, Promise) {
 
       it('uses promiseGenerator to wait', function(done) {
         var spy = jasmine.createSpy(),
-        promise = new Promise();
+            promise = new Promise();
 
         spy = spy.and.returnValue(promise);
         dialog = Modal.init(null, spy);
@@ -53,7 +53,7 @@ define(['Controller/Dialog/Modal', 'nbd/Promise'], function(Modal, Promise) {
 
       it('throttles based on generated promise', function() {
         var spy = jasmine.createSpy(),
-        promise = new Promise();
+            promise = new Promise();
 
         spy = spy.and.returnValue(promise);
         dialog = Modal.init(null, spy);

@@ -8,19 +8,6 @@ define([
   var loader,
       context;
 
-  beforeEach(function() {
-    jasmine.Ajax.install();
-    loader = create();
-    context = affix('#scroll_container #scroll_content');
-    context.css({height: 100, width: 2, overflow: 'scroll'});
-    context.find('#scroll_content').css({height: 1000});
-  });
-
-  afterEach(function() {
-    loader.destroy();
-    jasmine.Ajax.uninstall();
-  });
-
   function getConstructor(options) {
     options = options || {};
 
@@ -31,7 +18,7 @@ define([
       getNextOffset: options.getNextOffset || function(response) {
         return response.offset;
       },
-      loaded: options.loaded || function(response) {
+      loaded: options.loaded || function() {
         return true;
       }
     });
@@ -39,7 +26,7 @@ define([
 
   function create(options) {
     var Constructor = getConstructor(options),
-      loader = new Constructor();
+        loader = new Constructor();
 
     loader.url = '/';
 
@@ -68,7 +55,7 @@ define([
     context.scrollTop(height);
   }
 
-  function onError(loader, fn, response) {
+  function onError(loader, fn) {
     var request, promise;
 
     promise = loader.load();
@@ -82,6 +69,19 @@ define([
     request.response(RESPONSES.error);
     return promise;
   }
+
+  beforeEach(function() {
+    jasmine.Ajax.install();
+    loader = create();
+    context = affix('#scroll_container #scroll_content');
+    context.css({ height: 100, width: 2, overflow: 'scroll' });
+    context.find('#scroll_content').css({ height: 1000 });
+  });
+
+  afterEach(function() {
+    loader.destroy();
+    jasmine.Ajax.uninstall();
+  });
 
   describe('Component/InfiniteLoader', function() {
     describe('initialization', function() {
@@ -141,7 +141,7 @@ define([
       });
 
       it('can configure GET params besides for offset', function(done) {
-        loader.data = {dummy: 'dummy'};
+        loader.data = { dummy: 'dummy' };
 
         onLoad(loader, function(request) {
           expect(request.url).toEqual('/?dummy=dummy&offset=0');
@@ -168,43 +168,43 @@ define([
       });
 
       it('can configure url, data, offset using setParams', function() {
-        loader.setParams(1, {dummy: 'dummy'}, '/dummy');
+        loader.setParams(1, { dummy: 'dummy' }, '/dummy');
         expect(loader.offset).toEqual(1);
-        expect(loader.data).toEqual({dummy: 'dummy'});
+        expect(loader.data).toEqual({ dummy: 'dummy' });
         expect(loader.url).toEqual('/dummy');
 
         loader.setParams(2);
         expect(loader.offset).toEqual(2);
-        expect(loader.data).toEqual({dummy: 'dummy'});
+        expect(loader.data).toEqual({ dummy: 'dummy' });
         expect(loader.url).toEqual('/dummy');
 
-        loader.setParams(null, {a: 'a'});
+        loader.setParams(null, { a: 'a' });
         expect(loader.offset).toEqual(2);
-        expect(loader.data).toEqual({a: 'a'});
+        expect(loader.data).toEqual({ a: 'a' });
         expect(loader.url).toEqual('/dummy');
 
         loader.setParams(null, null, '/');
         expect(loader.offset).toEqual(2);
-        expect(loader.data).toEqual({a: 'a'});
+        expect(loader.data).toEqual({ a: 'a' });
         expect(loader.url).toEqual('/');
       });
 
       it('can configure url, data, offset using resetParams', function() {
         var defaultOffset = loader.offset,
-          defaultData = loader.data;
+            defaultData = loader.data;
 
-        loader.resetParams(1, {dummy: 'dummy'}, '/dummy');
+        loader.resetParams(1, { dummy: 'dummy' }, '/dummy');
         expect(loader.offset).toEqual(1);
-        expect(loader.data).toEqual({dummy: 'dummy'});
+        expect(loader.data).toEqual({ dummy: 'dummy' });
         expect(loader.url).toEqual('/dummy');
 
         loader.resetParams(2);
         expect(loader.offset).toEqual(2);
         expect(loader.data).toEqual(defaultData);
 
-        loader.resetParams(null, {a: 'a'});
+        loader.resetParams(null, { a: 'a' });
         expect(loader.offset).toEqual(defaultOffset);
-        expect(loader.data).toEqual({a: 'a'});
+        expect(loader.data).toEqual({ a: 'a' });
 
         loader.resetParams(null, null, '/');
         expect(loader.offset).toEqual(defaultOffset);

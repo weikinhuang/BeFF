@@ -71,7 +71,7 @@ define([
 
     _xhrOptions: function() {
       var options = this._super();
-      if (this._model){
+      if (this._model) {
         extend(options.data, this._model.data());
       }
       return options;

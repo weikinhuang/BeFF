@@ -29,7 +29,7 @@ define([
         try {
           formValidators.validateForm.call(this, this._data);
         }
-        catch(e) {
+        catch (e) {
           expect(e.foo).not.toBeDefined();
           expect(e.baz).toBeDefined();
         }

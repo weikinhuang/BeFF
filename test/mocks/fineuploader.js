@@ -21,7 +21,7 @@ define([
     });
 
     // Our fake/pre-uploaded image
-    var blob = new Blob([image.result], {type: image.mime});
+    var blob = new Blob([image.result], { type: image.mime });
     blob.name = image.name;
     this._blob = blob;
 

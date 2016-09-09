@@ -12,7 +12,7 @@ define(function() {
         !document.createRange) { return; }
 
     var sel = document.createRange(),
-    first;
+        first;
 
     if (!sel.getBoundingClientRect) { return; }
 
@@ -23,6 +23,15 @@ define(function() {
     sel.setEnd(textNode, first.index + 1);
 
     return sel;
+  }
+
+  /**
+   * Gets the height of the selection.
+   * @param  {Range} sel
+   * @return {Number}
+   */
+  function getHeightOfSelection(sel) {
+    return sel.getBoundingClientRect().height;
   }
 
   /**
@@ -38,15 +47,6 @@ define(function() {
   }
 
   /**
-   * Gets the height of the selection.
-   * @param  {Range} sel
-   * @return {Number}
-   */
-  function getHeightOfSelection(sel) {
-    return sel.getBoundingClientRect().height;
-  }
-
-  /**
    * Truncates a TextNode to a number of lines
    * @param textNode {TextNode} The DOM TextNode
    * @param limit {number} Number of lines at which to truncate
@@ -57,11 +57,11 @@ define(function() {
     if (!sel) { return; }
 
     var height = getHeightOfSelection(sel),
-    maxHeight = height * (limit + 0.5),
-    length = textNode.length,
-    delta = length,
-    dir = -1,
-    content;
+        maxHeight = height * (limit + 0.5),
+        length = textNode.length,
+        delta = length,
+        dir = -1,
+        content;
 
     // Bail out if current size is within bounds
     if (getHeightOfTextNode(sel, textNode) < maxHeight) {

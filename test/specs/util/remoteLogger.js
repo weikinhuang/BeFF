@@ -76,7 +76,7 @@ define([
         expect(getLogs().length).toEqual(1);
 
         logger.info(channel, message)
-        .info(channel, "My second message")
+        .info(channel, 'My second message')
         .send();
 
         expect(getLogs().length).toEqual(2);
@@ -101,10 +101,10 @@ define([
 
         mockdata = {
           pathname: '/path',
-          search: "?a=b"
+          search: '?a=b'
         };
 
-        spyOn(win, "getLocation").and.callFake(function(key) {
+        spyOn(win, 'getLocation').and.callFake(function(key) {
           return mockdata[key];
         });
 
@@ -127,15 +127,15 @@ define([
 
         mockdata = {
           pathname: '/path',
-          search: "?a=" + longerString + '&b[]=boop&b[]=' + longerString
+          search: '?a=' + longerString + '&b[]=boop&b[]=' + longerString
         };
 
         expectedParams = {
           a: longString,
-          b: ["boop", longString]
+          b: ['boop', longString]
         };
 
-        spyOn(win, "getLocation").and.callFake(function(key) {
+        spyOn(win, 'getLocation').and.callFake(function(key) {
           return mockdata[key];
         });
 

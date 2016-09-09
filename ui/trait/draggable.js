@@ -1,6 +1,6 @@
 define([
   'jqueryui/draggable'
-], function(draggable) {
+], function() {
   'use strict';
   return {
     makeDraggable: function($view, handle, containment, cancelSelector) {

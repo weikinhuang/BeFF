@@ -24,7 +24,7 @@ define(['Component/Container', 'Controller', 'jquery', 'trait/eventMappable'], f
     describe('init()', function() {
       it('constructs an instance', function() {
         var $foo = $('<div></div>'),
-        instance = Container.init($foo, spy);
+            instance = Container.init($foo, spy);
         expect(instance).toEqual(jasmine.any(Container));
         expect(spy).not.toHaveBeenCalled();
       });
@@ -45,14 +45,14 @@ define(['Component/Container', 'Controller', 'jquery', 'trait/eventMappable'], f
       it('maps events on bind', function() {
         spyOn(Container.prototype, '_mapEvents');
         var $foo = $('<div></div>'),
-        instance = new Container($foo);
+            instance = new Container($foo);
         instance.bind();
         expect(instance._mapEvents).toHaveBeenCalled();
       });
 
       it('decorates existing DOM elements', function() {
         var $foo = $('<ul><li></li><li></li><li></li></ul>'),
-        instance = new Container($foo);
+            instance = new Container($foo);
         instance.bind();
         expect(instance._nodes.length).toEqual(3);
         expect(instance._nodes).toEqual(jasmine.any(Array));
@@ -66,7 +66,7 @@ define(['Component/Container', 'Controller', 'jquery', 'trait/eventMappable'], f
       it('unmaps events', function() {
         spyOn(Container.prototype, '_undelegateEvents');
         var $foo = $('<div></div>'),
-        instance = Container.init($foo, spy);
+            instance = Container.init($foo, spy);
         instance.unbind();
         expect(instance._undelegateEvents).toHaveBeenCalled();
       });
@@ -75,8 +75,8 @@ define(['Component/Container', 'Controller', 'jquery', 'trait/eventMappable'], f
     describe('.add()', function() {
       it('is rendered', function() {
         var $foo = $('<div><ul></ul></div>'),
-        container = Container.init($foo, spy),
-        data = ['<li> foo </li>', '<li> bar </li>'];
+            container = Container.init($foo, spy),
+            data = ['<li> foo </li>', '<li> bar </li>'];
         container.add(data);
         expect(spy).toHaveBeenCalled();
         expect(spy.calls.count()).toEqual(3);
@@ -155,14 +155,14 @@ define(['Component/Container', 'Controller', 'jquery', 'trait/eventMappable'], f
     describe('.empty()', function() {
       it('is destroyed', function() {
         var $foo = $('<div><ul></ul></div>'),
-        container = Container.init($foo, spy);
+            container = Container.init($foo, spy);
         expect(container.isEmpty()).toEqual(false);
         container.empty();
         expect(container.isEmpty()).toEqual(true);
       });
       it('will not break when emptying an empty container', function() {
         var $foo = $('<div><ul></ul></div>'),
-        container = Container.init($foo, spy);
+            container = Container.init($foo, spy);
         expect(container.isEmpty()).toEqual(false);
         container.empty();
         expect(container.isEmpty()).toEqual(true);
@@ -171,8 +171,8 @@ define(['Component/Container', 'Controller', 'jquery', 'trait/eventMappable'], f
       });
       it('can add after being empty', function() {
         var $foo = $('<div><ul></ul></div>'),
-        container = Container.init($foo, spy),
-        data = ['<li> foo </li>', '<li> bar </li>'];
+            container = Container.init($foo, spy),
+            data = ['<li> foo </li>', '<li> bar </li>'];
         expect(container.isEmpty()).toEqual(false);
         container.empty();
         expect(container.isEmpty()).toEqual(true);
@@ -184,7 +184,7 @@ define(['Component/Container', 'Controller', 'jquery', 'trait/eventMappable'], f
     describe('.getNodes()', function() {
       it('returns correct number of nodes', function() {
         var $foo = $('<ul><li></li><li></li><li></li></ul>'),
-        instance = new Container($foo);
+            instance = new Container($foo);
         instance.bind();
         expect(instance.getNodes().length).toEqual(instance._nodes.length);
         expect(instance.getNodes()).toEqual(jasmine.any(Array));
@@ -195,7 +195,7 @@ define(['Component/Container', 'Controller', 'jquery', 'trait/eventMappable'], f
 
       it('returns an empty array when this._nodes is empty', function() {
         var $foo = $('<ul></ul>'),
-        instance = new Container($foo);
+            instance = new Container($foo);
         instance.bind();
         expect(instance.isEmpty()).toBe(true);
         expect(instance.getNodes().length).toEqual(0);

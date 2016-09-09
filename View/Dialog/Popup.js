@@ -10,7 +10,7 @@ define([
     _selector: '.popup',
 
     dialogData: {
-      dialogType: "popup",
+      dialogType: 'popup',
       toolbar: true
     },
 
@@ -42,7 +42,7 @@ define([
 
     rendered: function() {
       this.$block = this.$block || $('<div>', {
-        class: "blocking-div"
+        class: 'blocking-div'
       })
       .on('click', function(e) {
         e.stopPropagation();

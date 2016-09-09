@@ -19,7 +19,7 @@ define([
     },
 
     dialogData: {
-      dialogType: "menu",
+      dialogType: 'menu',
       toolbar: false
     },
 
@@ -31,10 +31,10 @@ define([
       }
 
       var defaultPosition = {
-        my: "left top",
-        at: "left bottom+10",
+        my: 'left top',
+        at: 'left bottom+10',
         of: this._lastContext,
-        collision: "flipfit"
+        collision: 'flipfit'
       };
 
       this.$view.position(extend(defaultPosition, positioning));

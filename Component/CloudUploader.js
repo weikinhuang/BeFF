@@ -115,7 +115,7 @@ define([
     },
 
     bind: function() {
-      $(this._config.button).on('click.cloud-uploader', 'input', function(e) {
+      $(this._config.button).on('click.cloud-uploader', 'input', function() {
         if (this._isDisabled()) {
           return false;
         }
@@ -393,7 +393,7 @@ define([
   }, {
     promise: function(options, files) {
       var Uploader = this;
-      return new Promise(function(resolve, reject) {
+      return new Promise(function(resolve) {
         var uploader = Uploader.init(options),
             submittedCount = 0,
             fileMap = {},

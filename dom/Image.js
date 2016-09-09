@@ -150,6 +150,12 @@ define([
      * @return {Number}
      */
     _getChannelCount: function(buffer) {
+      var state = 'getNextByte',
+          strPos = 0,
+          byte,
+          numCharactersToSkip,
+          header;
+
       function getChars(count) {
         if (strPos + count > buffer.length) {
           return false;
@@ -202,11 +208,7 @@ define([
         return 'skipFrame';
       }
 
-      var state = 'getNextByte',
-          strPos = 0,
-          byte,
-          numCharactersToSkip,
-          header = getChars(2);
+      header = getChars(2);
 
       // Ensure the first two bytes are the jpeg header
       if (header !== '\xFF\xd8') {
@@ -277,7 +279,7 @@ define([
     whenComplete: function(imgElement) {
       var Image = this;
 
-      return new Promise(function(resolve, reject) {
+      return new Promise(function(resolve) {
         var img = new Image(imgElement);
 
         if (img.isComplete()) {

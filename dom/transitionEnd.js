@@ -6,109 +6,109 @@ define([
 
   // Thanks modernizr
   var eventName = (function transitionEvent() {
-    var el = document.createElement('aside'),
-        transEndEventNames = {
-          WebkitTransition: 'webkitTransitionEnd',
-          MozTransition: 'transitionend',
-          OTransition: 'oTransitionEnd otransitionend',
-          transition: 'transitionend'
-        },
-        name;
+        var el = document.createElement('aside'),
+            transEndEventNames = {
+              WebkitTransition: 'webkitTransitionEnd',
+              MozTransition: 'transitionend',
+              OTransition: 'oTransitionEnd otransitionend',
+              transition: 'transitionend'
+            },
+            name;
 
-    for (name in transEndEventNames) {
-      if (el.style[name] !== undefined) {
-        return transEndEventNames[name];
-      }
-    }
-  })(),
+        for (name in transEndEventNames) {
+          if (el.style[name] !== undefined) {
+            return transEndEventNames[name];
+          }
+        }
+      })(),
 
-  requestAnimationFrame = window.requestAnimationFrame ||
-    window.mozRequestAnimationFrame ||
-    window.webkitRequestAnimationFrame ||
-    window.msRequestAnimationFrame,
+      requestAnimationFrame = window.requestAnimationFrame ||
+      window.mozRequestAnimationFrame ||
+      window.webkitRequestAnimationFrame ||
+      window.msRequestAnimationFrame,
 
-  bindPromise = function(key) {
-    var p = new Promise();
-    this.one(eventName, function(event) {
-      if (event.originalEvent.propertyName === key) {
-        p.resolve(event);
-      }
-    });
-    return p;
-  },
+      bindPromise = function(key) {
+        var p = new Promise();
+        this.one(eventName, function(event) {
+          if (event.originalEvent.propertyName === key) {
+            p.resolve(event);
+          }
+        });
+        return p;
+      },
 
-  // From https://developer.mozilla.org/en-US/docs/Web/CSS/CSS_animated_properties
-  allowedTransitionProps = [
-    'transform',
-    'transform-origin',
-    'perspective',
-    'perspective-origin',
-    'color',
-    'opacity',
-    'column-width',
-    'column-count',
-    'column-gap',
-    'column-rule-color',
-    'column-rule-width',
-    'letter-spacing',
-    'text-indent',
-    'word-spacing',
-    'text-decoration-color',
-    'text-shadow',
-    'flex-basis',
-    'flex-grow',
-    'flex-shrink',
-    'order',
-    'background-color',
-    'background-position',
-    'background-size',
-    'border-top-color',
-    'border-right-color',
-    'border-bottom-color',
-    'border-left-color',
-    'border-top-width',
-    'border-right-width',
-    'border-bottom-width',
-    'border-left-width',
-    'border-top-left-radius',
-    'border-top-right-radius',
-    'border-bottom-right-radius',
-    'border-bottom-left-radius',
-    'box-shadow',
-    'margin-top',
-    'margin-right',
-    'margin-bottom',
-    'margin-left',
-    'padding-top',
-    'padding-right',
-    'padding-bottom',
-    'padding-left',
-    'max-height',
-    'min-height',
-    'height',
-    'max-width',
-    'min-width',
-    'width',
-    'visibility',
-    'vertical-align',
-    'bottom',
-    'left',
-    'right',
-    'top',
-    'z-index',
-    'font-weight',
-    'font-stretch',
-    'font-size',
-    'font-size-adjust',
-    'line-height',
-    'outline-color',
-    'outline-width',
-    'outline-offset',
-    'clip',
-    'shape-outside',
-    'shape-margin',
-    'shape-image-threshold'
-  ];
+      // From https://developer.mozilla.org/en-US/docs/Web/CSS/CSS_animated_properties
+      allowedTransitionProps = [
+        'transform',
+        'transform-origin',
+        'perspective',
+        'perspective-origin',
+        'color',
+        'opacity',
+        'column-width',
+        'column-count',
+        'column-gap',
+        'column-rule-color',
+        'column-rule-width',
+        'letter-spacing',
+        'text-indent',
+        'word-spacing',
+        'text-decoration-color',
+        'text-shadow',
+        'flex-basis',
+        'flex-grow',
+        'flex-shrink',
+        'order',
+        'background-color',
+        'background-position',
+        'background-size',
+        'border-top-color',
+        'border-right-color',
+        'border-bottom-color',
+        'border-left-color',
+        'border-top-width',
+        'border-right-width',
+        'border-bottom-width',
+        'border-left-width',
+        'border-top-left-radius',
+        'border-top-right-radius',
+        'border-bottom-right-radius',
+        'border-bottom-left-radius',
+        'box-shadow',
+        'margin-top',
+        'margin-right',
+        'margin-bottom',
+        'margin-left',
+        'padding-top',
+        'padding-right',
+        'padding-bottom',
+        'padding-left',
+        'max-height',
+        'min-height',
+        'height',
+        'max-width',
+        'min-width',
+        'width',
+        'visibility',
+        'vertical-align',
+        'bottom',
+        'left',
+        'right',
+        'top',
+        'z-index',
+        'font-weight',
+        'font-stretch',
+        'font-size',
+        'font-size-adjust',
+        'line-height',
+        'outline-color',
+        'outline-width',
+        'outline-offset',
+        'clip',
+        'shape-outside',
+        'shape-margin',
+        'shape-image-threshold'
+      ];
 
   function hasTransition($el) {
     var duration = $el.css('transition-duration'),

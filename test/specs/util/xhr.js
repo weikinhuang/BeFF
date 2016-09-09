@@ -24,15 +24,15 @@ define(['util/xhr', 'nbd/Promise', 'util/csrfCookie'], function(xhr, Promise, cs
       var request = jasmine.Ajax.requests.mostRecent();
       expect(request.url).toBe('foo/bar');
       expect(request.method).toBe('POST');
-      expect(request.data()).toEqual({foo: ['bar']});
+      expect(request.data()).toEqual({ foo: ['bar'] });
     });
 
     it('fullfills promise on xhr success', function(done) {
       var success = jasmine.createSpy('ajaxSuccess'),
-      error = jasmine.createSpy('ajaxFailure'),
-      response = xhr(meta),
-      request = jasmine.Ajax.requests.mostRecent(),
-      text = 'you are awesome';
+          error = jasmine.createSpy('ajaxFailure'),
+          response = xhr(meta),
+          request = jasmine.Ajax.requests.mostRecent(),
+          text = 'you are awesome';
 
       request.response({
         status: 200,
@@ -49,10 +49,10 @@ define(['util/xhr', 'nbd/Promise', 'util/csrfCookie'], function(xhr, Promise, cs
 
     it('rejects promise on xhr failure', function(done) {
       var success = jasmine.createSpy('ajaxSuccess'),
-      error = jasmine.createSpy('ajaxFailure'),
-      response = xhr(meta),
-      request = jasmine.Ajax.requests.mostRecent(),
-      text = 'you are awesome';
+          error = jasmine.createSpy('ajaxFailure'),
+          response = xhr(meta),
+          request = jasmine.Ajax.requests.mostRecent(),
+          text = 'you are awesome';
 
       request.response({
         status: 400,
@@ -75,8 +75,8 @@ define(['util/xhr', 'nbd/Promise', 'util/csrfCookie'], function(xhr, Promise, cs
 
       it('will not resolve promise after abort', function(done) {
         var success = jasmine.createSpy('ajaxSuccess'),
-        error = jasmine.createSpy('ajaxFailure'),
-        response = xhr(meta);
+            error = jasmine.createSpy('ajaxFailure'),
+            response = xhr(meta);
 
         response.abort();
         response.then(success, error).then(function() {

@@ -22,7 +22,7 @@ define(['util/prequire'], function(prequire) {
 
     it('resolves with the requested modules required', function(done) {
       var module = jasmine.createSpy('module');
-      window.requirejs.and.callFake(function(deps, success, failure) {
+      window.requirejs.and.callFake(function(deps, success) {
         success(module);
       });
 

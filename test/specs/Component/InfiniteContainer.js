@@ -6,7 +6,7 @@ define(['Component/InfiniteContainer', 'util/xhr', 'nbd/Model', 'nbd/util/depara
 
     beforeEach(function() {
       Controller = jasmine.createSpy('controller class');
-      param = {url: "/search"};
+      param = { url: '/search' };
       $content = affix('div .foo');
       model = new Model();
     });
@@ -82,14 +82,14 @@ define(['Component/InfiniteContainer', 'util/xhr', 'nbd/Model', 'nbd/util/depara
       jasmine.Ajax.install();
 
       var  $bar = affix('div'),
-      foo = new InfiniteContainer(param);
+          foo = new InfiniteContainer(param);
 
       foo.of(Controller).at($bar).bind(model);
       var request = jasmine.Ajax.requests.mostRecent(),
-      data = request.url.split('?');
+          data = request.url.split('?');
 
       expect(data[0]).toBe('/search');
-      expect(deparam(data[1])).toEqual({ offset: '0'});
+      expect(deparam(data[1])).toEqual({ offset: '0' });
       expect(request.method).toBe('GET');
 
       jasmine.Ajax.uninstall();
@@ -99,14 +99,14 @@ define(['Component/InfiniteContainer', 'util/xhr', 'nbd/Model', 'nbd/util/depara
       jasmine.Ajax.install();
 
       var  $bar = affix('div'),
-      foo = new InfiniteContainer(param),
-      model = new Model({foo: 'bar'});
+          foo = new InfiniteContainer(param),
+          model = new Model({ foo: 'bar' });
 
       expect(model.get('foo')).toEqual('bar');
       foo.of(Controller).at($bar).bind(model);
 
       var request = jasmine.Ajax.requests.mostRecent(),
-      data = request.url.split('?');
+          data = request.url.split('?');
 
       expect(data[0]).toBe('/search');
       expect(deparam(data[1])).toEqual({ offset: '0', foo: 'bar' });
@@ -119,13 +119,13 @@ define(['Component/InfiniteContainer', 'util/xhr', 'nbd/Model', 'nbd/util/depara
       jasmine.Ajax.install();
 
       var  $bar = affix('div'),
-      foo = new InfiniteContainer(param);
+          foo = new InfiniteContainer(param);
 
-      model.set("foo", "bar");
+      model.set('foo', 'bar');
       foo.of(Controller).at($bar).bind(model);
 
       var request = jasmine.Ajax.requests.mostRecent(),
-      data = request.url.split('?');
+          data = request.url.split('?');
 
       expect(data[0]).toBe('/search');
       expect(deparam(data[1])).toEqual({ offset: '0', foo: 'bar' });
@@ -138,16 +138,16 @@ define(['Component/InfiniteContainer', 'util/xhr', 'nbd/Model', 'nbd/util/depara
       jasmine.Ajax.install();
 
       var  $bar = affix('div'),
-      foo = new InfiniteContainer(param),
-      model = new Model({foo: 'bar'});
+          foo = new InfiniteContainer(param),
+          model = new Model({ foo: 'bar' });
 
       foo.of(Controller).at($bar).bind(model);
       foo.offset = 3;
-      model.set("foo", "hi");
+      model.set('foo', 'hi');
 
       setTimeout(function() {
         var request = jasmine.Ajax.requests.mostRecent(),
-        data = request.url.split('?');
+            data = request.url.split('?');
         expect(data[0]).toBe('/search');
         expect(deparam(data[1])).toEqual({ offset: '0', foo: 'hi' });
         expect(request.method).toBe('GET');
@@ -160,7 +160,7 @@ define(['Component/InfiniteContainer', 'util/xhr', 'nbd/Model', 'nbd/util/depara
       jasmine.Ajax.install();
 
       var  $bar = affix('div'),
-      foo = new InfiniteContainer(param);
+          foo = new InfiniteContainer(param);
       foo.of(Controller).at($bar).bind(model);
 
       var request = jasmine.Ajax.requests.mostRecent();
@@ -168,7 +168,7 @@ define(['Component/InfiniteContainer', 'util/xhr', 'nbd/Model', 'nbd/util/depara
       request.response({
         status: 200,
         contentType: 'application/json',
-        responseText: JSON.stringify({ data: [{}, {}, {}]})
+        responseText: JSON.stringify({ data: [{}, {}, {}] })
       });
 
       setTimeout(function() {
@@ -187,8 +187,8 @@ define(['Component/InfiniteContainer', 'util/xhr', 'nbd/Model', 'nbd/util/depara
       jasmine.Ajax.install();
 
       var  $bar = affix('div'),
-      foo = new InfiniteContainer(param),
-      spy = jasmine.createSpy();
+          foo = new InfiniteContainer(param),
+          spy = jasmine.createSpy();
 
       foo.of(Controller).at($bar).bind(model);
       foo.on('empty', spy);
@@ -198,7 +198,7 @@ define(['Component/InfiniteContainer', 'util/xhr', 'nbd/Model', 'nbd/util/depara
       request.response({
         status: 200,
         contentType: 'application/json',
-        responseText: JSON.stringify({ data: []})
+        responseText: JSON.stringify({ data: [] })
       });
 
       setTimeout(function() {

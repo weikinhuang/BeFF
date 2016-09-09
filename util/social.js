@@ -1,5 +1,5 @@
 // Initialize 3rd party social sharing widgets
-/*global FB, twttr, IN, STMBLPN */
+/* global FB, twttr, IN, STMBLPN */
 define(['jquery'], function($) {
   'use strict';
 

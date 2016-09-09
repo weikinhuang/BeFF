@@ -9,19 +9,19 @@ define([
     // FileReader.readAsText fixes the issue, but can't be used in production
     // since we also want to render the image in production.
     var FileReaderBlob = FileReader.extend({
-          _read: function(file) {
-            this.reader.onload({
-              target: {
-                name: file.name,
-                type: file.type,
-                result: file.data
-              }
-            });
+      _read: function(file) {
+        this.reader.onload({
+          target: {
+            name: file.name,
+            type: file.type,
+            result: file.data
           }
         });
+      }
+    });
 
     beforeEach(function() {
-      this.blob = new Blob([image.result], {type: image.mime});
+      this.blob = new Blob([image.result], { type: image.mime });
       // Blob constructor doesn't support a name field
       this.blob.name = image.name;
       this.fileReader = new FileReaderBlob();

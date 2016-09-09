@@ -30,7 +30,7 @@ define([
     }, {});
   }
 
-  var normalizeSubmitter = function(e) {
+  function normalizeSubmitter(e) {
     switch (e.which) {
       // Left mouse
       case 1:
@@ -43,9 +43,9 @@ define([
       default:
         break;
     }
-  },
+  }
 
-  innerChain = function(metadata) {
+  function innerChain(metadata) {
     var chain = new Promise(),
         then = chain.thenable(),
         retval = typeof this.commit === 'function' ?
@@ -56,19 +56,19 @@ define([
     this.trigger('commit');
 
     return chain;
-  },
+  }
 
-  Form = Component.extend({
+  var Form = Component.extend({
     xhr: xhr,
 
     init: function($context) {
       if (!$context) {
-        throw new Error("The context of the form cannot be empty");
+        throw new Error('The context of the form cannot be empty');
       }
       this.$form = $context.is('form') ? $context : $context.find('form');
 
       if (!this.$form.length) {
-        throw new Error("Unable to find form within context");
+        throw new Error('Unable to find form within context');
       }
 
       // Internal bindings so that we can unbind later
@@ -82,7 +82,7 @@ define([
 
     destroy: function() {
       if (!this.$form) {
-        throw new Error("Cannot destroy null form");
+        throw new Error('Cannot destroy null form');
       }
       this._super();
       this.$form = null;
@@ -100,7 +100,7 @@ define([
     /**
      * Default validator does nothing
      */
-    validator: function(data) { return true; },
+    validator: function(/* data */) { return true; },
 
     /**
      * Inner Submission process. Should be limited to the forms specific behaviors that are
@@ -109,7 +109,7 @@ define([
      *
      * Default implementation simply submits the form data to the form's defined endpoint.
      */
-    commit: function(metadata) {
+    commit: function(/* metadata */) {
       return this;
     },
 
@@ -189,7 +189,7 @@ define([
 
     submit: function(e) {
       if (!this.$form) {
-        throw new Error("The form cannot be null");
+        throw new Error('The form cannot be null');
       }
       this.trigger('before', e);
       var chain = this._submit(e);

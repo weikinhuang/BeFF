@@ -107,7 +107,7 @@ define([
           value = parts[2];
 
       // Intentional weak equality
-      // jshint eqeqeq: false
+      // eslint-disable-next-line eqeqeq
       return ctxt[key] == value;
     },
 

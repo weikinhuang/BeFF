@@ -3,9 +3,9 @@ define(['jquery'], function($) {
 
   function makeCheckbox($el) {
     var $checkbox = $('<input>', {
-      type: "checkbox",
+      type: 'checkbox',
       name: $el[0].id,
-      value: "1",
+      value: '1',
       checked: $el.hasClass('active')
     }).hide();
 

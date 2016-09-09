@@ -47,7 +47,7 @@ define([
    * @param context {DOM|jQuery}
    */
   function scrollfloat(breakpoint, callback, context) {
-    if (typeof breakpoint === "function") {
+    if (typeof breakpoint === 'function') {
       context = callback;
       callback = breakpoint;
       breakpoint = 1;

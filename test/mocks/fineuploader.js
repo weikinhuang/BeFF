@@ -1,7 +1,7 @@
 define([
   'jquery',
   'nbd/Promise',
-  '../dom/FileReader',
+  '../../dom/FileReader',
   'fixtures/dom/FileReader'
 ], function($, Promise, FileReader, image) {
   'use strict';
@@ -21,9 +21,7 @@ define([
     });
 
     // Our fake/pre-uploaded image
-    var blob = new Blob([image.result], { type: image.mime });
-    blob.name = image.name;
-    this._blob = blob;
+    this._blob = { name: image.name, type: image.mime, data: image.result };
 
     this._buttons = [{
       getInput: function() {

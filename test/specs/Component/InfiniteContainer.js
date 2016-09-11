@@ -1,7 +1,7 @@
 define(['Component/InfiniteContainer', 'util/xhr', 'nbd/Model', 'nbd/util/deparam'], function(InfiniteContainer, xhr, Model, deparam) {
   'use strict';
 
-  describe('InfiniteContainer', function() {
+  describe('Component/InfiniteContainer', function() {
     var Controller, param, $content, model;
 
     beforeEach(function() {
@@ -165,7 +165,7 @@ define(['Component/InfiniteContainer', 'util/xhr', 'nbd/Model', 'nbd/util/depara
 
       var request = jasmine.Ajax.requests.mostRecent();
 
-      request.response({
+      request.respondWith({
         status: 200,
         contentType: 'application/json',
         responseText: JSON.stringify({ data: [{}, {}, {}] })
@@ -195,7 +195,7 @@ define(['Component/InfiniteContainer', 'util/xhr', 'nbd/Model', 'nbd/util/depara
 
       var request = jasmine.Ajax.requests.mostRecent();
 
-      request.response({
+      request.respondWith({
         status: 200,
         contentType: 'application/json',
         responseText: JSON.stringify({ data: [] })

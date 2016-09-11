@@ -7,7 +7,7 @@ define([
 
   describe('ux/CharCounter', function() {
     beforeEach(function() {
-      $('#jasmine_content').append(fixture);
+      affix('div').append(fixture);
     });
 
     it('does not duplicate the counterbox for multiple divs with char-counters', function() {

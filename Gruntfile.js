@@ -1,4 +1,4 @@
-/* jshint node: true */
+/* eslint-env node */
 module.exports = function(grunt) {
   'use strict';
 
@@ -6,31 +6,21 @@ module.exports = function(grunt) {
     pkg: grunt.file.readJSON('package.json'),
     karma: {
       options: {
-        configFile: 'test/lib/karma.conf.js',
-        singleRun: true
+        configFile: 'karma.conf.js'
       },
       watch: {
-        browsers: ['PhantomJS'],
         reporters: ['mocha'],
         singleRun: false
       },
-      persistent: {
-        browsers: ['Firefox'],
-        singleRun: false
-      },
       single: {
-        browsers: ['PhantomJS']
-      },
-      multi: {
-        reporters: ['dots'],
-        browsers: ['PhantomJS']
+        singleRun: true
       }
     },
 
     // Generates HTML JSDoc Documentation
     jsdoc: {
       dist: {
-        src: ['**/*.js', '!Gruntfile.js', '!node_modules/**/*.js', '!bower_components/**/*.js', '!test/**/*.js'],
+        src: ['**/*.js', '!Gruntfile.js', '!node_modules/**/*.js', '!test/**/*.js'],
         options: {
           destination: 'docs/html',
           template: 'node_modules/ink-docstrap/template',
@@ -42,10 +32,7 @@ module.exports = function(grunt) {
     eslint: {
       src: [
         '**/*.js',
-        '!bower_components/**/*.js',
-        '!node_modules/**/*.js',
-        '!Gruntfile.js',
-        '!test/lib/**/*.js'
+        '!node_modules/**/*.js'
       ]
     },
 
@@ -64,8 +51,8 @@ module.exports = function(grunt) {
   grunt.loadNpmTasks('grunt-karma');
   grunt.loadNpmTasks('grunt-gh-pages');
 
-  grunt.registerTask('test', ['eslint', 'karma:persistent']);
+  grunt.registerTask('test', ['eslint', 'karma:watch']);
   grunt.registerTask('docs', ['jsdoc', 'gh-pages']);
-  grunt.registerTask('travis', ['eslint', 'karma:multi']);
+  grunt.registerTask('travis', ['eslint', 'karma:single']);
   grunt.registerTask('default', ['test']);
 };

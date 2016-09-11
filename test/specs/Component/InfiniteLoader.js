@@ -5,85 +5,85 @@ define([
 ], function($, InfiniteLoader, RESPONSES) {
   'use strict';
 
-  var loader,
-      context;
-
-  function getConstructor(options) {
-    options = options || {};
-
-    return InfiniteLoader.extend({
-      hasMoreResults: options.hasMoreResults || function(response) {
-        return response.data.length > 0;
-      },
-      getNextOffset: options.getNextOffset || function(response) {
-        return response.offset;
-      },
-      loaded: options.loaded || function() {
-        return true;
-      }
-    });
-  }
-
-  function create(options) {
-    var Constructor = getConstructor(options),
-        loader = new Constructor();
-
-    loader.url = '/';
-
-    return loader;
-  }
-
-  function onLoad(loader, fn, response) {
-    var request, promise;
-
-    promise = loader.load();
-
-    request = jasmine.Ajax.requests.mostRecent();
-
-    promise.then(function() {
-      fn(request, true);
-    }, function() {
-      fn(request, false);
-    });
-
-    request.response(response || RESPONSES.success);
-    return promise;
-  }
-
-  function scrollAndCallback(context, height, callback) {
-    context.one('scroll', callback);
-    context.scrollTop(height);
-  }
-
-  function onError(loader, fn) {
-    var request, promise;
-
-    promise = loader.load();
-
-    request = jasmine.Ajax.requests.mostRecent();
-
-    promise.then(null, function() {
-      fn(request);
-    });
-
-    request.response(RESPONSES.error);
-    return promise;
-  }
-
-  beforeEach(function() {
-    jasmine.Ajax.install();
-    loader = create();
-    context = affix('#scroll_container #scroll_content');
-    context.css({ height: 100, width: 2, overflow: 'scroll' });
-    context.find('#scroll_content').css({ height: 1000 });
-  });
-
-  afterEach(function() {
-    loader.destroy();
-    jasmine.Ajax.uninstall();
-  });
-
   describe('Component/InfiniteLoader', function() {
+    var loader,
+        context;
+
+    function getConstructor(options) {
+      options = options || {};
+
+      return InfiniteLoader.extend({
+        hasMoreResults: options.hasMoreResults || function(response) {
+          return response.data.length > 0;
+        },
+        getNextOffset: options.getNextOffset || function(response) {
+          return response.offset;
+        },
+        loaded: options.loaded || function() {
+          return true;
+        }
+      });
+    }
+
+    function create(options) {
+      var Constructor = getConstructor(options),
+          loader = new Constructor();
+
+      loader.url = '/';
+
+      return loader;
+    }
+
+    function onLoad(loader, fn, response) {
+      var request, promise;
+
+      promise = loader.load();
+
+      request = jasmine.Ajax.requests.mostRecent();
+
+      promise.then(function() {
+        fn(request, true);
+      }, function() {
+        fn(request, false);
+      });
+
+      request.respondWith(response || RESPONSES.success);
+      return promise;
+    }
+
+    function scrollAndCallback(context, height, callback) {
+      context.one('scroll', callback);
+      context.scrollTop(height);
+    }
+
+    function onError(loader, fn) {
+      var request, promise;
+
+      promise = loader.load();
+
+      request = jasmine.Ajax.requests.mostRecent();
+
+      promise.then(null, function() {
+        fn(request);
+      });
+
+      request.respondWith(RESPONSES.error);
+      return promise;
+    }
+
+    beforeEach(function() {
+      jasmine.Ajax.install();
+      loader = create();
+      context = affix('#scroll_container #scroll_content');
+      context.css({ height: 100, width: 2, overflow: 'scroll' });
+      context.find('#scroll_content').css({ height: 1000 });
+    });
+
+    afterEach(function() {
+      loader.destroy();
+      jasmine.Ajax.uninstall();
+    });
+
     describe('initialization', function() {
       it('throws errors if not configured', function() {
         var infiniteLoader = InfiniteLoader.init();
@@ -237,12 +237,9 @@ define([
 
     describe('reload', function() {
       it('still loads after it has no more results and calls reload', function(done) {
-        jasmine.Ajax.install();
-
         onLoad(loader, function() {
           loader.reload();
           expect(jasmine.Ajax.requests.count()).toEqual(2);
-          jasmine.Ajax.uninstall();
           done();
         }, RESPONSES.empty);
       });

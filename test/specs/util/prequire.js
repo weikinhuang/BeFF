@@ -4,11 +4,6 @@ define(['util/prequire'], function(prequire) {
   describe('util/prequire', function() {
     beforeEach(function() {
       window.requirejs = jasmine.createSpy('requirejs');
-      jasmine.Ajax.install();
-    });
-
-    afterEach(function() {
-      jasmine.Ajax.uninstall();
     });
 
     it('returns a promise', function() {

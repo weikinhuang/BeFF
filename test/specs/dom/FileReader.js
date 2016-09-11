@@ -21,9 +21,7 @@ define([
     });
 
     beforeEach(function() {
-      this.blob = new Blob([image.result], { type: image.mime });
-      // Blob constructor doesn't support a name field
-      this.blob.name = image.name;
+      this.blob = { name: image.name, type: image.mime, data: image.result };
       this.fileReader = new FileReaderBlob();
     });
 

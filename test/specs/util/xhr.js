@@ -34,7 +34,7 @@ define(['util/xhr', 'nbd/Promise', 'util/csrfCookie'], function(xhr, Promise, cs
           request = jasmine.Ajax.requests.mostRecent(),
           text = 'you are awesome';
 
-      request.response({
+      request.respondWith({
         status: 200,
         contentType: 'text/plain',
         responseText: text
@@ -54,7 +54,7 @@ define(['util/xhr', 'nbd/Promise', 'util/csrfCookie'], function(xhr, Promise, cs
           request = jasmine.Ajax.requests.mostRecent(),
           text = 'you are awesome';
 
-      request.response({
+      request.respondWith({
         status: 400,
         contentType: 'text/plain',
         responseText: text

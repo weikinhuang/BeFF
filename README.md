@@ -13,12 +13,6 @@ You can manually generate the HTML documentation of our JSDoc blocks via:
 
 That Grunt task will also push the generated html files to your fork's `gh-pages branch`
 
-### MISC
-
-Bower - Using the dependencies listed in the current directory's bower.json:
-
-'git config --global url."https://".insteadOf git://', then 'bower install'
-
 ### Cutting a Release
 
 1. `npm version <version number>`

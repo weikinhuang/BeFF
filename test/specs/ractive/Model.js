@@ -1,5 +1,5 @@
 define([
-  'Ractive',
+  'ractive',
   'ractive/Model'
 ], function(Ractive, RactiveModel) {
   'use strict';

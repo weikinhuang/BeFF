@@ -4,11 +4,11 @@ define([
 ], function(attachDom, Model) {
   'use strict';
 
-  function attachDomModel() {
-    return Model.extend().mixin(attachDom)();
-  }
-
   describe('trait/attachDom', function() {
+    function attachDomModel() {
+      return Model.extend().mixin(attachDom)();
+    }
+
     describe('attachCheckbox', function() {
       var $context;
 

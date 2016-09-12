@@ -1,15 +1,15 @@
 define(['trait/eventMappable', 'nbd/util/extend'], function(eventMappable, extend) {
   'use strict';
 
-  var test;
-
-  beforeEach(function() {
-    test = extend({
-      $view: affix('div .foo')
-    }, eventMappable);
-  });
-
   describe('trait/eventMappable', function() {
+    var test;
+
+    beforeEach(function() {
+      test = extend({
+        $view: affix('div .foo')
+      }, eventMappable);
+    });
+
     describe('_mapEvents', function() {
       it('maps event correctly', function() {
         expect(test.$view.is('div')).toBeTruthy();

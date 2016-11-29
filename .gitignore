@@ -29,3 +29,4 @@ node_modules
 
 # Junk from OSX
 .DS_Store
+/.idea

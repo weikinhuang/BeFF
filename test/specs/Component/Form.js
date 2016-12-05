@@ -219,8 +219,6 @@ define(['jquery', 'Component/Form', 'nbd/Promise', 'util/xhr'], function($, Form
       it('returns its original context', function(done) {
         jasmine.Ajax.install();
 
-        console.log(xhr);
-
         var spy = jasmine.createSpy(),
             success = jasmine.createSpy('ajaxSuccess'),
             error = jasmine.createSpy('ajaxFailure'),

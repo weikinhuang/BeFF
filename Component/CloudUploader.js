@@ -5,8 +5,10 @@ define([
   'nbd/util/extend',
   '../Component',
   '../dom/FileReader',
+  './CloudUploader/facades/promise',
+  './CloudUploader/facades/promises',
   'fineuploader/all.fine-uploader'
-], function($, Promise, pubsub, extend, Component, BeFileReader, fineUploader) {
+], function($, Promise, pubsub, extend, Component, BeFileReader, promiseFacade, promisesFacade, fineUploader) {
   'use strict';
 
   /**
@@ -350,6 +352,7 @@ define([
     _onProgress: function(id, name, loaded, total) {
       this.trigger('progress', {
         id: id,
+        file: this._getFile(id),
         name: name,
         loaded: loaded,
         total: total
@@ -391,60 +394,12 @@ define([
       });
     }
   }, {
+    promises: function(options, files) {
+      return promisesFacade(this, options, files);
+    },
+
     promise: function(options, files) {
-      var Uploader = this;
-      return new Promise(function(resolve) {
-        var uploader = Uploader.init(options),
-            submittedCount = 0,
-            fileMap = {},
-            fileList;
-
-        function resolveCheck() {
-          submittedCount++;
-          if (submittedCount === fileList.length) {
-            resolve(fileList);
-          }
-        }
-
-        uploader
-        .on('validateBatch', function(data) {
-          fileList = data.files.map(function(file) {
-            fileMap[file.name] = {
-              file: null,
-              promise: extend(new Promise(), pubsub)
-            };
-            return fileMap[file.name];
-          });
-        })
-        .on('cancel error', function(data) {
-          fileMap[data.name].promise.reject(data);
-          // an xhr is only present when an error
-          // occured beyond validation
-          if (!data.xhr) {
-            resolveCheck();
-          }
-        })
-        .on('submit', function(data) {
-          fileMap[data.name].file = data.file;
-          resolveCheck();
-        })
-        .on('progress', function(data) {
-          fileMap[data.name].promise.trigger('progress', data);
-        })
-        .on('complete', function(data) {
-          fileMap[data.name].promise.resolve(data);
-        })
-        .on('allComplete', function() {
-          uploader.destroy();
-        });
-
-        if (files) {
-          uploader.addFiles(files);
-        }
-        else {
-          uploader.choose();
-        }
-      });
+      return promiseFacade(this, options, files);
     },
 
     setDropElement: function(element, cb) {

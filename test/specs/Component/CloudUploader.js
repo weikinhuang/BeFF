@@ -282,6 +282,41 @@ define([
       });
     });
 
+    describe('.promises', function() {
+      it('should return an array of upload promises', function(done) {
+        var files = [
+          { id: 1, name: 'file1.png', blob: 'blobdata1' },
+          { id: 2, name: 'file2.png', blob: 'blobdata2' }
+        ];
+
+        spyOn(Uploader.prototype, 'addFiles').and.callFake(function(files) {
+          fineuploaderMock.fakeValidateBatch([files[0], files[1]]);
+          fineuploaderMock.fakeSubmit(files[0].id, files[0].name);
+          fineuploaderMock.fakeSubmit(files[1].id, files[1].name);
+        });
+
+        Uploader.promises({}, files)
+        .then(function(promises) {
+          promises.forEach(function(promise) {
+            expect(promise).toEqual(jasmine.any(Promise));
+          });
+
+          Promise.all(promises)
+          .then(function(uploads) {
+            uploads.forEach(function(upload) {
+              expect(upload.file).toEqual(jasmine.any(Object));
+              expect(upload.promise).toEqual(jasmine.any(Promise));
+              done();
+            });
+          });
+
+          fineuploaderMock.fakeProgress(files[0].id, files[0].name, 5, 100);
+          fineuploaderMock.fakeComplete(files[0].id, files[0].name);
+          fineuploaderMock.fakeAllComplete();
+        });
+      });
+    });
+
     describe('.setDropElement', function() {
       beforeEach(function() {
         spyOn(fineUploader, 'DragAndDrop');

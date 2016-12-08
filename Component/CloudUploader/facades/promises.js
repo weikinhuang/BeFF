@@ -11,63 +11,54 @@ define([
     function createWrapper(blobData) {
       return {
         blobData: blobData,
-        uploadPromise: new Promise(),
-        submit: function(data) {
-          this.promise = extend(new Promise(), pubsub);
-          this.uploadPromise.resolve({
-            file: data.file,
-            promise: this.promise
-          });
-        },
-        progress: function(progress) {
-          this.promise.trigger('progress', progress);
-        },
-        complete: function(data) {
-          this.promise.resolve(data);
-        },
-        error: function(err) {
-          this.promise.reject(err);
-        },
-        validationError: function(err) {
-          this.submit({ file: null });
-          this.promise.reject(err);
-        }
+        validationPromise: new Promise(),
+        uploadPromise: extend(new Promise(), pubsub),
       };
     }
 
-    function findWrapper(file) {
-      return wrappers.filter(function(wrapper) {
+    function findUnsubmittedWrapper(file) {
+      var wrapper = wrappers.filter(function(wrapper) {
         var bdata = wrapper.blobData;
         return (bdata.name === file.name);
       })[0];
+      wrappers.splice(wrappers.indexOf(wrapper), 1);
+      return wrapper;
     }
 
     uploader
     .on('validateBatch', function(data) {
       wrappers = data.files.map(createWrapper);
       resolve(wrappers.map(function(wrapper) {
-        return wrapper.uploadPromise;
+        return wrapper.validationPromise;
       }));
     })
     .on('cancel error', function(data) {
       var wrapper = submitted[data.id];
       if (!wrapper) {
-        wrapper = findWrapper(data);
-        wrapper.validationError(data);
+        wrapper = findUnsubmittedWrapper(data);
+        wrapper.uploadPromise.reject(data);
+        wrapper.validationPromise.resolve({
+          file: null,
+          promise: wrapper.uploadPromise
+        });
       }
       else {
-        wrapper.error(data);
+        wrapper.uploadPromise.reject(data);
       }
     })
     .on('submit', function(data) {
-      submitted[data.id] = findWrapper(data);
-      submitted[data.id].submit(data);
+      var wrapper = findUnsubmittedWrapper(data);
+      wrapper.validationPromise.resolve({
+        file: data.file,
+        promise: wrapper.uploadPromise
+      });
+      submitted[data.id] = wrapper;
     })
     .on('progress', function(data) {
-      submitted[data.id].progress(data);
+      submitted[data.id].uploadPromise.trigger('progress', data);
     })
     .on('complete', function(data) {
-      submitted[data.id].complete(data);
+      submitted[data.id].uploadPromise.resolve(data);
     })
     .on('allComplete', function() {
       uploader.destroy();

@@ -199,27 +199,21 @@ define([
       });
 
       it('returns a promise resolved with an array of progress aware subpromises', function(done) {
-        var loaded = 5,
-            total = 100;
+        var loaded = 5;
+        var total = 100;
+        var file1 = { id: 1, size: 1, name: 'a.jpg' };
+        var file2 = { id: 2, size: 2, name: 'b.jpg' };
 
         spyOn(Uploader.prototype, 'choose').and.callFake(function() {
-          var file1 = { id: 1, size: 1, name: 'a.jpg' },
-              file2 = { id: 2, size: 2, name: 'b.jpg' };
-
           fineuploaderMock.fakeValidateBatch([file1, file2]);
-          Promise.all([
-            fineuploaderMock.fakeSubmit(file1.id, file1.name),
-            fineuploaderMock.fakeValidationError(file2.id, file2.name, 'oopsy')
-          ]).then(function() {
-            fineuploaderMock.fakeProgress(file1.id, file1.name, loaded, total);
-            fineuploaderMock.fakeComplete(file1.id, file1.name);
-            fineuploaderMock.fakeAllComplete();
-          });
+          fineuploaderMock.fakeSubmit(file1.id, file1.name);
+          fineuploaderMock.fakeValidationError(file2.id, file2.name, 'oopsy');
         });
 
         Uploader.promise().then(function(fileArray) {
           expect(fileArray[0].file.readerData).toBeDefined();
           expect(fileArray[1].file).toBe(null);
+
           Promise.all([
             fileArray[0].promise,
             fileArray[1].promise.catch(function() {
@@ -235,6 +229,10 @@ define([
             expect(retvals[2].total).toBe(total);
             done();
           });
+
+          fineuploaderMock.fakeProgress(file1.id, file1.name, loaded, total);
+          fineuploaderMock.fakeComplete(file1.id, file1.name);
+          fineuploaderMock.fakeAllComplete();
         });
       });
 
@@ -253,19 +251,14 @@ define([
 
         spyOn(Uploader.prototype, 'addFiles').and.callFake(function(files) {
           fineuploaderMock.fakeValidateBatch([files[0], files[1]]);
-          Promise.all([
-            fineuploaderMock.fakeSubmit(files[0].id, files[0].name),
-            fineuploaderMock.fakeValidationError(files[1].id, files[1].name, 'oopsy')
-          ]).then(function() {
-            fineuploaderMock.fakeProgress(files[0].id, files[0].name, loaded, total);
-            fineuploaderMock.fakeComplete(files[0].id, files[0].name);
-            fineuploaderMock.fakeAllComplete();
-          });
+          fineuploaderMock.fakeSubmit(files[0].id, files[0].name);
+          fineuploaderMock.fakeValidationError(files[1].id, files[1].name, 'oopsy');
         });
 
         Uploader.promise({}, files).then(function(fileArray) {
           expect(fileArray[0].file.readerData).toBeDefined();
           expect(fileArray[1].file).toBe(null);
+
           Promise.all([
             fileArray[0].promise,
             fileArray[1].promise.catch(function() {
@@ -281,6 +274,45 @@ define([
             expect(retvals[2].total).toBe(total);
             done();
           });
+
+          fineuploaderMock.fakeProgress(files[0].id, files[0].name, loaded, total);
+          fineuploaderMock.fakeComplete(files[0].id, files[0].name);
+          fineuploaderMock.fakeAllComplete();
+        });
+      });
+    });
+
+    describe('.promises', function() {
+      it('should return an array of upload promises', function(done) {
+        var files = [
+          { id: 1, name: 'file1.png', blob: 'blobdata1' },
+          { id: 2, name: 'file2.png', blob: 'blobdata2' }
+        ];
+
+        spyOn(Uploader.prototype, 'addFiles').and.callFake(function(files) {
+          fineuploaderMock.fakeValidateBatch([files[0], files[1]]);
+          fineuploaderMock.fakeSubmit(files[0].id, files[0].name);
+          fineuploaderMock.fakeSubmit(files[1].id, files[1].name);
+        });
+
+        Uploader.promises({}, files)
+        .then(function(promises) {
+          promises.forEach(function(promise) {
+            expect(promise).toEqual(jasmine.any(Promise));
+          });
+
+          Promise.all(promises)
+          .then(function(uploads) {
+            uploads.forEach(function(upload) {
+              expect(upload.file).toEqual(jasmine.any(Object));
+              expect(upload.promise).toEqual(jasmine.any(Promise));
+              done();
+            });
+          });
+
+          fineuploaderMock.fakeProgress(files[0].id, files[0].name, 5, 100);
+          fineuploaderMock.fakeComplete(files[0].id, files[0].name);
+          fineuploaderMock.fakeAllComplete();
         });
       });
     });

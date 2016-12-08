@@ -1,15 +1,11 @@
 define([
   'nbd/Promise',
-  './observable',
-  './helpers/observableToPubSubPromise'
-], function(Promise, observableFacade, observableToPubSubPromise) {
+  './promises',
+], function(Promise, promisesFacade) {
   return function(Uploader, options, files) {
-    return observableFacade(Uploader, options, files)
+    return promisesFacade(Uploader, options, files)
     .then(function(uploadPromises) {
-      return Promise.all(uploadPromises)
-      .then(function(uploads) {
-        return uploads.map(observableToPubSubPromise);
-      });
+      return Promise.all(uploadPromises);
     });
   };
 });

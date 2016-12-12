@@ -1,7 +1,8 @@
 define([
   'jquery',
+  'lodash.debounce',
   '../Component'
-], function($, Component) {
+], function($, debounce, Component) {
   'use strict';
 
   return Component.extend({
@@ -36,7 +37,7 @@ define([
     },
 
     _setWindowScroller: function() {
-      $(window).on('scroll.stickyPenScroller', function(e) {
+      $(window).on('scroll.stickyPenScroller', debounce(function(e) {
         this.$context.find(this.moduleClass).each(function(_, module) {
           var $module = $(module),
               $pen = $module.find('.js-pen'),
@@ -57,7 +58,7 @@ define([
             this._fixDropDownPosition($dropdown, $pen);
           }
         }.bind(this));
-      }.bind(this));
+      }.bind(this), 100));
     },
 
     _getScrollBottomLimit: function($module, $pen) {

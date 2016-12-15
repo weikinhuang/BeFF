@@ -1,8 +1,7 @@
 define([
   'jquery',
-  'lodash.debounce',
   '../Component'
-], function($, debounce, Component) {
+], function($, Component) {
   'use strict';
 
   return Component.extend({
@@ -37,28 +36,38 @@ define([
     },
 
     _setWindowScroller: function() {
-      $(window).on('scroll.stickyPenScroller', debounce(function(e) {
-        this.$context.find(this.moduleClass).each(function(_, module) {
-          var $module = $(module),
-              $pen = $module.find('.js-pen'),
-              moduleOffsetTop = $module.offset().top,
-              scrollTop = $(e.target).scrollTop() + this.offset,
-              $dropdown = $pen.next('.js-dropdown');
+      var $module = this.$modules.first();
+      var scrollTop;
 
-          // top and bottom scroll bounds for each module
-          if (scrollTop > moduleOffsetTop && scrollTop < this._getScrollBottomLimit($module, $pen)) {
-            $pen.css('top', scrollTop - moduleOffsetTop + this.penMargin);
-            this._fixDropDownPosition($dropdown, $pen);
-          }
-          else if ($module.outerHeight() < $pen.outerHeight()) {
-            $pen.css('top', this.penTopPosForShortModules);
-          }
-          else {
-            $pen.css('top', this.penMargin);
-            this._fixDropDownPosition($dropdown, $pen);
-          }
-        }.bind(this));
-      }.bind(this), 100));
+      var update = function() {
+        var $pen = $module.find('.js-pen');
+        var moduleOffsetTop = $module.offset().top;
+        var $dropdown = $pen.next('.js-dropdown');
+        var offsettedScrollTop = scrollTop + this.offset;
+
+        // top and bottom scroll bounds for each module
+        if (offsettedScrollTop > moduleOffsetTop && offsettedScrollTop < this._getScrollBottomLimit($module, $pen)) {
+          $pen.css('top', offsettedScrollTop - moduleOffsetTop + this.penMargin);
+          this._fixDropDownPosition($dropdown, $pen);
+        }
+        else if ($module.outerHeight() < $pen.outerHeight()) {
+          $pen.css('top', this.penTopPosForShortModules);
+        }
+        else {
+          $pen.css('top', this.penMargin);
+          this._fixDropDownPosition($dropdown, $pen);
+        }
+      }.bind(this);
+
+      this.$context.on('mouseenter.stickyPenScroller', this.moduleClass, function() {
+        $module = $(this);
+        update();
+      });
+
+      $(window).on('scroll.stickyPenScroller', function(e) {
+        scrollTop = $(e.target).scrollTop();
+        update();
+      });
     },
 
     _getScrollBottomLimit: function($module, $pen) {
@@ -104,9 +113,9 @@ define([
     },
 
     unbind: function() {
-      this.$context.off('mouseup.stickyPenScroller');
-      this.$modules.off('mouseenter.stickyPenScroller');
-      $(window).off('scroll.stickyPenScroller');
+      this.$context.off('.stickyPenScroller');
+      this.$modules.off('.stickyPenScroller');
+      $(window).off('.stickyPenScroller');
     }
   });
 });

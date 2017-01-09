@@ -41,7 +41,7 @@ define([], function() {
     },
 
     getBinaryFromDataUri: function(dataUri) {
-      return window.atob(dataUri.split(',')[1]);
+      return atob(dataUri.split(',')[1]);
     },
 
     /**

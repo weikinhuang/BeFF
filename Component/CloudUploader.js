@@ -4,11 +4,10 @@ define([
   'nbd/trait/pubsub',
   'nbd/util/extend',
   '../Component',
-  '../dom/FileReader',
   './CloudUploader/facades/promise',
   './CloudUploader/facades/promises',
   'fineuploader/all.fine-uploader'
-], function($, Promise, pubsub, extend, Component, BeFileReader, promiseFacade, promisesFacade, fineUploader) {
+], function($, Promise, pubsub, extend, Component, promiseFacade, promisesFacade, fineUploader) {
   'use strict';
 
   /**
@@ -324,10 +323,8 @@ define([
 
       file.id = file.id || id;
 
-      return BeFileReader.promise(file)
-      .then(function(readerData) {
-        file.readerData = readerData;
-        return this._validator(file);
+      return new Promise(function(resolve) {
+        resolve(this._validator(file));
       }.bind(this))
       .then(function() {
         this.trigger('submit', {

@@ -1,7 +1,6 @@
 define([
-  './image',
-  'nbd/Promise'
-], function(image, Promise) {
+  './image'
+], function(image) {
   'use strict';
 
   return {

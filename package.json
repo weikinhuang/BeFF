@@ -13,6 +13,7 @@
     "nbd": "^1.1.5"
   },
   "devDependencies": {
+    "babel-polyfill": "^6.20.0",
     "eslint": "~3.4.0",
     "eslint-plugin-behance": "^1.0.0",
     "eslint-preset-behance": "^4.0.0",

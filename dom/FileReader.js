@@ -12,7 +12,7 @@ define([
    */
   return Component.extend({
     init: function() {
-      this.reader = new window.FileReader();
+      this.reader = new FileReader();
     },
 
     /**

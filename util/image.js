@@ -1,4 +1,12 @@
 define([], function() {
+  function int16BE(bits, pos) {
+    return (bits.charCodeAt(pos) << 8) + bits.charCodeAt(pos + 1);
+  }
+
+  function int16LE(bits, pos) {
+    return (bits.charCodeAt(pos + 1) << 8) + bits.charCodeAt(pos);
+  }
+
   return {
     /**
      * Returns whether the src property is a data-uri of an animated gif.
@@ -6,11 +14,30 @@ define([], function() {
      * @throws {Error} If the src attribute is not a data-uri.
      * @return {Boolean}
      */
-    isAnimatedGif: function(binaryData) {
+    isAnimatedGif: function(bits) {
       var gifHeaderHex = '\x00\x21\xF9\x04';
       var gifFrameHex = '\x00\x2C';
 
-      return binaryData.indexOf(gifHeaderHex) > -1 && binaryData.split(gifFrameHex).length > 2;
+      return bits.indexOf(gifHeaderHex) > -1 && bits.split(gifFrameHex).length > 2;
+    },
+
+    getDimensions: function(bits) {
+      var header = bits.substring(0, 6);
+      if (!/^GIF8[79]a/.test(header)) {
+        throw new Error('Please provide a GIF encoded image.');
+      }
+
+      var frameHex = '\x00\x2C';
+      var framePos = bits.indexOf(frameHex);
+
+      if (framePos < 0) {
+        throw new Error('Please provide a GIF encoded image.');
+      }
+
+      return {
+        width: int16LE(bits, 6),
+        height: int16LE(bits, 8)
+      };
     },
 
     getBinaryFromDataUri: function(dataUri) {
@@ -23,11 +50,11 @@ define([], function() {
      * @throws {Error} If the src attribute is not a data-uri.
      * @return {Boolean}
      */
-    isCMYK: function(binaryData) {
+    isCMYK: function(bits) {
       // JPEG's with less than 4 color channels can't be CMYK. More importantly,
       // this logic matches the image service logic that has been used in production
       // since at least 2012.
-      return this._getChannelCount(binaryData) > 3;
+      return this._getChannelCount(bits) > 3;
     },
 
     /**
@@ -36,11 +63,11 @@ define([], function() {
      * @see  https://github.com/tommoor/fastimage/blob/master/Fastimage.php, which this implementation
      * was adapted from.
      *
-     * @param {String} buffer
+     * @param {String} bits
      * @throws {Error} If the src attribute is not a data-uri.
      * @return {Number}
      */
-    _getChannelCount: function(buffer) {
+    _getChannelCount: function(bits) {
       var state = 'getNextByte',
           strPos = 0,
           byte,
@@ -48,11 +75,11 @@ define([], function() {
           header;
 
       function getChars(count) {
-        if (strPos + count > buffer.length) {
+        if (strPos + count > bits.length) {
           return false;
         }
 
-        var substr = buffer.substring(strPos, strPos + count);
+        var substr = bits.substring(strPos, strPos + count);
         strPos += count;
         return substr;
       }
@@ -63,7 +90,7 @@ define([], function() {
 
       function getInt16() {
         var bytes = getChars(2);
-        return (bytes.charCodeAt(0) << 8) + bytes.charCodeAt(1);
+        return int16BE(bytes, 0);
       }
 
       function getStateFromByte(byte) {
@@ -106,7 +133,7 @@ define([], function() {
         return 0;
       }
 
-      while (strPos < buffer.length) {
+      while (strPos < bits.length) {
         switch (state) {
           case 'getNextByte':
             byte = getByte();

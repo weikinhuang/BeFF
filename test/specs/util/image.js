@@ -28,5 +28,20 @@ define([
         expect(image.isAnimatedGif(image.getBinaryFromDataUri(Images.rgbGrant.result))).toBeFalsy();
       });
     });
+
+    describe('#getDimensions', function() {
+      it('returns dimensions when a gif is provided', function() {
+        expect(image.getDimensions(image.getBinaryFromDataUri(Images.animatedGif.result))).toEqual({
+          width: 500,
+          height: 609
+        });
+      });
+
+      it('throws when a non-gif is provided', function() {
+        expect(function() {
+          image.getDimensions(image.getBinaryFromDataUri(Images.rgbGrant.result));
+        }).toThrow();
+      });
+    });
   });
 });

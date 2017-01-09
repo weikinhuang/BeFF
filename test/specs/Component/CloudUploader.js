@@ -130,7 +130,6 @@ define([
         this.uploader.on('submit', function(data) {
           expect(data.name).toBeDefined();
           expect(data.id).toBeDefined();
-          expect(data.file.readerData).toBeDefined();
           done();
         });
         fineuploaderMock.fakeSubmit();
@@ -211,7 +210,6 @@ define([
         });
 
         Uploader.promise().then(function(fileArray) {
-          expect(fileArray[0].file.readerData).toBeDefined();
           expect(fileArray[1].file).toBe(null);
 
           Promise.all([
@@ -256,7 +254,6 @@ define([
         });
 
         Uploader.promise({}, files).then(function(fileArray) {
-          expect(fileArray[0].file.readerData).toBeDefined();
           expect(fileArray[1].file).toBe(null);
 
           Promise.all([

@@ -1,7 +1,6 @@
 define([
-  'nbd/Promise',
   '../Component'
-], function(Promise, Component) {
+], function(Component) {
   'use strict';
 
   /**

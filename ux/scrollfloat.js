@@ -14,28 +14,44 @@ define([
   }
 
   function getContextId(context, contentContext) {
-    return contentContext ? context + '|' + contentContext : context;
+    if (!contentContext) {
+      return context;
+    }
+
+    if (typeof contentContext !== 'string' || typeof context !== 'string') {
+      throw new Error('context and contentContext must both be strings if contentContext is provided.');
+    }
+
+    return context + '|' + contentContext;
   }
 
-  // Check if the user's viewport has scrolled based a defined breakpoint
-  function scrolled($context) {
-    var elementHeight, scrollBottom;
+  function getScrollHeight($context, $contentContext) {
+    var contextOffsetTop;
 
-    if ($context.is($window)) {
-      elementHeight = (window.innerHeight || $window.height());
-      scrollBottom = $document.height() - elementHeight - $window.scrollTop();
+    if ($contentContext.is($window)) {
+      return $document.height();
     }
-    else {
-      elementHeight = $context.prop('clientHeight');
-      scrollBottom = $context.prop('scrollHeight') - elementHeight - $context.scrollTop();
+
+    if ($contentContext !== $context) {
+      contextOffsetTop = $context.is($window) ? 0 : $context.offset().top;
+      return $contentContext.height() + $contentContext.offset().top - contextOffsetTop;
     }
+
+    return $context.prop('scrollHeight');
+  }
+
+  function getScrollDistance($context, $contentContext) {
+    var elementHeight = $context.is($window) ? window.innerHeight : $context.prop('clientHeight');
+    var scrollHeight = getScrollHeight($context, $contentContext);
+    var scrollBottom = scrollHeight - elementHeight - $context.scrollTop();
 
     return (scrollBottom / elementHeight);
   }
 
-  function onScroll(context) {
+  function onScroll(context, contentContext) {
     var $context = getContext(context);
-    var contextId = getContextId(context);
+    var $contentContext = contentContext ? $(contentContext) : $context;
+    var contextId = getContextId(context, contentContext);
     var scrollEls = 'window' === context ? $('html,body') : $context;
 
     return function() {
@@ -43,10 +59,10 @@ define([
         return $(el).css('overflowY') !== 'hidden';
       });
 
-      var breakpoint, s = scrolled($context);
+      var scrollDistance = getScrollDistance($context, $contentContext);
 
-      for (breakpoint in registry[contextId]) {
-        if (s <= Number(breakpoint) && canScroll) {
+      for (var breakpoint in registry[contextId]) {
+        if (scrollDistance <= Number(breakpoint) && canScroll) {
           registry[contextId][breakpoint].wrapped.forEach(function(fn) {
             fn();
           });
@@ -56,12 +72,14 @@ define([
   }
 
   /**
-   * @param breakpoint {Number|String} Percentage of viewport height from bottom of context. e.g. '50%' or 0.5
+   * @param breakpoint {Number} Percentage of viewport height from bottom of context as a decimal. e.g. 0.5 is 50%
    * @param callback {Function} Potential promise generator
    * @param context {DOM|jQuery}
+   * @param contentContext {?DOM|?jQuery}
    */
-  function scrollfloat(breakpoint, callback, context) {
+  function scrollfloat(breakpoint, callback, context, contentContext) {
     if (typeof breakpoint === 'function') {
+      contentContext = context;
       context = callback;
       callback = breakpoint;
       breakpoint = 1;
@@ -70,11 +88,11 @@ define([
     breakpoint = Number(breakpoint).toString();
 
     var $context = getContext(context);
-    var contextId = getContextId(context);
+    var contextId = getContextId(context, contentContext);
 
     if (!registry[contextId]) {
       registry[contextId] = {};
-      scrollCache[contextId] = onScroll(context);
+      scrollCache[contextId] = onScroll(context, contentContext);
 
       $context.on('scroll', scrollCache[contextId]);
     }
@@ -114,14 +132,18 @@ define([
   }
 
   scrollfloat.on = scrollfloat;
-  scrollfloat.off = function(fn, context) {
+  scrollfloat.off = function(fn, context, contentContext) {
     context = context || 'window';
 
     var breakpoint;
     var cb;
     var i;
     var $context = getContext(context);
-    var contextId = getContextId(context);
+    var contextId = getContextId(context, contentContext);
+
+    if (!registry[contextId]) {
+      return;
+    }
 
     for (breakpoint in registry[contextId]) {
       cb = registry[contextId][breakpoint];
@@ -142,8 +164,8 @@ define([
     }
   };
 
-  scrollfloat.check = function(context) {
-    var contextId = getContextId(context || 'window');
+  scrollfloat.check = function(context, contentContext) {
+    var contextId = getContextId(context || 'window', contentContext);
 
     scrollCache[contextId]();
   };

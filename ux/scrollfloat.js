@@ -9,7 +9,13 @@ define([
       scrollCache = {},
       registry = {};
 
-  function callIt(fn) { fn(); }
+  function getContext(context) {
+    return context === 'window' ? $window : $(context);
+  }
+
+  function getContextId(context, contentContext) {
+    return contentContext ? context + '|' + contentContext : context;
+  }
 
   // Check if the user's viewport has scrolled based a defined breakpoint
   function scrolled($context) {
@@ -27,8 +33,9 @@ define([
     return (scrollBottom / elementHeight);
   }
 
-  function scroll(context) {
-    var $context = context === 'window' ? $window : $(context);
+  function onScroll(context) {
+    var $context = getContext(context);
+    var contextId = getContextId(context);
     var scrollEls = 'window' === context ? $('html,body') : $context;
 
     return function() {
@@ -38,9 +45,11 @@ define([
 
       var breakpoint, s = scrolled($context);
 
-      for (breakpoint in registry[context]) {
+      for (breakpoint in registry[contextId]) {
         if (s <= Number(breakpoint) && canScroll) {
-          registry[context][breakpoint].wrapped.forEach(callIt);
+          registry[contextId][breakpoint].wrapped.forEach(function(fn) {
+            fn();
+          });
         }
       }
     };
@@ -60,19 +69,20 @@ define([
     context = context || 'window';
     breakpoint = Number(breakpoint).toString();
 
-    var cb, $context = context === 'window' ? $window : $(context);
+    var $context = getContext(context);
+    var contextId = getContextId(context);
 
-    if (!registry[context]) {
-      registry[context] = {};
-      scrollCache[context] = scroll(context);
+    if (!registry[contextId]) {
+      registry[contextId] = {};
+      scrollCache[contextId] = onScroll(context);
 
-      $context.on('scroll', scrollCache[context]);
+      $context.on('scroll', scrollCache[contextId]);
     }
 
-    cb = registry[context][breakpoint];
+    var cb = registry[contextId][breakpoint];
 
     if (!cb) {
-      cb = registry[context][breakpoint] = {
+      cb = registry[contextId][breakpoint] = {
         wrapped: [],
         original: []
       };
@@ -87,7 +97,7 @@ define([
       if (retval && typeof retval.then === 'function') {
         retval.then(function() {
           onHit.blocking = false;
-          scrollCache[context]();
+          scrollCache[contextId]();
         });
       }
       else {
@@ -100,39 +110,42 @@ define([
     cb.wrapped.push(onHit);
 
     // First check
-    scrollCache[context]();
+    scrollCache[contextId]();
   }
 
   scrollfloat.on = scrollfloat;
   scrollfloat.off = function(fn, context) {
     context = context || 'window';
 
-    var breakpoint, cb, i,
-        $context = context === 'window' ? $window : $(context);
+    var breakpoint;
+    var cb;
+    var i;
+    var $context = getContext(context);
+    var contextId = getContextId(context);
 
-    for (breakpoint in registry[context]) {
-      cb = registry[context][breakpoint];
+    for (breakpoint in registry[contextId]) {
+      cb = registry[contextId][breakpoint];
       // search for the original function
       i = cb.original.indexOf(fn);
       if (~i) {
         cb.original.splice(i, 1);
         cb.wrapped.splice(i, 1);
         if (!cb.original.length) {
-          delete registry[context][breakpoint];
+          delete registry[contextId][breakpoint];
         }
       }
     }
 
-    if (!Object.keys(registry[context]).length) {
-      $context.off('scroll', scrollCache[context]);
-      delete registry[context];
+    if (!Object.keys(registry[contextId]).length) {
+      $context.off('scroll', scrollCache[contextId]);
+      delete registry[contextId];
     }
   };
 
   scrollfloat.check = function(context) {
-    context = context || 'window';
+    var contextId = getContextId(context || 'window');
 
-    scrollCache[context]();
+    scrollCache[contextId]();
   };
 
   return scrollfloat;

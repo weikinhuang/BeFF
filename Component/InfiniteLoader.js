@@ -9,8 +9,9 @@ define([
   'use strict';
 
   return Component.extend({
-    init: function(context, offset) {
+    init: function(context, offset, contentContext) {
       this.context = context || 'window';
+      this.contentContext = contentContext;
       this.resetParams(offset);
     },
 
@@ -61,7 +62,7 @@ define([
       }
 
       this._boundLoad = this.load.bind(this);
-      this._infinitescroll(this.breakpoint, this._boundLoad, this.context);
+      this._infinitescroll(this.breakpoint, this._boundLoad, this.context, this.contentContext);
       return this;
     },
 
@@ -76,7 +77,7 @@ define([
         return;
       }
 
-      this._infinitescroll.off(this._boundLoad, this.context);
+      this._infinitescroll.off(this._boundLoad, this.context, this.contentContext);
       delete this._boundLoad;
       return this;
     },

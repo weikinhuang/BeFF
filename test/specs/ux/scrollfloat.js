@@ -8,42 +8,75 @@ define([
   describe('ux/scrollfloat', function() {
     beforeEach(function() {
       affix('div').append(fixture);
-      this._$window = $('.js-mock-window');
+      this._contextSelector = '.js-mock-window';
+      this._contentContextSelector = '.js-content-measure';
+      this._$window = $(this._contextSelector);
 
       this._scrollTo = function(top) {
         this._$window.scrollTop(top);
         this._$window.trigger('scroll');
       };
-      this.foo = {
-        setBar: function() {}
+      this._spy = {
+        fn: jasmine.createSpy()
       };
-      spyOn(this.foo, 'setBar');
     });
 
-    afterEach(function() {
-      scrollfloat.off(this.foo.setBar, this._$window[0]);
-    });
+    describe('without contentContext', function() {
+      afterEach(function() {
+        scrollfloat.off(this._spy.fn, this._contextSelector);
+      });
 
-    describe('scroll', function() {
       it('should trigger callback when overflowY is not hidden', function() {
-        expect(this.foo.setBar.calls.count()).toBe(0);
+        expect(this._spy.fn.calls.count()).toBe(0);
 
-        scrollfloat(0.8, this.foo.setBar, this._$window[0]);
+        scrollfloat(0.8, this._spy.fn, this._contextSelector);
 
-        expect(this.foo.setBar.calls.count()).toBe(1);
+        expect(this._spy.fn.calls.count()).toBe(1);
 
         this._scrollTo(this._$window.prop('clientHeight'));
 
-        expect(this.foo.setBar.calls.count()).toBe(2);
+        expect(this._spy.fn.calls.count()).toBe(2);
       });
 
       it('should NOT trigger callback when overflowY is hidden', function() {
         this._$window.css('overflowY', 'hidden');
 
-        scrollfloat(0.8, this.foo.setBar, this._$window[0]);
+        scrollfloat(0.8, this._spy.fn, this._contextSelector);
         this._scrollTo(this._$window.prop('clientHeight'));
 
-        expect(this.foo.setBar).not.toHaveBeenCalled();
+        expect(this._spy.fn).not.toHaveBeenCalled();
+      });
+
+      it('should NOT trigger callback if far from bottom of context', function() {
+        $('.js-content-wrap').height(6000);
+        scrollfloat(0.8, this._spy.fn, this._contextSelector);
+        expect(this._spy.fn).not.toHaveBeenCalled();
+      });
+    });
+
+    describe('with scrollContext', function() {
+      afterEach(function() {
+        scrollfloat.off(this._spy.fn, this._contextSelector, this._contentContextSelector);
+      });
+
+      it('should throw if context is not a string', function() {
+        $('.js-content-wrap').height(6000);
+        expect(function() {
+          scrollfloat(0.8, this._spy.fn, this._$window[0], this._contentContextSelector);
+        }.bind(this)).toThrow();
+      });
+
+      it('should throw if contentContext is not a string', function() {
+        $('.js-content-wrap').height(6000);
+        expect(function() {
+          scrollfloat(0.8, this._spy.fn, this._contextSelector, $(this._contentContextSelector));
+        }.bind(this)).toThrow();
+      });
+
+      it('should trigger callback if far from bottom of context but close to bottom of contentContext', function() {
+        $('.js-content-wrap').height(6000);
+        scrollfloat(0.8, this._spy.fn, this._contextSelector, this._contentContextSelector);
+        expect(this._spy.fn).toHaveBeenCalled();
       });
     });
   });

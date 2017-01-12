@@ -40,6 +40,8 @@ define([
       var scrollTop;
 
       var update = function() {
+        if (!$module.length) { return; }
+
         var $pen = $module.find('.js-pen');
         var moduleOffsetTop = $module.offset().top;
         var $dropdown = $pen.next('.js-dropdown');

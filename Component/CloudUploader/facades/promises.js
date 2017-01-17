@@ -49,6 +49,7 @@ define([
     .on('submit', function(data) {
       var wrapper = findUnsubmittedWrapper(data);
       wrapper.validationPromise.resolve({
+        name: data.name,
         file: data.file,
         promise: wrapper.uploadPromise
       });

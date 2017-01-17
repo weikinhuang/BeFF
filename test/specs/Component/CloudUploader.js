@@ -301,6 +301,7 @@ define([
           Promise.all(promises)
           .then(function(uploads) {
             uploads.forEach(function(upload) {
+              expect(upload.name).toEqual(jasmine.any(String));
               expect(upload.file).toEqual(jasmine.any(Object));
               expect(upload.promise).toEqual(jasmine.any(Promise));
               done();

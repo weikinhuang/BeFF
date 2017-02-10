@@ -1,15 +1,16 @@
 /* eslint-env node */
 
 var webpackConfig = require('./webpack.config.js');
-var reporters = ['progress'];
+var reporters = ['mocha'];
 
-// Only run coverage report during `npm test`
-if (process.env.npm_lifecycle_event === 'test') {
-  webpackConfig.module.postLoaders = [{
+// Run coverage when `COVERAGE=true` is present in CLI
+if (process.env.COVERAGE === 'true') {
+  webpackConfig.module.rules.push({
     test: /\.js$/,
     exclude: /(test|node_modules)\//,
-    loader: 'istanbul-instrumenter'
-  }];
+    loader: 'istanbul-instrumenter-loader',
+    enforce: 'post'
+  });
   reporters.push('coverage');
 }
 

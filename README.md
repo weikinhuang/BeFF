@@ -3,16 +3,6 @@ BeFF ![Build Status](https://travis-ci.org/behance/BeFF.svg?branch=master)
 
 Behance Frontend Framework
 
-#### Documentation
-
-[View the Docs](https://behance.github.io/BeFF)
-
-You can manually generate the HTML documentation of our JSDoc blocks via:
-
-`grunt docs`
-
-That Grunt task will also push the generated html files to your fork's `gh-pages branch`
-
 ### Cutting a Release
 
  * Before cutting a new release, make sure your changes are *merged*, your *master* branch is *up to date (pull from upstream)*, and you're on your *`master`* branch.

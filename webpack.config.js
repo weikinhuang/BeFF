@@ -11,13 +11,17 @@ module.exports = {
   devtool: 'eval',
   target: 'web',
   module: {
-    preLoaders: [{
+    rules: [{
+      enforce: 'pre',
       test: /(fine-uploader).*\.js$/,
-      loader: 'imports?jQuery=jquery'
+      loader: 'imports-loader?jQuery=jquery'
     }]
   },
   resolve: {
-    root: __dirname,
+    modules: [
+      __dirname,
+      'node_modules'
+    ],
     alias: {
       // local paths
       template: path.join(__dirname, 'template'),
@@ -30,12 +34,12 @@ module.exports = {
       fixtures: 'test/fixtures',
       mocks: 'test/mocks'
     },
-    extensions: ['', '.js', '.mustache']
+    extensions: ['.js', '.mustache']
   },
   resolveLoader: {
     alias: {
-      text$: 'raw',
-      hgn$: 'hgn'
+      text$: 'raw-loader',
+      hgn$: 'hgn-loader'
     }
   },
   plugins: [

@@ -1,7 +1,7 @@
 define([
   '../Component',
-  '../util/prequire'
-], function(Component, prequire) {
+  'tiny-script-loader/loadScriptPromised'
+], function(Component, loadScriptPromised) {
   'use strict';
 
   return Component.extend({
@@ -31,7 +31,7 @@ define([
     },
 
     _load: function() {
-      return prequire('//static.ads-twitter.com/uwt.js');
+      return loadScriptPromised('//static.ads-twitter.com/uwt.js');
     },
 
     _createTwitterWrapper: function() {

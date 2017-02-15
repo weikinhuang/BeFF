@@ -10,7 +10,8 @@
     "intersection-observer-polyfill": "jeremenichelli/intersection-observer-polyfill#464b24f928710834d945d7a33f8a334d0db0f1c4",
     "jquery": "~2.1.1",
     "jquery-ui": "jquery/jquery-ui#1.11.4",
-    "nbd": "^1.1.5"
+    "nbd": "^1.1.5",
+    "tiny-script-loader": "^1.1.0"
   },
   "devDependencies": {
     "babel-polyfill": "^6.20.0",
@@ -32,7 +33,6 @@
     "karma-webpack": "^2.0.2",
     "ractive": "~0.7.3",
     "raw-loader": "^0.5.1",
-    "requirejs": "^2.1.11",
     "webpack": "^2.2.1",
     "webpack-notifier": "^1.5.0"
   },

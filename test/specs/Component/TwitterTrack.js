@@ -1,7 +1,6 @@
 define([
-  'nbd/Promise',
   'Component/TwitterTrack'
-], function(Promise, TwitterTrack) {
+], function(TwitterTrack) {
   'use strict';
 
   describe('Component/TwitterTrack', function() {
@@ -13,6 +12,7 @@ define([
     });
 
     afterEach(function() {
+      delete window.twq;
       this.twitterTrack.destroy();
     });
 

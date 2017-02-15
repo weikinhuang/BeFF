@@ -1,8 +1,8 @@
 define([
   'jquery',
   '../Component',
-  '../util/prequire'
-], function($, Component, prequire) {
+  'tiny-script-loader/loadScriptPromised'
+], function($, Component, loadScriptPromised) {
   'use strict';
 
   return Component.extend({
@@ -14,7 +14,7 @@ define([
 
     bind: function() {
       $('.js-zendesk').bind('click.be-zendesk', function() {
-        this._prequire('//assets.zendesk.com/embeddable_framework/main.js')
+        this._load()
         .then(function() {
           window.zEmbed.activate({ hideOnClose: true });
         });
@@ -32,7 +32,9 @@ define([
       document.zEQueue = null;
     },
 
-    _prequire: prequire,
+    _load: function() {
+      return loadScriptPromised('//assets.zendesk.com/embeddable_framework/main.js');
+    },
 
     _export: function() {
       var queue = [];

@@ -1,12 +1,10 @@
 define([
   'jquery',
-  'util/prequire',
-  'nbd/Promise',
   'Component/zenDesk'
-], function($, prequire, Promise, ZenDesk) {
+], function($, ZenDesk) {
   'use strict';
 
-  describe('be/zenDesk', function() {
+  describe('Component/zenDesk', function() {
     beforeEach(function() {
       affix('div.js-zendesk');
 
@@ -42,7 +40,7 @@ define([
           document.zEQueue = [];
         });
 
-        spyOn(this.zenDesk, '_prequire').and.returnValue(this.resolvedProm);
+        spyOn(this.zenDesk, '_load').and.returnValue(this.resolvedProm);
 
         $('.js-zendesk').trigger('click');
 

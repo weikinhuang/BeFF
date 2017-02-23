@@ -22,6 +22,8 @@ define([
     },
 
     bind: function() {
+      var self = this;
+
       // Appear event is triggered by $.fn.lazyload
       this._$elem.on('appear', function createPictureElementFromElement() {
         var $elem = $(this);
@@ -29,11 +31,14 @@ define([
         var $sources = $elem.find('source');
 
         $img.one('load', function() {
-          $img
-          .removeAttr('height')
-          .removeAttr('width')
-          .removeAttr('style')
-          .addClass('image-loaded');
+          $img.addClass('image-loaded');
+
+          if (!self._options || self._options.removeAttributes !== false) {
+            $img
+            .removeAttr('height')
+            .removeAttr('width')
+            .removeAttr('style');
+          }
         });
 
         swapAttr($img, 'srcset');
@@ -45,19 +50,13 @@ define([
 
           swapAttr($source, 'srcset');
           swapAttr($source, 'media');
-        }.bind(this));
+        });
       });
 
       this._$elem.lazyload(this._options);
-
-      // lazyload doesn't fire on window resize so we are doing it manually
-      $(window).one('resize.beff-lazyloadpicture', function() {
-        this._$elem.trigger('appear');
-      }.bind(this));
     },
 
     unbind: function() {
-      $(window).off('resize.beff-lazyloadpicture');
       this._$elem.off('appear');
     }
   });

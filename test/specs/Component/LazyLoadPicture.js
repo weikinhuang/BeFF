@@ -90,6 +90,29 @@ define([
         lazyLoadPicture.destroy();
         done();
       }.bind(this));
+
+      $(window).trigger('resize');
+    });
+
+    it('doesnt remove attrs and style once image is loaded if removeAttributes is false', function(done) {
+      var lazyLoadPicture = LazyLoadPicture.init(this._$lazyPicture, { removeAttributes: false });
+
+      this._$lazyPicture.on('appear', function() {
+        expect(this._$img).toHaveAttr('height');
+        expect(this._$img).toHaveAttr('width');
+        expect(this._$img).toHaveAttr('style');
+
+        this._$img.trigger('load');
+
+        expect(this._$img).toHaveAttr('height');
+        expect(this._$img).toHaveAttr('width');
+        expect(this._$img).toHaveAttr('style');
+
+        lazyLoadPicture.destroy();
+        done();
+      }.bind(this));
+
+      $(window).trigger('resize');
     });
   });
 });

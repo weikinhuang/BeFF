@@ -12,6 +12,18 @@ define([
 
         resolve(file);
       });
+    },
+
+    CMYKWarning: function(file, warnings) {
+      warnings = Array.isArray(warnings) ? warnings : [];
+
+      return new Promise(function(resolve) {
+        if (file.readerData.isImage && image.isCMYK(image.getBinaryFromDataUri(file.readerData.result))) {
+          warnings.push('Your images look best on the web in RGB instead of CMYK. Please upload ' + file.readerData.name + ' as a RGB image.');
+        }
+
+        resolve(warnings);
+      });
     }
   };
 });

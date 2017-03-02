@@ -32,10 +32,12 @@ define([
     });
 
     describe('.CMYKWarning', function() {
+      var _cmykWarningMessage = 'Image koala.jpeg has been converted from CMYK to a web friendly format. <a href="https://help.behance.net/hc/en-us/articles/115003666887">Learn more about CMYK display here</a>.';
+
       it('returns a promise with an array containing a warning when validating a CMYK image', function(done) {
         var data = { readerData: fixtureData.cmykKoala };
         uploadValidator.CMYKWarning(data).then(function(warnings) {
-          expect(warnings).toEqual(['Your images look best on the web in RGB instead of CMYK. Please upload koala.jpeg as a RGB image.']);
+          expect(warnings).toEqual([_cmykWarningMessage]);
           done();
         });
       });
@@ -52,7 +54,7 @@ define([
         var data = { readerData: fixtureData.cmykKoala };
         var existingWarnings = ['foo'];
         uploadValidator.CMYKWarning(data, existingWarnings).then(function(warnings) {
-          expect(warnings).toEqual(['foo', 'Your images look best on the web in RGB instead of CMYK. Please upload koala.jpeg as a RGB image.']);
+          expect(warnings).toEqual(['foo', _cmykWarningMessage]);
           done();
         });
       });

@@ -32,7 +32,7 @@ define([
     });
 
     describe('.CMYKWarning', function() {
-      var _cmykWarningMessage = 'Image koala.jpeg has been converted from CMYK to a web friendly format. <a href="https://help.behance.net/hc/en-us/articles/115003666887">Learn more about CMYK display here</a>.';
+      var _cmykWarningMessage = 'Image koala.jpeg has been converted from CMYK to a web friendly format. <a href="https://help.behance.net/hc/en-us/articles/115003666887" target="_blank">Learn more about CMYK display here</a>.';
 
       it('returns a promise with an array containing a warning when validating a CMYK image', function(done) {
         var data = { readerData: fixtureData.cmykKoala };

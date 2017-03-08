@@ -14,16 +14,8 @@ define([
       });
     },
 
-    CMYKWarning: function(file, warnings) {
-      warnings = Array.isArray(warnings) ? warnings : [];
-
-      return new Promise(function(resolve) {
-        if (file.readerData.isImage && image.isCMYK(image.getBinaryFromDataUri(file.readerData.result))) {
-          warnings.push('Image ' + file.readerData.name + ' has been converted from CMYK to a web friendly format. <a href="https://help.behance.net/hc/en-us/articles/115003666887" target="_blank">Learn more about CMYK display here</a>.');
-        }
-
-        resolve(warnings);
-      });
+    isCMYK: function(file) {
+      return file.readerData.isImage && image.isCMYK(image.getBinaryFromDataUri(file.readerData.result));
     }
   };
 });

@@ -4,7 +4,7 @@ define([
   '../View',
   '../ux/keyboard',
   '../dom/transitionEnd',
-  'hgn!../template/dialog'
+  'hgn-loader!../template/dialog'
 ], function(async, extend, View, keyboard, transitionEnd, dialogTemplate) {
   'use strict';
 

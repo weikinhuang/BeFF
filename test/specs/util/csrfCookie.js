@@ -18,6 +18,12 @@ define(['util/csrfCookie'], function(csrfCookie) {
         expect(csrfCookie.get()).toBe(value);
       });
 
+      it('generates a UUIDv4', function() {
+        var cookieVal = csrfCookie.get();
+        var regEx = /[a-z0-9]{8}-[a-z0-9]{4}-[a-z0-9]{4}-[a-z0-9]{4}-[a-z0-9]{12}$/g;
+        expect(regEx.test(cookieVal)).toBeTruthy();
+      });
+
       it('sets the csrf cookie when not there', function() {
         expect(document.cookie).not.toContain('bcp=');
         var value = csrfCookie.get();

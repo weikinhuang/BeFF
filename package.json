@@ -12,7 +12,8 @@
     "jquery-ui": "jquery/jquery-ui#1.11.4",
     "jquery-lazyload": "~1.9.7",
     "nbd": "^1.1.5",
-    "tiny-script-loader": "^1.1.0"
+    "tiny-script-loader": "^1.1.0",
+    "uuid": "^3.0.1"
   },
   "devDependencies": {
     "babel-polyfill": "^6.20.0",

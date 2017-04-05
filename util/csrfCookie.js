@@ -2,26 +2,17 @@
  * Module wrapper around usage of the CSRF token stored in the cookie store
  */
 define([
-  './cookie'
-], function(cookie) {
+  './cookie',
+  'uuid/v4'
+], function(cookie, uuidV4) {
   'use strict';
-
-  /**
-   * Generate a random integer between 0 and 1000000.
-   * Used as the value of the CSRF token
-   *
-   * @return {Number}
-   */
-  function genRandom() {
-    return Math.floor(Math.random() * 1000000);
-  }
 
   /**
    * Sets the CSRF cookie to a random value. Calling multiple times will
    * set the cookie to a new value
    */
   function genCookie() {
-    cookie.set('bcp', genRandom(), { path: '/', expires: 1 });
+    cookie.set('bcp', uuidV4(), { path: '/', expires: 1 });
     return cookie.get('bcp');
   }
 

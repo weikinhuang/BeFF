@@ -34,7 +34,9 @@ define(['jquery', 'nbd/Promise', './csrfCookie'], function($, Promise, csrfCooki
       options = { url: options };
     }
 
-    options = addCsrfToken(options);
+    if (!options.crossDomain) {
+      options = addCsrfToken(options);
+    }
 
     req = $.ajax(options);
     p.resolve(req);

@@ -118,6 +118,15 @@ define(['util/xhr', 'nbd/Promise', 'util/csrfCookie'], function(xhr, Promise, cs
         expect(request.requestHeaders['X-BCP']).toBe(csrfCookie.get());
         expect(request.requestHeaders['X-FOO-HEADER']).toBe('bar');
       });
+
+      it('does not add CSRF header when `options.crossDomain` is true', function() {
+        var request;
+
+        xhr({ data: 'foostring', crossDomain: true });
+
+        request = jasmine.Ajax.requests.mostRecent();
+        expect(request.requestHeaders['X-BCP']).not.toExist();
+      });
     });
   });
 });

@@ -20,8 +20,29 @@ define([
     });
 
     describe('#isAnimatedGif', function() {
-      it('detects an animated gif properly', function() {
-        expect(image.isAnimatedGif(image.getBinaryFromDataUri(Images.animatedGif.result))).toBeTruthy();
+      [
+        'animatedGif',
+        'multibyteAnimatedGif',
+        'animatedGif87a',
+        'animatedGif89a',
+        'animatedGifPhotoshop',
+        'animatedGifUncompressed',
+        'animatedGifGCEInBody',
+        'animatedGifNoGCE',
+      ].forEach(function(name) {
+        it('detects an animated gif properly: ' + name, function() {
+          expect(image.isAnimatedGif(image.getBinaryFromDataUri(Images[name].result))).toBeTruthy();
+        });
+      });
+
+      [
+        'singleFrameGif',
+        'singleFrameGifNoGCE',
+        'gifNoHeader',
+      ].forEach(function(name) {
+        it('detects an non-animated gif properly: ' + name, function() {
+          expect(image.isAnimatedGif(image.getBinaryFromDataUri(Images[name].result))).toBeFalsy();
+        });
       });
 
       it('detects a non-gif image properly', function() {

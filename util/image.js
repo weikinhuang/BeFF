@@ -15,10 +15,38 @@ define([], function() {
      * @return {Boolean}
      */
     isAnimatedGif: function(bits) {
-      var gifHeaderHex = '\x00\x21\xF9\x04';
-      var gifFrameHex = '\x00\x2C';
+      if (!/^GIF8[79]a/.test(bits)) {
+        return false;
+      }
 
-      return bits.indexOf(gifHeaderHex) > -1 && bits.split(gifFrameHex).length > 2;
+      var count = 0;
+
+      // Find Graphic Control Extension followed by image separator (0x2C) or extension introducer (0x21):
+      // Graphic control extensions are:
+      // 0x21 Extension Introducer
+      // 0xF9 Graphic Control Label
+      // 0x04 Block Size (always a fixed value of 4)
+      // 4 bytes of other data
+      // 0x00 Block Terminator
+      // Must not be inlined due to /g flag to keep track of number of matches
+      var gceWithImageSeparatorRe = /\x21\xF9\x04.{4}\x00(\x2C|\x21)/g;
+
+      while (gceWithImageSeparatorRe.exec(bits)) {
+        count++;
+        if (count === 2) {
+          return true;
+        }
+      }
+
+      // Some animated gifs don't include the optional graphics control extension.
+      // In this case, do a simple check for Block Terminator followed by Image Separator.
+      // This will produce an occasional false positive, but better than having
+      // to parse the whole entire gif for this rare case.
+      if (count === 0) {
+        return bits.split('\x00\x2c').length > 2;
+      }
+
+      return false;
     },
 
     getDimensions: function(bits) {

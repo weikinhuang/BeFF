@@ -167,7 +167,7 @@ define(['util/validate'], function(validate) {
       bad('Alpha', 0);
     });
 
-    it('verifies length', function() {
+    it('verifies length when a minimum and maximum are defined', function() {
       var tests = {
         good: ['a', 'aa'],
         bad: ['', 'aaa']
@@ -175,6 +175,26 @@ define(['util/validate'], function(validate) {
 
       tests.good.forEach(function(testCase) { good('required,length[1,2]', testCase); });
       tests.bad.forEach(function(testCase) { bad('required,length[1,2]', testCase); });
+    });
+
+    it('verifies length when a only a maximum is defined', function() {
+      var tests = {
+        good: ['12', 'aas'],
+        bad: ['aaaa', '12345']
+      };
+
+      tests.good.forEach(function(testCase) { good('required,length[,3]', testCase); });
+      tests.bad.forEach(function(testCase) { bad('required,length[,3]', testCase); });
+    });
+
+    it('verifies length when a only a minimum is defined', function() {
+      var tests = {
+        good: ['aaa', '11111'],
+        bad: ['1', 'aa']
+      };
+
+      tests.good.forEach(function(testCase) { good('required,length[3,]', testCase); });
+      tests.bad.forEach(function(testCase) { bad('required,length[3,]', testCase); });
     });
 
     it('verifies optional', function() {

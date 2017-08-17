@@ -162,10 +162,11 @@ define(function() {
 
         length: {
           test: function(corpus, meta) {
-            var limits = /\[(,?\d+(?:,\d+)?)\]/.exec(meta);
+            var limits = /\[(?:(\d+|\d+,\d+|,\d+|\d+,))\]/.exec(meta);
             corpus = String(corpus).replace(/[\s]+/g, ' ');
 
             if (!limits) { return false; }
+            limits[1] = limits[1].split(',')[0] === '' ? 0 + limits[1] : limits[1];
             return (new RegExp('^.{' + limits[1] + '}$')).test(corpus);
           },
           message: function(corpus, meta) {

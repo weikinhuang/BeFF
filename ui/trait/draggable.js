@@ -13,7 +13,11 @@ define([
 
       $view.draggable({
         handle: handle,
-        containment: containment
+        containment: containment,
+        stop: function() {
+          // https://bugs.jqueryui.com/ticket/10725
+          this.style.removeProperty('height');
+        }
       });
 
       cancelDefault = $view.draggable('option', 'cancel');

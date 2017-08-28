@@ -7,6 +7,7 @@ define([
   describe('ui/trait/draggable', function() {
     beforeEach(function() {
       this._$view = affix('div');
+      this._$view.affix('.js-drag-handle');
 
       this.view = extend({
         $view: this._$view
@@ -35,6 +36,22 @@ define([
       this.view.makeDraggable(this._$view, '');
 
       expect(this.view.$view.draggable('option', 'handle')).toEqual('');
+    });
+
+    it('unsets inline height after dragging', function(done) {
+      this.view.makeDraggable();
+
+      this.view.$view.on('dragstop', function() {
+        expect(this.view.$view[0].style.height).toEqual('');
+        done();
+      }.bind(this));
+
+      this.view.$view
+        .find('.js-drag-handle')
+        .simulate('drag', {
+          dx: 10,
+          dy: 10,
+        });
     });
   });
 });

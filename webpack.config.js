@@ -1,6 +1,6 @@
 /* eslint-env node */
 
-var hgn = require('hgn-loader');
+var hgn = require('@behance/hgn-loader');
 var path = require('path');
 var pkg = require('./package.json');
 var Notifier = require('webpack-notifier');
@@ -13,7 +13,7 @@ module.exports = {
   module: {
     rules: [{
       enforce: 'pre',
-      test: /(fine-uploader).*\.js$/,
+      test: /(@behance\/fine-uploader).*\.js$/,
       loader: 'imports-loader?jQuery=jquery'
     }]
   },
@@ -27,8 +27,8 @@ module.exports = {
       template: path.join(__dirname, 'template'),
 
       // vendor
-      fineuploader: 'fine-uploader/dist',
-      jqueryui: 'jquery-ui/ui',
+      fineuploader: '@behance/fine-uploader/dist',
+      jqueryui: '@behance/jquery-ui/ui',
       ractive$: 'ractive',
 
       fixtures: 'test/fixtures',
@@ -39,7 +39,7 @@ module.exports = {
   resolveLoader: {
     alias: {
       text$: 'raw-loader',
-      hgn$: 'hgn-loader'
+      'hgn-loader': '@behance/hgn-loader'
     }
   },
   plugins: [

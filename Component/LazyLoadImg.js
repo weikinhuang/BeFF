@@ -1,7 +1,7 @@
 define([
   'jquery',
   '../Component',
-  'intersection-observer-polyfill'
+  '@behance/intersection-observer-polyfill'
 ], function($, Component) {
   'use strict';
 

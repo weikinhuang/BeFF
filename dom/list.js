@@ -1,6 +1,6 @@
 define([
   'jquery',
-  'nbd/util/curry'
+  '@behance/nbd/util/curry'
 ], function($, curry) {
   'use strict';
 

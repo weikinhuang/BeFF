@@ -1,6 +1,6 @@
 define([
   'jquery',
-  'nbd/Promise',
+  '@behance/nbd/Promise',
   '../../dom/FileReader',
   'fixtures/dom/FileReader'
 ], function($, Promise, FileReader, image) {

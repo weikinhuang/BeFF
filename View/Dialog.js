@@ -1,6 +1,6 @@
 define([
-  'nbd/util/async',
-  'nbd/util/extend',
+  '@behance/nbd/util/async',
+  '@behance/nbd/util/extend',
   '../View',
   '../ux/keyboard',
   '../dom/transitionEnd',

@@ -1,8 +1,8 @@
 define([
   'jquery',
-  'nbd/Promise',
-  'nbd/trait/pubsub',
-  'nbd/util/extend',
+  '@behance/nbd/Promise',
+  '@behance/nbd/trait/pubsub',
+  '@behance/nbd/util/extend',
   '../Component',
   './CloudUploader/facades/promise',
   './CloudUploader/facades/promises',

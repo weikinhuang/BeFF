@@ -1,5 +1,5 @@
 define([
-  'nbd/Promise',
+  '@behance/nbd/Promise',
   '../Component',
   '../util/image'
 ], function(Promise, Component, imageUtil) {

@@ -1,7 +1,7 @@
 define([
   'jquery',
-  'nbd/util/async',
-  'nbd/util/extend',
+  '@behance/nbd/util/async',
+  '@behance/nbd/util/extend',
   '../Dialog',
   'jqueryui/position'
 ], function($, async, extend, View) {

@@ -1,7 +1,7 @@
 define([
-  'nbd/trait/pubsub',
-  'nbd/util/construct',
-  'nbd/util/extend',
+  '@behance/nbd/trait/pubsub',
+  '@behance/nbd/util/construct',
+  '@behance/nbd/util/extend',
   '../Component',
   '../ux/scrollfloat',
   '../util/xhr'

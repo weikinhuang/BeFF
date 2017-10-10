@@ -1,4 +1,4 @@
-define(['Controller/Dialog/Modal', 'nbd/Promise'], function(Modal, Promise) {
+define(['Controller/Dialog/Modal', '@behance/nbd/Promise'], function(Modal, Promise) {
   'use strict';
 
   describe('Controller/Dialog/Modal', function() {

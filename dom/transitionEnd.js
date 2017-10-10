@@ -1,6 +1,6 @@
 define([
-  'nbd/Promise',
-  'nbd/util/diff'
+  '@behance/nbd/Promise',
+  '@behance/nbd/util/diff'
 ], function(Promise, diff) {
   'use strict';
 

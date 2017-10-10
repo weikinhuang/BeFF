@@ -1,6 +1,6 @@
 define([
   'trait/attachDom',
-  'nbd/Model'
+  '@behance/nbd/Model'
 ], function(attachDom, Model) {
   'use strict';
 

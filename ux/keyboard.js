@@ -1,4 +1,4 @@
-define(['jquery', 'nbd/Class'], function($, Class) {
+define(['jquery', '@behance/nbd/Class'], function($, Class) {
   'use strict';
 
   function checkMeta(metas, fn) {

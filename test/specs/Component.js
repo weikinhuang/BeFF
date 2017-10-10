@@ -1,4 +1,4 @@
-define(['Component', 'nbd/trait/pubsub'], function(Component, pubsub) {
+define(['Component', '@behance/nbd/trait/pubsub'], function(Component, pubsub) {
   'use strict';
 
   describe('Component', function() {

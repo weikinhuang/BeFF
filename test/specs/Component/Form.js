@@ -1,4 +1,4 @@
-define(['jquery', 'Component/Form', 'nbd/Promise', 'util/xhr'], function($, Form, Promise, xhr) {
+define(['jquery', 'Component/Form', '@behance/nbd/Promise', 'util/xhr'], function($, Form, Promise, xhr) {
   'use strict';
 
   describe('Component/Form', function() {

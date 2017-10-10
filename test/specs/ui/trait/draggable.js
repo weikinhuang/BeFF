@@ -1,5 +1,5 @@
 define([
-  'nbd/util/extend',
+  '@behance/nbd/util/extend',
   'ui/trait/draggable'
 ], function(extend, draggable) {
   'use strict';

@@ -1,5 +1,5 @@
 define([
-  'nbd/util/deparam',
+  '@behance/nbd/util/deparam',
   'util/window',
   'util/remoteLogger'
 ], function(deparam, win, logger) {

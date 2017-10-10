@@ -1,9 +1,9 @@
 define([
   'jquery',
-  'nbd/util/extend',
-  'nbd/trait/log',
-  'nbd/trait/responsive',
-  'nbd/Controller',
+  '@behance/nbd/util/extend',
+  '@behance/nbd/trait/log',
+  '@behance/nbd/trait/responsive',
+  '@behance/nbd/Controller',
   './View'
 ], function($, extend, log, responsive, Controller, View) {
   'use strict';

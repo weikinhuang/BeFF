@@ -1,4 +1,4 @@
-define(['jquery', 'nbd/Promise', './csrfCookie'], function($, Promise, csrfCookie) {
+define(['jquery', '@behance/nbd/Promise', './csrfCookie'], function($, Promise, csrfCookie) {
   'use strict';
 
   function addCsrfToken(options) {

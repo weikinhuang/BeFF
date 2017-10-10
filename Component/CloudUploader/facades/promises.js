@@ -1,7 +1,7 @@
 define([
-  'nbd/Promise',
-  'nbd/trait/pubsub',
-  'nbd/util/extend'
+  '@behance/nbd/Promise',
+  '@behance/nbd/trait/pubsub',
+  '@behance/nbd/util/extend'
 ], function(Promise, pubsub, extend) {
   function promisesFacade(Uploader, options, files, resolve) {
     var uploader = Uploader.init(options);

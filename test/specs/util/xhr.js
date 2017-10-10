@@ -1,4 +1,4 @@
-define(['util/xhr', 'nbd/Promise', 'util/csrfCookie'], function(xhr, Promise, csrfCookie) {
+define(['util/xhr', '@behance/nbd/Promise', 'util/csrfCookie'], function(xhr, Promise, csrfCookie) {
   'use strict';
 
   describe('util/xhr', function() {

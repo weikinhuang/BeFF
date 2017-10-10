@@ -1,4 +1,4 @@
-define(['trait/eventMappable', 'nbd/util/extend'], function(eventMappable, extend) {
+define(['trait/eventMappable', '@behance/nbd/util/extend'], function(eventMappable, extend) {
   'use strict';
 
   describe('trait/eventMappable', function() {

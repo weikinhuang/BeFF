@@ -1,8 +1,8 @@
 define([
-  'nbd/trait/promise',
+  '@behance/nbd/trait/promise',
   '../Dialog',
   '../../View/Dialog/Popup',
-  'nbd/util/throttle'
+  '@behance/nbd/util/throttle'
 ], function(promise, Dialog, Popup, throttle) {
   'use strict';
 

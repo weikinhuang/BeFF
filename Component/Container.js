@@ -1,6 +1,6 @@
 define([
   'jquery',
-  'nbd/util/construct',
+  '@behance/nbd/util/construct',
   '../Component',
   '../Controller',
   '../trait/eventMappable'

@@ -1,5 +1,5 @@
 define([
-  'nbd/util/deparam'
+  '@behance/nbd/util/deparam'
 ], function(deparam) {
   'use strict';
 

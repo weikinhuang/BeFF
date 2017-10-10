@@ -1,8 +1,8 @@
 define([
-  'nbd/Class',
-  'nbd/util/construct',
-  'nbd/trait/log',
-  'nbd/trait/pubsub'
+  '@behance/nbd/Class',
+  '@behance/nbd/util/construct',
+  '@behance/nbd/trait/log',
+  '@behance/nbd/trait/pubsub'
 ], function(Class, construct, log, pubsub) {
   'use strict';
 

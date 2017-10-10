@@ -1,7 +1,7 @@
 define([
-  'nbd/Promise',
-  'nbd/util/extend',
-  'nbd/util/pipe',
+  '@behance/nbd/Promise',
+  '@behance/nbd/util/extend',
+  '@behance/nbd/util/pipe',
   '../Component',
   '../util/xhr',
   '../util/error'

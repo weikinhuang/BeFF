@@ -1,4 +1,4 @@
-define(['Component/InfiniteContainer', 'util/xhr', 'nbd/Model', 'nbd/util/deparam'], function(InfiniteContainer, xhr, Model, deparam) {
+define(['Component/InfiniteContainer', 'util/xhr', '@behance/nbd/Model', '@behance/nbd/util/deparam'], function(InfiniteContainer, xhr, Model, deparam) {
   'use strict';
 
   describe('Component/InfiniteContainer', function() {

@@ -1,7 +1,7 @@
 define([
   'jquery',
-  'nbd/View',
-  'nbd/trait/log',
+  '@behance/nbd/View',
+  '@behance/nbd/trait/log',
   './trait/eventMappable'
 ], function($, View, log, eventMappable) {
   'use strict';

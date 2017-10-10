@@ -1,7 +1,7 @@
 define([
-  'nbd/util/async',
-  'nbd/util/construct',
-  'nbd/util/extend',
+  '@behance/nbd/util/async',
+  '@behance/nbd/util/construct',
+  '@behance/nbd/util/extend',
   './InfiniteLoader',
   './Container'
 ], function(async, construct, extend, InfiniteLoader, Container) {

@@ -1,4 +1,4 @@
-define(['util/error', 'nbd/Promise'], function(error, Promise) {
+define(['util/error', '@behance/nbd/Promise'], function(error, Promise) {
   'use strict';
 
   describe('util/error', function() {

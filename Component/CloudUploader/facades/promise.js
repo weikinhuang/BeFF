@@ -1,5 +1,5 @@
 define([
-  'nbd/Promise',
+  '@behance/nbd/Promise',
   './promises',
 ], function(Promise, promisesFacade) {
   return function(Uploader, options, files) {

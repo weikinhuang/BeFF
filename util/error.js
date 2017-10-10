@@ -1,4 +1,4 @@
-define(['nbd/Promise'], function(Promise) {
+define(['@behance/nbd/Promise'], function(Promise) {
   'use strict';
 
   var handlers = [],

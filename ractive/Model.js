@@ -1,5 +1,5 @@
 define([
-  'nbd/Model'
+  '@behance/nbd/Model'
 ], function(Model) {
   'use strict';
 

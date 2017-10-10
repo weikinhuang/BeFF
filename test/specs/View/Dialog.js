@@ -1,7 +1,7 @@
 define([
   'View/Dialog',
-  'nbd/Promise',
-  'nbd/util/async'
+  '@behance/nbd/Promise',
+  '@behance/nbd/util/async'
 ], function(View, Promise, async) {
   'use strict';
 

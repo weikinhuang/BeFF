@@ -16,7 +16,7 @@ define(['jquery', '@behance/nbd/Class'], function($, Class) {
     };
   }
 
-  var keyhandler = new (Class.extend({
+  var KeyHandler = Class.extend({
     listeners: null,
     globals: null,
 
@@ -203,12 +203,20 @@ define(['jquery', '@behance/nbd/Class'], function($, Class) {
       122: true,
       123: true
     }
-  }))();
+  });
+
+  var keyhandler;
+  function lazyCallMethod(methodName) {
+    return function() {
+      keyhandler = keyhandler || new KeyHandler();
+      keyhandler[methodName].apply(keyhandler, arguments);
+    };
+  }
 
   return {
-    on: keyhandler.addListener,
-    off: keyhandler.removeListener,
-    add: keyhandler.appendListener,
-    global: keyhandler.addGlobal
+    on: lazyCallMethod('addListener'),
+    off: lazyCallMethod('removeListener'),
+    add: lazyCallMethod('appendListener'),
+    global: lazyCallMethod('addGlobal')
   };
 });

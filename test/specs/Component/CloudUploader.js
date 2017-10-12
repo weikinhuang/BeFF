@@ -2,7 +2,7 @@ define([
   'jquery',
   '@behance/nbd/util/async',
   '@behance/nbd/Promise',
-  'fineuploader/all.fine-uploader',
+  '@behance/fine-uploader',
   'mocks/fineuploader',
   'Component/CloudUploader'
 ], function($, async, Promise, fineUploader, fineUploaderMock, CloudUploader) {

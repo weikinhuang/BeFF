@@ -27,7 +27,6 @@ module.exports = {
       template: path.join(__dirname, 'template'),
 
       // vendor
-      fineuploader: '@behance/fine-uploader/dist',
       jqueryui: '@behance/jquery-ui/ui',
       ractive$: 'ractive',
 

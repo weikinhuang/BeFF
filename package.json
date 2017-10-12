@@ -6,7 +6,7 @@
     "test": "test"
   },
   "dependencies": {
-    "@behance/fine-uploader": "5.1.3-xhr-passthru",
+    "@behance/fine-uploader": "5.1.3-edge-content-type-fix",
     "@behance/intersection-observer-polyfill": "0.0.2",
     "@behance/jquery-ui": "1.11.4",
     "@behance/nbd": "^1.1.8",

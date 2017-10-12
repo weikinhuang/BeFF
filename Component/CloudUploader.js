@@ -6,7 +6,7 @@ define([
   '../Component',
   './CloudUploader/facades/promise',
   './CloudUploader/facades/promises',
-  'fineuploader/all.fine-uploader'
+  '@behance/fine-uploader'
 ], function($, Promise, pubsub, extend, Component, promiseFacade, promisesFacade, fineUploader) {
   'use strict';
 

@@ -113,7 +113,7 @@ define([
     },
 
     _checkAndSetLeftBoundaryForPen: function($pen) {
-      if (this.leftBoundaryWidth) {
+      if (this.leftBoundaryWidth && $pen && $pen.position()) {
         if (!this.initialPenLeftPosition) {
           this.initialPenLeftPosition = $pen.position().left;
         }
@@ -127,7 +127,7 @@ define([
     },
 
     _checkAndSetLeftBoundaryForDropdown: function($pen, $dropdown) {
-      if (this.leftBoundaryWidth) {
+      if (this.leftBoundaryWidth && $pen && $pen.position()) {
         if ($pen.offset().left < this.leftBoundaryWidth + this.dropDownMargin) {
           $dropdown.css('left', $pen.position().left + 1); // +1 to show left shadow of dropdown
         }

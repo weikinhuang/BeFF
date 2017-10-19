@@ -36,4 +36,17 @@ define(['jquery', 'Component/StickyPenScroller'], function($, StickyPenScroller)
       expect(this.$context.find('.js-dropdown').offset().left).toBe(71);
     });
   });
+
+  describe('on setup', function() {
+    it('does not error when there are no .js-pen classes within the modules', function() {
+      var $noPenContext = affix('.js-context .js-editable .js-dropdown');
+      var pen = new StickyPenScroller({
+        $context: $noPenContext,
+        moduleClass: '.js-editable',
+        leftBoundaryWidth: 70,
+      });
+      expect(function() { $noPenContext.find('.js-editable').mouseenter(); }).not.toThrow();
+      pen.unbind();
+    });
+  });
 });

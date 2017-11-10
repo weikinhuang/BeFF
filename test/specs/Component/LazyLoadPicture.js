@@ -73,6 +73,32 @@ define([
       lazyLoadPicture.destroy();
     });
 
+    it('doesn\'t remove data-* attrs if keepDataAttributes is true', function() {
+      var src = this._$lazyImg.data('src');
+      var srcset = this._$lazyImg.data('srcset');
+      var sizes = this._$lazyImg.data('sizes');
+
+      var lazyLoadPicture;
+
+      expect(this._$lazyImg.attr('src')).not.toBe(src);
+      expect(this._$lazyImg.attr('srcset')).not.toBe(srcset);
+      expect(this._$lazyImg.attr('sizes')).not.toBe(sizes);
+
+      lazyLoadPicture = LazyLoadPicture.init(this._$lazyImg, { keepDataAttributes: true });
+
+      $(window).trigger('resize');
+
+      expect(this._$lazyImg).toHaveAttr('data-src');
+      expect(this._$lazyImg).toHaveAttr('data-srcset');
+      expect(this._$lazyImg).toHaveAttr('data-sizes');
+
+      expect(this._$lazyImg.attr('src')).toBe(src);
+      expect(this._$lazyImg.attr('srcset')).toBe(srcset);
+      expect(this._$lazyImg.attr('sizes')).toBe(sizes);
+
+      lazyLoadPicture.destroy();
+    });
+
     it('removes dimension attrs and style once image is loaded', function(done) {
       var lazyLoadPicture = LazyLoadPicture.init(this._$lazyPicture);
 

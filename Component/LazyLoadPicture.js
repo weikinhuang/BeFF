@@ -5,13 +5,15 @@ define([
 ], function($, Component) {
   'use strict';
 
-  function swapAttr($elem, attr) {
+  function swapAttr($elem, attr, keepDataAttributes) {
     var property = 'data-' + attr;
 
     if ($elem.attr(property)) {
       $elem
-      .attr(attr, $elem.data(attr))
-      .removeAttr(property);
+      .attr(attr, $elem.attr(property));
+      if (!keepDataAttributes) {
+        $elem.removeAttr(property);
+      }
     }
   }
 
@@ -41,15 +43,17 @@ define([
           }
         });
 
-        swapAttr($img, 'srcset');
-        swapAttr($img, 'src');
-        swapAttr($img, 'sizes');
+        var keepDataAttributes = self._options && self._options.keepDataAttributes;
+
+        swapAttr($img, 'srcset', keepDataAttributes);
+        swapAttr($img, 'src', keepDataAttributes);
+        swapAttr($img, 'sizes', keepDataAttributes);
 
         $sources.each(function(_, source) {
           var $source = $(source);
 
-          swapAttr($source, 'srcset');
-          swapAttr($source, 'media');
+          swapAttr($source, 'srcset', keepDataAttributes);
+          swapAttr($source, 'media', keepDataAttributes);
         });
       });
 

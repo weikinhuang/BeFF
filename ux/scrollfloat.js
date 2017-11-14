@@ -4,13 +4,11 @@ define([
 ], function($) {
   'use strict';
 
-  var $window = $(window),
-      $document = $(document),
-      scrollCache = {},
+  var scrollCache = {},
       registry = {};
 
   function getContext(context) {
-    return context === 'window' ? $window : $(context);
+    return context === 'window' ? $(window) : $(context);
   }
 
   function getContextId(context, contentContext) {
@@ -28,12 +26,12 @@ define([
   function getScrollHeight($context, $contentContext) {
     var contextOffsetTop;
 
-    if ($contentContext.is($window)) {
-      return $document.height();
+    if ($contentContext.is($(window))) {
+      return $(document).height();
     }
 
     if ($contentContext !== $context) {
-      contextOffsetTop = $context.is($window) ? 0 : $context.offset().top;
+      contextOffsetTop = $context.is($(window)) ? 0 : $context.offset().top;
       return $contentContext.height() + $contentContext.offset().top - contextOffsetTop;
     }
 
@@ -41,7 +39,7 @@ define([
   }
 
   function getScrollDistance($context, $contentContext) {
-    var elementHeight = $context.is($window) ? window.innerHeight : $context.prop('clientHeight');
+    var elementHeight = $context.is($(window)) ? window.innerHeight : $context.prop('clientHeight');
     var scrollHeight = getScrollHeight($context, $contentContext);
     var scrollBottom = scrollHeight - elementHeight - $context.scrollTop();
 

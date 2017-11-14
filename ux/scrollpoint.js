@@ -9,8 +9,6 @@ define([
    */
 
   var percent = /(\d+)%/,
-      $window = $(window),
-      $document = $(document),
       registry = {};
 
   function isPercent(breakpoint) {
@@ -33,8 +31,8 @@ define([
   }
 
   function elementHeight($context) {
-    return $context.is($window) ?
-           ($document.height() - (window.innerHeight || $window.height())) :
+    return $context.is($(window)) ?
+           ($(document).height() - (window.innerHeight || $(window).height())) :
            $context.prop('scrollHeight');
   }
 
@@ -48,7 +46,7 @@ define([
   }
 
   function scroll(context) {
-    var $context = context === 'window' ? $window : $(context);
+    var $context = context === 'window' ? $(window) : $(context);
 
     return function() {
       var breakpoint, cb, cache,
@@ -116,7 +114,7 @@ define([
   function scrollpoint(breakpoint, callback, context) {
     context = context || 'window';
 
-    var $context = context === 'window' ? $window : $(context),
+    var $context = context === 'window' ? $(window) : $(context),
         point;
 
     if (!registry.hasOwnProperty(context)) {

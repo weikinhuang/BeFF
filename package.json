@@ -13,7 +13,7 @@
     "jquery": "~2.1.1",
     "jquery-lazyload": "~1.9.7",
     "tiny-script-loader": "^1.1.0",
-    "uuid": "^3.0.1"
+    "uuid": "3.0.1"
   },
   "devDependencies": {
     "@behance/hgn-loader": "^1.0.0",

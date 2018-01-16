@@ -2,8 +2,19 @@ define(['util/validate'], function(validate) {
   'use strict';
 
   describe('lib/validate', function() {
+    var goodUrls = [
+      'http://a.com',
+      'http://www.a.com',
+      'https://www.a.com',
+      'a.com',
+      'http://a.com?blah',
+      'a.com?blah',
+      'smurf.co',
+      'http://foo:bar@a.com',
+      'http://InSens.COm',
+      'ftp://blah.com',
+    ];
     var tests = {
-
           Generic: {
             good: [' ', 'anything', '!@#$%^&*()-=', '\''],
             bad: ['<script type="jarvascript">document.write', null, undefined]
@@ -65,9 +76,14 @@ define(['util/validate'], function(validate) {
           },
 
           ContainsUrl: {
-            good: ['Text before link http://google.com', 'http://google.com Text after link', 'http://google.com', 'www.google.com', 'Text before http://google.com and after link', 'http://google.com?foo=bar'],
-            bad: ['Text without a link']
-          }
+            good: goodUrls.concat(goodUrls.map(function(url) { return 'In the ' + url + ' middle'; })),
+            bad: ['Text without a link', 'a.a', 'http://', 'www.f']
+          },
+
+          ContainsEmail: {
+            good: ['blah@blah.com', 'blah.something1@f.co', 'With IP address test@[123.123.123.123]', 'In the blah.soioj@asdf.abz middle'],
+            bad: ['blah.com', '@blah.com', 'friend@something', 'With broken IP address test@[123.123.123]'],
+          },
         },
 
         /**

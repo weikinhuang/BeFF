@@ -133,9 +133,17 @@ define(function() {
           test: test.bind(/^((?:https?):\/\/)?(?:(?:(?:[\w\.\-\+!$&\'\(\)*\+,;=_]|%[0-9a-f]{2})+:)*(?:[\w\.\-\+%!$&\'\(\)*\+,;=]|%[0-9a-f]{2})+@)?(?:[A-Za-z0-9_\-]+\.)(?:[A-Za-z0-9\-\._])+(?::\d+)?(?:[\/|\?](?:[\w#!:\.\?\+=&@$\'~*,;_\/\(\)\[\]\-]|%[0-9a-f]{2})*)?$/),
           message: 'This field must be a valid URL'
         },
+
+        // Regex from https://stackoverflow.com/questions/10570286/check-if-string-contains-url-anywhere-in-string-using-javascript
         ContainsUrl: {
-          test: test.bind(/(https?:\/\/|www\.)/i),
+          test: test.bind(/([a-zA-Z0-9]+:\/\/)?([a-zA-Z0-9_]+:[a-zA-Z0-9_]+@)?([a-zA-Z0-9.-]+\.[A-Za-z]{2,4})(:[0-9]+)?(\/.*)?/i),
           message: 'This field contains a URL'
+        },
+
+        // Regex from http://emailregex.com/
+        ContainsEmail: {
+          test: test.bind(/(([^<>()\[\]\\.,;:\s@"]+(\.[^<>()\[\]\\.,;:\s@"]+)*)|(".+"))@((\[[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}])|(([a-zA-Z\-0-9]+\.)+[a-zA-Z]{2,}))/),
+          message: 'This field contains an email'
         },
         Html: {
           test: function() {

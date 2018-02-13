@@ -13,6 +13,7 @@ define(['util/validate'], function(validate) {
       'http://foo:bar@a.com',
       'http://InSens.COm',
       'ftp://blah.com',
+      'fun.stuff.with.urls.co.uk',
     ];
     var tests = {
           Generic: {
@@ -77,7 +78,7 @@ define(['util/validate'], function(validate) {
 
           ContainsUrl: {
             good: goodUrls.concat(goodUrls.map(function(url) { return 'In the ' + url + ' middle'; })),
-            bad: ['Text without a link', 'a.a', 'http://', 'www.f']
+            bad: ['Text without a link', 'a.a', 'http://', 'www.f', 'In other words...I....LOVE IT!', 'I wanted to explore a more intimate and everyday style of Iceland... Glad you like it! :)']
           },
 
           ContainsEmail: {

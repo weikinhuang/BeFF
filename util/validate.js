@@ -136,7 +136,7 @@ define(function() {
 
         // Regex from https://stackoverflow.com/questions/10570286/check-if-string-contains-url-anywhere-in-string-using-javascript
         ContainsUrl: {
-          test: test.bind(/([a-zA-Z0-9]+:\/\/)?([a-zA-Z0-9_]+:[a-zA-Z0-9_]+@)?([a-zA-Z0-9.-]+\.[A-Za-z]{2,4})(:[0-9]+)?(\/.*)?/i),
+          test: test.bind(/([a-zA-Z0-9]+:\/\/)?([a-zA-Z0-9_]+:[a-zA-Z0-9_]+@)?([a-zA-Z0-9-]+\.[A-Za-z]{2,4})(:[0-9]+)?(\/.*)?/i),
           message: 'This field contains a URL'
         },
 

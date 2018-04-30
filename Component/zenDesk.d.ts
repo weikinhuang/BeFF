@@ -1,4 +1,4 @@
-import {ClassBuilder} from '@behance/nbd/Class';
+import { ClassBuilder } from '@behance/nbd/Class';
 import {
   ComponentInstance,
   ComponentConstructorProps,

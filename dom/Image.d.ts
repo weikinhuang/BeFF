@@ -27,7 +27,7 @@ export interface ImageInstance extends ComponentInstance {
   isCMYK(): boolean;
 }
 
-export interface ImageConstructorProps extends ComponentConstructorProps {
+export interface ImageConstructorProps extends ComponentConstructorProps<ImageInstance> {
   getDimensions(url: string): Promise<{
     displayWidth: number;
     displayHeight: number;

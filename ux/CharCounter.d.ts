@@ -9,7 +9,7 @@ export interface CharCounterInstance extends ComponentInstance {
 }
 
 
-export interface CharCounterConstructor<I extends CharCounterInstance = CharCounterInstance> extends ComponentConstructorProps, ClassBuilder<I> {
+export interface CharCounterConstructor<I extends CharCounterInstance = CharCounterInstance> extends ComponentConstructorProps<CharCounterInstance>, ClassBuilder<I> {
   new(...args: any[]): I;
 
   // we have to override here because we want to return a classbuilder that has additional props

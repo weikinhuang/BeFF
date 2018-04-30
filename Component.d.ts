@@ -14,13 +14,13 @@ export interface ComponentInstance extends PubSubTrait, LogTrait {
   destroy(): void;
 }
 
-export interface ComponentConstructorProps {
+export interface ComponentConstructorProps<I = ComponentInstance> {
   displayName: string;
 
-  init(...args: any[]): ComponentInstance;
+  init(...args: any[]): I;
 }
 
-export interface ComponentConstructor<I extends ComponentInstance = ComponentInstance> extends ComponentConstructorProps, ClassBuilder<I> {
+export interface ComponentConstructor<I extends ComponentInstance = ComponentInstance> extends ComponentConstructorProps<I>, ClassBuilder<I> {
   new(...args: any[]): I;
 
   // we have to override here because we want to return a classbuilder that has additional props

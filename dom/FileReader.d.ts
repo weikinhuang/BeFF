@@ -23,7 +23,7 @@ export interface FileReaderInstance extends ComponentInstance {
   load(file: File | Blob): Promise<FileReaderLoadResponse>;
 }
 
-export interface FileReaderConstructorProps extends ComponentConstructorProps {
+export interface FileReaderConstructorProps extends ComponentConstructorProps<FileReaderInstance> {
   promise(file: File | Blob): Promise<FileReaderLoadResponse>;
 }
 

@@ -9,8 +9,7 @@ export interface TwitterTrackInstance extends ComponentInstance {
   trackPageView(): Promise<void>;
 }
 
-export interface TwitterTrackConstructorProps extends ComponentConstructorProps {
-  init(...args: any[]): TwitterTrackInstance;
+export interface TwitterTrackConstructorProps extends ComponentConstructorProps<TwitterTrackInstance> {
 }
 
 export interface TwitterTrackConstructor<I extends TwitterTrackInstance = TwitterTrackInstance> extends TwitterTrackConstructorProps, ClassBuilder<I> {

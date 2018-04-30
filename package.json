@@ -20,6 +20,9 @@
     "@behance/hogan.js": "^3.0.11",
     "@behance/istanbul": "0.3.17-sourcemap",
     "@behance/jquery-simulate": "1.0.1",
+    "@types/jquery": "^3.3.1",
+    "@types/jqueryui": "^1.12.2",
+    "@types/ractive": "^0.7.27",
     "babel-polyfill": "^6.20.0",
     "eslint": "~3.4.0",
     "eslint-plugin-behance": "^1.0.0",
@@ -38,6 +41,7 @@
     "karma-webpack": "^2.0.2",
     "ractive": "~0.7.3",
     "raw-loader": "^0.5.1",
+    "typescript": "^2.8.3",
     "webpack": "^2.2.1",
     "webpack-notifier": "^1.5.0"
   },

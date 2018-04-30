@@ -46,9 +46,10 @@
     "webpack-notifier": "^1.5.0"
   },
   "scripts": {
-    "test": "npm run eslint && npm run karma",
-    "test:dev": "npm run eslint && npm run karma:watch",
+    "test": "npm run eslint && npm run tsc  && npm run karma",
+    "test:dev": "npm run eslint && npm run tsc && npm run karma:watch",
     "eslint": "eslint *.js **/*.js",
+    "tsc": "tsc",
     "karma": "COVERAGE=true karma start --single-run",
     "karma:watch": "karma start"
   },

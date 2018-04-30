@@ -9,9 +9,9 @@ export interface ComponentInstance extends PubSubTrait, LogTrait {
   _super(...args: any[]): any;
   init(config?: any): void;
 
-  bind(): this;
-  unbind(): this;
-  destroy(): void;
+  bind(...args: any[]): this;
+  unbind(...args: any[]): this;
+  destroy(...args: any[]): void;
 }
 
 export interface ComponentConstructorProps<I = ComponentInstance> {

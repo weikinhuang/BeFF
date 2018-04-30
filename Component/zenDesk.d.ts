@@ -6,12 +6,12 @@ import {
 } from '../Component';
 
 interface ZenDeskConfig {
-  subdomain: string;
+  subdomain?: string;
 
-  identify: {
-    name: string;
-    email: string;
-    externalId: string;
+  identify?: {
+    name?: string;
+    email?: string;
+    externalId?: string;
   };
 
   [k: string]: any;

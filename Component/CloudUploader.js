@@ -54,6 +54,9 @@ define([
       },
       text: {
         defaultResponseError: ''
+      },
+      dropElementClasses: {
+        dropActive: 'fine-uploader-drop-active',
       }
     },
 
@@ -154,6 +157,7 @@ define([
 
       this._dropZone = new fineUploader.DragAndDrop({
         dropZoneElements: [element],
+        classes: this._config.dropElementClasses,
         callbacks: {
           processingDroppedFiles: function() {
             // TODO: fire an event on the uploader so that, e.g., a spinner can be shown

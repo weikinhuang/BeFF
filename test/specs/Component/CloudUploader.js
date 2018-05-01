@@ -331,6 +331,21 @@ define([
         }));
       });
 
+      it('creates a DragAndDrop instance with the provided classes', function() {
+        var dropElementClasses = {
+          dropActive: 'dropClass',
+        };
+
+        this.uploader = Uploader.init({
+          dropElementClasses: dropElementClasses,
+        });
+
+        this.uploader.setDropElement(document.body);
+        expect(fineUploader.DragAndDrop).toHaveBeenCalledWith(jasmine.objectContaining({
+          classes: dropElementClasses,
+        }));
+      });
+
       it('creates a DragAndDrop instance with the provided callback', function() {
         var processingDoneFn = jasmine.createSpy();
 

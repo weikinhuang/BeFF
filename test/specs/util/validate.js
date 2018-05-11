@@ -62,8 +62,13 @@ define(['util/validate'], function(validate) {
           },
 
           UrlWithProtocol: {
-            good: ['http://foo.com', 'https://foo.com/bar', 'http://foo.com/?bar#what', 'http://1.2.3.4', 'http://some.very.long.domain', 'http://a.co', 'http://punycode.XN--TCKWE'],
-            bad: ['http://-foo.com', 'http://foo.-cm', 'htts://foo.com', 'http://foo', 'ww.foo.com', 'www.foo.com', 'https://foo.hack"attr']
+            good: ['http://foo.com', 'https://foo.com/bar', 'http://foo.com/?bar#what', 'http://1.2.3.4', 'http://some.very.long.domain', 'http://a.co', 'http://punycode.XN--TCKWE', 'http://全国温泉ガイド.jp', 'http://उदाहरण.परीक्षा', 'https://инобрнауки.рф'],
+            bad: ['foo-bar', 'http://hello', 'http://-foo.com', 'http://foo.-cm', 'htts://foo.com', 'ww.foo.com', 'www.foo.com', '12.34.56.78', 'https://foo.hack"attr', 'canada.XN--TFTFTF', 'инобрнауки', 'ガイド.jp']
+          },
+
+          UrlExt: {
+            good: ['www.foo.com', 'abcde.us', 'https://foo.com/bar', 'http://foo.com/?bar#what', 'http://1.2.3.4', 'http://a.co', 'http://punycode.XN--TCKWE', 'canada.XN--TFTFTF', 'http://xn--p1b6ci4b4b3a.xn--11b5bs3a9aj6g', 'http://全国温泉ガイド.jp', 'http://उदाहरण.परीक्षा', 'инобрнауки.рф'],
+            bad: ['foo-bar', 'http://hello', 'htts://foo.com', 'http://abc.', 'инобрнауки']
           },
 
           City: {

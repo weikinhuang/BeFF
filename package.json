@@ -1,6 +1,6 @@
 {
   "name": "@behance/beff",
-  "version": "9.2.5",
+  "version": "9.3.0",
   "description": "Behance Frontend Framework",
   "directories": {
     "test": "test"

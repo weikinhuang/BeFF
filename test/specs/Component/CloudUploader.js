@@ -330,22 +330,7 @@ define([
           dropZoneElements: [document.body]
         }));
       });
-
-      it('creates a DragAndDrop instance with the provided classes', function() {
-        var dropElementClasses = {
-          dropActive: 'dropClass',
-        };
-
-        this.uploader = Uploader.init({
-          dropElementClasses: dropElementClasses,
-        });
-
-        this.uploader.setDropElement(document.body);
-        expect(fineUploader.DragAndDrop).toHaveBeenCalledWith(jasmine.objectContaining({
-          classes: dropElementClasses,
-        }));
-      });
-
+      
       it('creates a DragAndDrop instance with the provided callback', function() {
         var processingDoneFn = jasmine.createSpy();
 
@@ -355,6 +340,32 @@ define([
             processingDroppedFilesComplete: processingDoneFn
           }
         }));
+      });
+
+      it('assigns the default dragActive class', function() {
+        CloudUploader.setDropElement();
+        expect(fineUploader.DragAndDrop).toHaveBeenCalledWith(jasmine.objectContaining({
+          classes: {
+            dropActive: 'fine-uploader-drop-active',
+          },
+        }));
+      });
+
+      describe('the instance method', function() {
+        it('creates a DragAndDrop instance with the provided classes', function() {
+          var dropElementClasses = {
+            dropActive: 'dropClass',
+          };
+  
+          this.uploader = Uploader.init({
+            dropElementClasses: dropElementClasses,
+          });
+  
+          this.uploader.setDropElement(document.body);
+          expect(fineUploader.DragAndDrop).toHaveBeenCalledWith(jasmine.objectContaining({
+            classes: dropElementClasses,
+          }));
+        });  
       });
     });
 

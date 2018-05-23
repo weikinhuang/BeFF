@@ -406,6 +406,9 @@ define([
     setDropElement: function(element, cb) {
       return new fineUploader.DragAndDrop({
         dropZoneElements: [element],
+        classes: {
+          dropActive: 'fine-uploader-drop-active',
+        },
         callbacks: {
           processingDroppedFilesComplete: cb
         }

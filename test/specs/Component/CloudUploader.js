@@ -128,6 +128,7 @@ define([
 
       it('fires the submit event after a successful submission', function(done) {
         this.uploader.on('submit', function(data) {
+          expect(data.scaled).toEqual(fineuploaderMock.blob);
           expect(data.name).toBeDefined();
           expect(data.id).toBeDefined();
           done();
@@ -330,7 +331,7 @@ define([
           dropZoneElements: [document.body]
         }));
       });
-      
+
       it('creates a DragAndDrop instance with the provided callback', function() {
         var processingDoneFn = jasmine.createSpy();
 
@@ -356,16 +357,16 @@ define([
           var dropElementClasses = {
             dropActive: 'dropClass',
           };
-  
+
           this.uploader = Uploader.init({
             dropElementClasses: dropElementClasses,
           });
-  
+
           this.uploader.setDropElement(document.body);
           expect(fineUploader.DragAndDrop).toHaveBeenCalledWith(jasmine.objectContaining({
             classes: dropElementClasses,
           }));
-        });  
+        });
       });
     });
 

@@ -322,25 +322,45 @@ define([
       return this._uploader.getFile(id);
     },
 
-    _onSubmit: function(id, name) {
+    /**
+     * Returns correctly scaled, orientation fixed image
+     * @param {Number} id
+     * @param {Object} options
+     * @return {Promise}
+     */
+    _scaleImage: function(id, options) {
       var file = this._getFile(id);
+      var _options = options || {};
 
-      file.id = file.id || id;
+      $.extend(true, _options, {
+        maxSize: file.size,
+      });
 
-      return new Promise(function(resolve) {
-        resolve(this._validator(file));
-      }.bind(this))
-      .then(function() {
-        this.trigger('submit', {
-          file: file,
-          id: id,
-          name: name
-        });
-      }.bind(this), function(reason) {
-        // ensures any rejections from _validator are propagated as errors
-        // while still ending in a rejected promise so that fineuploader prevents submission
-        this._onError(id, name, reason);
-        throw reason;
+      return this._uploader.scaleImage(id, _options).then(function(blob) {
+        return Promise.resolve(blob);
+      }.bind(this));
+    },
+
+    _onSubmit: function(id, name) {
+      return this._scaleImage(id).then(function(blob) {
+        this.scaled = blob;
+        this.scaled.id = this.scaled.id || id;
+
+        return new Promise(function(resolve) {
+          resolve(this._validator(this.scaled));
+        }.bind(this))
+        .then(function() {
+          this.trigger('submit', {
+            file: this.scaled,
+            id: id,
+            name: name
+          });
+        }.bind(this), function(reason) {
+          // ensures any rejections from _validator are propagated as errors
+          // while still ending in a rejected promise so that fineuploader prevents submission
+          this._onError(id, name, reason);
+          throw reason;
+        }.bind(this));
       }.bind(this));
     },
 
@@ -353,7 +373,7 @@ define([
     _onProgress: function(id, name, loaded, total) {
       this.trigger('progress', {
         id: id,
-        file: this._getFile(id),
+        file: this.scaled,
         name: name,
         loaded: loaded,
         total: total
@@ -365,7 +385,7 @@ define([
         response: response,
         id: id,
         name: name,
-        file: this._getFile(id),
+        file: this.scaled,
         uploadEndpoint: this.getUploadEndpoint(),
         uploadPath: this.getUploadPath(id)
       });

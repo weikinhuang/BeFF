@@ -59,6 +59,12 @@ define([
       return this._blob.name;
     },
 
+    scaleImage: function() {
+      return new Promise(function(resolve) {
+        resolve(this._blob);
+      }.bind(this));
+    },
+
     /**
      * Fakes a submit
      *

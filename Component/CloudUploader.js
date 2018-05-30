@@ -101,6 +101,8 @@ define([
         }
       });
 
+      this.scaled = [];
+
       // move the drift option to a location that a hacked version of fineuploader can find it
       config.signature.params = config.signature.params || {};
       config.signature.params.drift = options.drift;
@@ -136,6 +138,11 @@ define([
       if (this._buttonCreated) {
         $(this._config.button).remove();
       }
+    },
+
+    destroy: function() {
+      this.scaled = [];
+      this._super();
     },
 
     addFiles: function(files) {
@@ -336,22 +343,20 @@ define([
         maxSize: file.size,
       });
 
-      return this._uploader.scaleImage(id, _options).then(function(blob) {
-        return Promise.resolve(blob);
-      }.bind(this));
+      return this._uploader.scaleImage(id, _options);
     },
 
     _onSubmit: function(id, name) {
       return this._scaleImage(id).then(function(blob) {
-        this.scaled = blob;
-        this.scaled.id = this.scaled.id || id;
+        this.scaled[id] = blob;
+        this.scaled[id].id = this.scaled[id].id || id;
 
         return new Promise(function(resolve) {
-          resolve(this._validator(this.scaled));
+          resolve(this._validator(this.scaled[id]));
         }.bind(this))
         .then(function() {
           this.trigger('submit', {
-            file: this.scaled,
+            file: this.scaled[id],
             id: id,
             name: name
           });
@@ -371,9 +376,13 @@ define([
     },
 
     _onProgress: function(id, name, loaded, total) {
+      if (!this.scaled[id]) {
+        return;
+      }
+
       this.trigger('progress', {
         id: id,
-        file: this.scaled,
+        file: this.scaled[id],
         name: name,
         loaded: loaded,
         total: total
@@ -381,11 +390,15 @@ define([
     },
 
     _onComplete: function(id, name, response) {
+      if (!this.scaled[id]) {
+        return;
+      }
+
       this.trigger('complete', {
         response: response,
         id: id,
         name: name,
-        file: this.scaled,
+        file: this.scaled[id],
         uploadEndpoint: this.getUploadEndpoint(),
         uploadPath: this.getUploadPath(id)
       });

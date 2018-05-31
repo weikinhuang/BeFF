@@ -138,6 +138,12 @@ define([
         });
       });
 
+      it('fires the processing event on a submit', function(done) {
+        this.uploader.on('processing', done);
+
+        fineuploaderMock.fakeSubmit();
+      });
+
       it('fires the complete event with the correctly scaled images', function(done) {
         Promise.all([
           fineuploaderMock.fakeSubmitAndComplete(this.expectedReturns[0].id, 'foo'),

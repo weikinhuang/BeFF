@@ -343,6 +343,8 @@ define([
         maxSize: file.size,
       });
 
+      this.trigger('processing');
+
       return this._uploader.scaleImage(id, _options);
     },
 

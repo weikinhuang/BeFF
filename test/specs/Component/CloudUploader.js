@@ -105,6 +105,23 @@ define([
     });
 
     describe('events', function() {
+      beforeEach(function() {
+        this.expectedReturns = [
+          {
+            id: 0,
+            expectedFileName: fineuploaderMock.scaled[0].name,
+          },
+          {
+            id: 1,
+            expectedFileName: fineuploaderMock.scaled[1].name,
+          },
+          {
+            id: 2,
+            expectedFileName: fineuploaderMock.scaled[2].name,
+          },
+        ];
+      });
+
       it('fires the complete event on a successful upload', function(done) {
         spyOn(this.uploader._uploader, 'getKey').and.returnValue('1.jpg');
 
@@ -119,6 +136,32 @@ define([
         fineuploaderMock.fakeSubmitAndComplete(null, null, {
           http_code: 200
         });
+      });
+
+      it('fires the complete event with the correctly scaled images', function(done) {
+        Promise.all([
+          fineuploaderMock.fakeSubmitAndComplete(this.expectedReturns[0].id, 'foo'),
+          fineuploaderMock.fakeSubmitAndComplete(this.expectedReturns[1].id, 'foo'),
+          fineuploaderMock.fakeSubmitAndComplete(this.expectedReturns[2].id, 'foo'),
+        ]).then(function() {
+          this.uploader.scaled.forEach(function(scaled, index) {
+            expect(scaled.name).toEqual(this.expectedReturns[index].expectedFileName);
+          }.bind(this));
+          done();
+        }.bind(this));
+      });
+
+      it('fires the progress event with the correctly scaled images', function(done) {
+        Promise.all([
+          fineuploaderMock.fakeSubmitAndProgress(this.expectedReturns[0].id, 'foo'),
+          fineuploaderMock.fakeSubmitAndProgress(this.expectedReturns[1].id, 'foo'),
+          fineuploaderMock.fakeSubmitAndProgress(this.expectedReturns[2].id, 'foo'),
+        ]).then(function() {
+          this.uploader.scaled.forEach(function(scaled, index) {
+            expect(scaled.name).toEqual(this.expectedReturns[index].expectedFileName);
+          }.bind(this));
+          done();
+        }.bind(this));
       });
 
       it('fires the allComplete event when all uploads are complete', function(done) {

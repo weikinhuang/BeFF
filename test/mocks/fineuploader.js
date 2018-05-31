@@ -23,6 +23,12 @@ define([
     // Our fake/pre-uploaded image
     this._blob = { name: image.name, type: image.mime, data: image.result };
 
+    this.scaled = [
+      this._blob,
+      Object.assign({}, this._blob, { name: 'second image' }),
+      Object.assign({}, this._blob, { name: 'third image' }),
+    ];
+
     this._buttons = [{
       getInput: function() {
         return $('<input type="file"></input>').html();
@@ -59,9 +65,12 @@ define([
       return this._blob.name;
     },
 
-    scaleImage: function() {
+    scaleImage: function(id) {
+      var _id = id || 0;
+      var mocked = this.scaled[_id] || this.scaled[0];
+
       return new Promise(function(resolve) {
-        resolve(this._blob);
+        resolve(mocked);
       }.bind(this));
     },
 
@@ -102,6 +111,26 @@ define([
         response = response || {};
         self.fakeSubmit(id, name).then(function() {
           self.fakeComplete(id, name, response);
+          resolve();
+        });
+      });
+    },
+
+    /**
+     * Fakes a submit then a progress.
+     *
+     * @param {id}
+     * @param {name}
+     * @param {percent}
+     * @param {total}
+     * @return {Promise}
+     */
+    fakeSubmitAndProgress: function(id, name, percent, total) {
+      var self = this;
+
+      return new Promise(function(resolve) {
+        self.fakeSubmit(id, name).then(function() {
+          self.fakeProgress(id, name, percent, total);
           resolve();
         });
       });

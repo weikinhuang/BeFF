@@ -337,6 +337,11 @@ define([
      */
     _scaleImage: function(id, options) {
       var file = this._getFile(id);
+
+      if (file.type.indexOf('image') === -1) {
+        return Promise.resolve(file);
+      }
+
       var _options = options || {};
 
       $.extend(true, _options, {

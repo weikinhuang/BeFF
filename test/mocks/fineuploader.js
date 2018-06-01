@@ -22,6 +22,8 @@ define([
 
     // Our fake/pre-uploaded image
     this._blob = { name: image.name, type: image.mime, data: image.result };
+    this._video = { name: image.name, type: 'video/mp4', data: image.result };
+    this._audio = { name: image.name, type: 'audio/mp3', data: image.result };
 
     this.scaled = [
       this._blob,
@@ -37,7 +39,15 @@ define([
   }
 
   FineUploaderBasic.prototype = {
-    getFile: function() {
+    getFile: function(id) {
+      if (id === 'video') {
+        return this._video;
+      }
+
+      if (id === 'audio') {
+        return this._audio;
+      }
+
       return this._blob;
     },
 

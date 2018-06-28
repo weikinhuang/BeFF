@@ -330,6 +330,15 @@ define([
     },
 
     /**
+     * Checks if the file should not be orientation corrected
+     * @param {Object} file
+     * @return {Boolean}
+     */
+    _shouldNotRotate: function(file) {
+      return file.type.indexOf('image') === -1 || file.type.indexOf('gif') !== -1;
+    },
+
+    /**
      * Returns correctly scaled, orientation fixed image
      * @param {Number} id
      * @param {Object} options
@@ -338,7 +347,7 @@ define([
     _scaleImage: function(id, options) {
       var file = this._getFile(id);
 
-      if (file.type.indexOf('image') === -1) {
+      if (this._shouldNotRotate(file)) {
         return Promise.resolve(file);
       }
 

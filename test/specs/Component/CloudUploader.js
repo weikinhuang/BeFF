@@ -217,6 +217,22 @@ define([
         fineuploaderMock.fakeSubmit('audio');
       });
 
+      it('does not fire the processing event on a submit with a gif type file', function(done) {
+        spyOn(this.uploader, 'trigger').and.callThrough();
+
+        this.uploader.on('submit', function() {
+          var allArgs = this.uploader.trigger.calls.allArgs();
+
+          allArgs.forEach(function(arg) {
+            expect(arg[0]).not.toEqual('processing');
+          });
+
+          done();
+        }.bind(this));
+
+        fineuploaderMock.fakeSubmit('gif');
+      });
+
       it('fires the error event with a suitable message on an upload error', function(done) {
         var filename = fineuploaderMock.getFakeImageName();
 

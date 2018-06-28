@@ -24,6 +24,7 @@ define([
     this._blob = { name: image.name, type: image.mime, data: image.result };
     this._video = { name: image.name, type: 'video/mp4', data: image.result };
     this._audio = { name: image.name, type: 'audio/mp3', data: image.result };
+    this._gif = { name: image.name, type: 'image/gif', data: image.result };
 
     this.scaled = [
       this._blob,
@@ -40,15 +41,16 @@ define([
 
   FineUploaderBasic.prototype = {
     getFile: function(id) {
-      if (id === 'video') {
-        return this._video;
+      switch (id) {
+        case 'video':
+          return this._video;
+        case 'audio':
+          return this._audio;
+        case 'gif':
+          return this._gif;
+        default:
+          return this._blob;
       }
-
-      if (id === 'audio') {
-        return this._audio;
-      }
-
-      return this._blob;
     },
 
     cancelAll: function() {},
